@@ -2,9 +2,30 @@ import { motion } from 'framer-motion';
 import { Users, BookOpen, Eye, Star, Plus, BarChart2 } from 'lucide-react';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 export const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const [turmas, setTurmas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTurmas = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiUrl}/pedagogico/turmas/`);
+        const data = await response.json();
+        if (data.turmas) {
+          setTurmas(data.turmas);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar turmas na API do Hemera_OS:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTurmas();
+  }, []);
 
   const stats = [
     { icon: Users, label: 'Alunos Ativos', value: '45', change: '+12%', color: 'sky' },
@@ -111,31 +132,37 @@ export const TeacherDashboard = () => {
           <button className="text-sm text-alpine-600 font-medium hover:text-alpine-700">Ver todas</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { id: 1, nome: "1º Ano A", turno: "Matutino", num_alunos: 35, color: "bg-sky-500" },
-            { id: 2, nome: "2º Ano B", turno: "Matutino", num_alunos: 32, color: "bg-indigo-500" },
-            { id: 3, nome: "9º Ano C", turno: "Vespertino", num_alunos: 28, color: "bg-purple-500" },
-          ].map((turma) => (
-            <GlassCard key={turma.id} className="relative overflow-hidden group hover:-translate-y-1 transition-all">
-              <div className={`absolute top-0 left-0 w-full h-2 ${turma.color}`} />
-              <div className="mt-2">
-                <h4 className="text-lg font-bold text-slate-800">{turma.nome}</h4>
-                <div className="flex items-center gap-4 mt-4 text-sm text-slate-600">
-                  <div className="flex items-center gap-1">
-                    <Users size={16} />
-                    <span>{turma.num_alunos} alunos</span>
+          {loading ? (
+            <div className="col-span-3 py-10 text-center text-slate-500 font-medium">Carregando módulos de IA do Hemera...</div>
+          ) : turmas.length > 0 ? (
+            turmas.map((turma, idx) => {
+              const bgColors = ["bg-sky-500", "bg-indigo-500", "bg-purple-500", "bg-alpine-500", "bg-pink-500"];
+              const color = bgColors[idx % bgColors.length];
+              return (
+                <GlassCard key={turma.id} className="relative overflow-hidden group hover:-translate-y-1 transition-all">
+                  <div className={`absolute top-0 left-0 w-full h-2 ${color}`} />
+                  <div className="mt-2">
+                    <h4 className="text-lg font-bold text-slate-800">{turma.nome}</h4>
+                    <div className="flex items-center gap-4 mt-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-1">
+                        <Users size={16} />
+                        <span>{turma.num_alunos} alunos</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <BookOpen size={16} />
+                        <span>{turma.turno}</span>
+                      </div>
+                    </div>
+                    <button className="mt-6 w-full py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium rounded-lg transition-colors border border-slate-200">
+                      Acessar Gradebook
+                    </button>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <BookOpen size={16} />
-                    <span>{turma.turno}</span>
-                  </div>
-                </div>
-                <button className="mt-6 w-full py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium rounded-lg transition-colors border border-slate-200">
-                  Acessar Gradebook
-                </button>
-              </div>
-            </GlassCard>
-          ))}
+                </GlassCard>
+              );
+            })
+          ) : (
+            <div className="col-span-3 py-10 text-center text-slate-500 font-medium">Nenhuma turma encontrada.</div>
+          )}
         </div>
       </div>
     </div>

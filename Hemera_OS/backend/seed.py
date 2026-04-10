@@ -93,7 +93,6 @@ def seed_database():
     # Cria Turma Padrão para vincular alunos
     turma_elite, _ = Turma.objects.get_or_create(
         nome="3º Ano A - Médio",
-        tenant_id=escola_privada.tenant_id,
         defaults={'ano_letivo': 2025}
     )
 
@@ -126,13 +125,11 @@ def seed_database():
             user_aluno.save()
 
         # 2. Cria Registro Acadêmico (Aluno Pedagógico)
-        # Verifica se já existe pelo nome e tenant para não duplicar
-        if not Aluno.objects.filter(nome=a["nome"], tenant_id=a["escola"].tenant_id).exists():
+        # Verifica se já existe pelo usuário para não duplicar
+        if not Aluno.objects.filter(usuario=user_aluno).exists():
             Aluno.objects.create(
-                nome=a["nome"],
-                email=a["email"],
-                matricula_id=a["matricula"],
-                tenant_id=a["escola"].tenant_id,
+                usuario=user_aluno,
+                matricula=a["matricula"],
                 turma=turma_elite if a["escola"] == escola_privada else None
             )
 

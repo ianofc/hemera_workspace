@@ -24,7 +24,8 @@ urlpatterns = [
 
     # Rota raiz da API Hemera_OS para comunicação Headless
     path('api/status/', include([
-        path('', __import__('niocortex.api').api.api_status, name='api_status')
+        path('', __import__('niocortex.api').api.api_status, name='api_status'),
+        path('login/', __import__('niocortex.api').api.api_login, name='api_login')
     ])),
 ]
 

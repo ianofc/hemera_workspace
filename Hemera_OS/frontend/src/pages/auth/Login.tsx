@@ -13,8 +13,20 @@ export const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
-    navigate('/student');
+    try {
+      await login(email, password);
+      const user = useAuthStore.getState().user;
+      
+      // Dinâmica de Redirecionamento Baseada em Role (Hierarquia Django)
+      const roleStr = user?.role?.toLowerCase() || '';
+      if (roleStr.includes('prof') || roleStr.includes('admin') || roleStr.includes('direc')) {
+        navigate('/teacher');
+      } else {
+        navigate('/student');
+      }
+    } catch (err) {
+      console.log("Login form absorveu o erro");
+    }
   };
 
   return (

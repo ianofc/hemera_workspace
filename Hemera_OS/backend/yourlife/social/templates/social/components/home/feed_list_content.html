@@ -1,0 +1,78 @@
+{% load static %}
+
+<div class="hidden w-full space-y-10 skeleton-wrapper">
+    {% for i in "123" %}
+    <div class="relative w-full aspect-[4/5] rounded-[2.5rem] bg-slate-800/50 border border-white/10 overflow-hidden">
+         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skeleton-shimmer"></div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="w-full space-y-10 real-content">
+    
+    {% if posts %}
+        
+        {% if posts.0.is_system %}
+        <div class="flex justify-center mb-6 animate-pulse">
+            <div class="px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 backdrop-blur-md">
+                <span class="text-[10px] font-bold text-indigo-300 uppercase tracking-[0.2em]">
+                    Início da Jornada
+                </span>
+            </div>
+        </div>
+        {% endif %}
+
+        {% for post in posts %}
+            <div class="feed-item-anim" style="--i: {{ forloop.counter }};">
+                {% include 'social/feed/post_card.html' with post=post %}
+            </div>
+        {% endfor %}
+
+    {% else %}
+        
+        <div class="flex flex-col items-center justify-center py-32 text-center">
+            <div class="relative mb-6">
+                <div class="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 animate-pulse"></div>
+                <div class="relative flex items-center justify-center w-24 h-24 text-indigo-400 border rounded-full shadow-xl bg-slate-900 border-indigo-500/30">
+                    <i class="text-4xl fa-solid fa-wind animate-bounce"></i>
+                </div>
+            </div>
+            <h3 class="text-sm font-black tracking-[0.2em] uppercase text-slate-500">Silêncio no Horizonte</h3>
+            <p class="max-w-xs mt-3 font-medium leading-relaxed text-slate-500">
+                Nada por aqui ainda.
+            </p>
+            <a href="{% url 'yourlife_social:explore' %}" class="mt-8 px-8 py-3 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 transition-all">
+                Descobrir
+            </a>
+        </div>
+
+    {% endif %}
+</div>
+
+<style>
+    /* Animação de Entrada */
+    .feed-item-anim {
+        opacity: 0;
+        transform: translateY(30px);
+        /* O delay é calculado baseado no índice do item */
+        animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: calc(var(--i) * 0.15s);
+    }
+
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animação do Skeleton */
+    .skeleton-shimmer {
+        animation: shimmer 2s infinite linear;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+</style>

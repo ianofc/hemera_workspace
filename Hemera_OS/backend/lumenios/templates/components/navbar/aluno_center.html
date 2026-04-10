@@ -1,0 +1,28 @@
+
+<div class="items-center justify-center flex-1 hidden gap-6 md:flex">
+    <a href="{% url 'lumenios:dashboard_aluno' %}" class="p-2 group" title="Meu Painel de Estudos">
+        <i class="text-2xl text-indigo-600 transition fas fa-home group-hover:scale-110"></i>
+    </a>
+    
+    <a href="{% url 'core:student_subjects' %}" class="p-2 group" title="Minhas Disciplinas">
+        <i class="text-2xl transition fas fa-book text-slate-400 group-hover:text-indigo-600"></i>
+    </a>
+    
+    <a href="{% url 'core:student_grades' %}" class="p-2 group" title="Boletim e Notas">
+        <i class="text-2xl transition fas fa-chart-line text-slate-400 group-hover:text-indigo-600"></i>
+    </a>
+
+    <div class="w-px h-8 mx-2 bg-slate-300/50"></div>
+    
+    <a href="{% url 'yourlife_social:home' %}" class="p-2 group" title="Ir para Rede Social (YourLife)">
+        <i class="text-2xl transition fas fa-heartbeat text-slate-400 group-hover:text-pink-500"></i>
+    </a>
+    
+    <a href="{% url 'core:student_library' %}" class="p-2 group" title="Biblioteca Virtual">
+        <i class="text-2xl transition fas fa-book-open text-slate-400 group-hover:text-indigo-600"></i>
+    </a>
+    
+    <button @click="$store.nav.toggle('zios')" class="p-2 group" title="Tutor IA (Zios AI)">
+        <i class="text-2xl text-purple-400 transition fas fa-brain group-hover:text-purple-600 animate-pulse"></i>
+    </button>
+</div>

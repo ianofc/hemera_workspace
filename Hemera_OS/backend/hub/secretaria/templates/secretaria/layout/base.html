@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Hub | Secretaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body { background-color: #f8fafc; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; }
+        .font-display { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased text-slate-900">
+    <nav class="fixed top-0 left-0 right-0 z-50 h-20 px-6 glass-nav">
+        <div class="max-w-[1600px] mx-auto h-full flex items-center justify-between">
+            {% include 'secretaria/components/navbar/left.html' %}
+            {% include 'secretaria/components/navbar/center.html' %}
+            {% include 'core/components/navbar/right.html' %}
+        </div>
+    </nav>
+
+    <main class="max-w-[1600px] mx-auto pt-28 pb-12 px-6 grid grid-cols-12 gap-8">
+        <aside class="col-span-12 lg:col-span-3">
+            {% include 'secretaria/components/home/left_sidebar.html' %}
+        </aside>
+        <section class="col-span-12 lg:col-span-9">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+
+    {% include 'core/components/module_switcher.html' %}
+</body>
+</html>

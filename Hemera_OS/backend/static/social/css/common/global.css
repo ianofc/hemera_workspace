@@ -1,0 +1,19 @@
+
+/* Estilos base */
+body { 
+    background-color: #f0f2f5; 
+}
+
+/* Utilitários globais */
+.masonry-grid { 
+    column-count: 2; 
+    gap: 1rem; 
+}
+
+/* O container do Reels precisa estar disponível globalmente ou apenas no módulo */
+/* Se for usado só no Reels, idealmente fica no css do reels, mas mal não faz aqui */
+.reels-container { 
+    scroll-snap-type: y mandatory; 
+    height: 100vh; 
+    overflow-y: scroll; 
+}

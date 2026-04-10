@@ -1,0 +1,19 @@
+{% extends 'base_adaptive.html' %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen p-6 text-white bg-slate-950">
+    <div class="w-full max-w-2xl p-8 space-y-6 text-center border shadow-2xl glass-panel rounded-3xl border-white/10">
+        <div class="flex items-center justify-center w-20 h-20 mx-auto bg-blue-500 rounded-full animate-pulse">
+            <span class="text-3xl font-bold">Z</span>
+        </div>
+        <h1 class="text-4xl font-extrabold tracking-tighter">ZIOS LIFE OS</h1>
+        <div class="text-xl italic font-medium leading-relaxed text-blue-200/80">
+            "{{ zios_message }}"
+        </div>
+        <div class="pt-8">
+            <a href="/social/" class="px-8 py-3 font-bold transition bg-white rounded-full shadow-lg text-slate-950 hover:scale-105">
+                Entrar no Seu Mundo
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

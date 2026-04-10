@@ -1,0 +1,37 @@
+{% extends "social/base.html" %}
+
+{% block title %}Emitir Documento{% endblock %}
+
+{% block content %}
+<div class="space-y-6 animate-fade-in-down">
+    
+    <div class="text-center py-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Para quem é o documento?</h1>
+        <p class="text-gray-500">Selecione o aluno para iniciar a emissão.</p>
+    </div>
+
+    <div class="max-w-xl mx-auto mb-8 relative">
+        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+        <input type="text" placeholder="Buscar aluno por nome ou matrícula..." class="form-input pl-10">
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for aluno in alunos %}
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex items-center justify-between hover:shadow-md transition group">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 flex items-center justify-center font-bold">
+                    {{ aluno.nome|slice:":2"|upper }}
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 dark:text-white text-sm">{{ aluno.nome }}</h3>
+                    <p class="text-xs text-gray-500">Matrícula: {{ aluno.matricula }}</p>
+                </div>
+            </div>
+            <a href="{% url 'secretariat:gerar_documento' aluno.id %}" class="btn-primary px-3 py-1.5 text-xs">
+                Selecionar <i class="fas fa-chevron-right ml-1"></i>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

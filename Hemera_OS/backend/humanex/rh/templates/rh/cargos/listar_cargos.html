@@ -1,0 +1,45 @@
+{% extends "social/base.html" %}
+
+{% block title %}Cargos e Funções{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6 animate-fade-in-down">
+    
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Cargos</h1>
+            <p class="text-sm text-gray-500">Definição de funções e salários base.</p>
+        </div>
+        <a href="{% url 'hr:criar_cargo' %}" class="btn-secondary text-sm">
+            <i class="fas fa-plus"></i> Novo Cargo
+        </a>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 font-semibold">
+                <tr>
+                    <th class="px-6 py-4">Título do Cargo</th>
+                    <th class="px-6 py-4">CBO</th>
+                    <th class="px-6 py-4">Salário Base</th>
+                    <th class="px-6 py-4 text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for cargo in cargos %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ cargo.titulo }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">{{ cargo.cbo|default:"-" }}</td>
+                    <td class="px-6 py-4 font-mono text-sm">R$ {{ cargo.salario_base|default:"0,00" }}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="btn-ghost"><i class="fas fa-pen"></i></button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="p-6 text-center text-gray-500">Nenhum cargo definido.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

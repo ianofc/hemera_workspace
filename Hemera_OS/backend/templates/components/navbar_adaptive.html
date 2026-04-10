@@ -1,0 +1,22 @@
+
+<header class="h-[var(--nav-height)] px-6 flex items-center justify-between sticky top-0 z-40 transition-all duration-300 backdrop-blur-md bg-[rgba(255,255,255,0.05)] border-b border-[var(--glass-border)]">
+    
+    <div class="flex items-center justify-start flex-1 gap-4">
+        <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-colors">
+            <i class="text-2xl ph ph-list"></i>
+        </button>
+        
+        <div class="font-bold text-xl tracking-tight text-[var(--text-primary)]">
+            Nio<span class="text-[var(--primary)]">Cortex</span>
+        </div>
+    </div>
+
+    <div class="justify-center flex-none">
+        {% include "core/components/navbar/center.html" %}
+    </div>
+
+    <div class="flex items-center justify-end flex-1 gap-4">
+        {% include "core/components/navbar/right.html" %}
+    </div>
+
+</header>

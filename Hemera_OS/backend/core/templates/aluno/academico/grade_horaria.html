@@ -1,0 +1,360 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grade Horária - NioCortex">
+    <title>Grade Horária | NioCortex</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/perfis.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        accent: 'var(--color-accent)',
+                        background: 'var(--bg-body)',
+                        surface: 'var(--bg-card)',
+                        text: 'var(--text-main)',
+                        textMuted: 'var(--text-muted)',
+                        talkio: {
+                            sidebar: 'var(--talkio-sidebar)',
+                            chat: 'var(--talkio-chat)',
+                            hover: 'var(--talkio-hover)',
+                            bubbleOut: 'var(--talkio-bubble-out)',
+                            bubbleIn: 'var(--talkio-bubble-in)',
+                            meta: 'var(--talkio-meta)',
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow': '0 0 15px var(--color-primary)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Estilos específicos para a Grade */
+        .table-cell-hover:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.02);
+            transition: all 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-layout { display: block !important; width: 100%; }
+            body { background: white; color: black; }
+            .glass-panel { box-shadow: none; border: 1px solid #ccc; backdrop-filter: none; background: white; }
+        }
+    </style>
+</head>
+
+<body x-data="timetableData()" 
+      x-init="init()"
+      :class="{
+          'theme-pink': theme === 'pink',
+          'theme-blue': theme === 'blue',
+          'theme-dark': theme === 'dark',
+          'theme-premium-fem': theme === 'premium-fem',
+          'theme-premium-masc': theme === 'premium-masc'
+      }"
+      class="font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[var(--color-primary)] selection:text-white">
+
+    <div class="fixed inset-0 z-0 transition-colors duration-700 pointer-events-none no-print">
+        <div class="absolute top-[-10%] left-[20%] w-[800px] h-[800px] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-float" :style="`background-color: var(--color-secondary)`"></div>
+        <div class="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-float" style="animation-delay: 2s; background-color: var(--color-primary)"></div>
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(var(--text-muted) 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+
+    <nav class="sticky top-0 z-40 w-full px-4 py-2 transition-colors duration-300 shadow-sm glass-nav no-print">
+        <div class="flex items-center justify-between h-16 mx-auto max-w-7xl">
+            <div class="flex items-center flex-1 gap-4">
+                <a href="{% url 'core:aluno_dashboard' %}" class="flex items-center gap-3 group">
+                    <div class="flex items-center justify-center w-10 h-10 text-lg font-bold text-white transition-transform shadow-lg rounded-xl group-hover:scale-110" style="background: var(--gradient-sidebar)">N</div>
+                    <div class="flex flex-col justify-center">
+                        <span class="hidden text-xl font-bold leading-none tracking-tight font-display md:block" style="color: var(--text-main)">Nio<span style="color: var(--color-primary)">Student</span></span>
+                        <span class="text-[10px] uppercase font-bold tracking-widest opacity-60 hidden md:block" style="color: var(--text-muted)">Portal do Aluno</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="items-center justify-center flex-1 hidden gap-8 lg:flex">
+                <a href="{% url 'core:aluno_dashboard' %}" class="relative flex flex-col items-center p-2 group" title="Início">
+                    <i class="mb-1 text-2xl transition-colors duration-300 fas fa-home text-slate-400 group-hover:text-[var(--color-primary)]"></i>
+                </a>
+                <a href="{% url 'core:student_calendar' %}" class="relative flex flex-col items-center p-2 rounded-lg group hover:bg-black/5" title="Agenda">
+                    <i class="fas fa-calendar-alt text-2xl mb-1 transition-colors duration-300 group-hover:text-[var(--color-primary)] text-slate-400"></i>
+                </a>
+                <a href="#" class="relative flex flex-col items-center p-2 rounded-lg group" title="Horários (Atual)">
+                    <i class="mb-1 text-2xl transition-colors duration-300 fas fa-clock" style="color: var(--color-primary)"></i>
+                    <span class="absolute bottom-0 w-1.5 h-1.5 rounded-full" style="background-color: var(--color-primary)"></span>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-end flex-1 gap-4">
+                <button @click="openTalkio()" class="relative flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-black/5">
+                    <img src="{% static 'imgs/talkio/Talkio_logo.png' %}" class="object-contain w-8 h-8 drop-shadow-sm">
+                </button>
+                <div class="relative ml-2 cursor-pointer group">
+                    <div class="w-10 h-10 rounded-full p-[2px]" :class="is_premium ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-indigo-400 to-purple-500'">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}https://i.pravatar.cc/150?img=32{% endif %}" class="object-cover w-full h-full border-2 border-white rounded-full">
+                    </div>
+                    <div class="absolute right-0 z-50 hidden w-64 mt-4 bg-white border shadow-2xl dark:bg-slate-800 rounded-2xl border-slate-100 group-hover:block animate-fade-in-up">
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-t-2xl">
+                            <div class="flex items-center gap-2">
+                                <p class="text-sm font-bold text-gray-800 truncate dark:text-white">{{ user.first_name }}</p>
+                                {% if is_premium %}<i class="text-xs text-blue-500 fas fa-check-circle" title="Verificado"></i>{% endif %}
+                            </div>
+                            <p class="text-xs capitalize text-slate-500">{{ aluno.nivel_ensino|default:"Aluno" }}</p>
+                        </div>
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider">Aparência</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button @click="setTheme('aurora')" class="flex items-center justify-center h-10 transition border-2 rounded-xl hover:shadow-md"><div class="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-cyan-400"></div></button>
+                                <button @click="setTheme('dark')" class="flex items-center justify-center h-10 transition border-2 rounded-xl hover:shadow-md"><div class="w-5 h-5 border rounded-full bg-slate-800 border-slate-600"></div></button>
+                                <template x-if="gender === 'F'"><button @click="setTheme('pink')" class="flex items-center justify-center h-10 transition border-2 rounded-xl hover:shadow-md"><div class="w-5 h-5 bg-pink-500 rounded-full"></div></button></template>
+                                <template x-if="gender === 'M'"><button @click="setTheme('blue')" class="flex items-center justify-center h-10 transition border-2 rounded-xl hover:shadow-md"><div class="w-5 h-5 bg-blue-500 rounded-full"></div></button></template>
+                            </div>
+                        </div>
+                        <a href="{% url 'core:logout' %}" class="flex items-center gap-3 p-4 text-sm text-red-600 transition hover:bg-red-50 rounded-b-2xl"><i class="fas fa-power-off"></i> Sair do Sistema</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 w-full p-6 pt-10 mx-auto max-w-7xl">
+        
+        <div class="flex flex-col items-end justify-between gap-4 mb-8 md:flex-row no-print">
+            <div>
+                <h1 class="text-3xl font-extrabold font-display" style="color: var(--text-main)">Grade Horária</h1>
+                <p class="mt-1 text-sm font-medium" style="color: var(--text-muted)">Confira seus horários e salas de aula.</p>
+            </div>
+            
+            <button onclick="window.print()" class="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-bold rounded-xl shadow-sm hover:shadow-md hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition flex items-center gap-2">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+
+        <div class="mb-10 lg:hidden no-print">
+            <div class="flex gap-2 pb-4 mb-2 overflow-x-auto scrollbar-hide">
+                <template x-for="day in days">
+                    <button @click="activeDay = day.id" 
+                            :class="activeDay === day.id ? 'bg-[var(--color-primary)] text-white shadow-lg' : 'bg-white/60 text-slate-600 hover:bg-white'"
+                            class="flex-1 px-5 py-3 text-sm font-bold text-center transition rounded-xl whitespace-nowrap"
+                            x-text="day.label"></button>
+                </template>
+            </div>
+
+            <div class="p-4 space-y-3 glass-panel rounded-2xl">
+                <template x-for="slot in getScheduleForDay(activeDay)">
+                    <div class="flex items-center gap-4 p-3 transition border rounded-xl bg-white/50 border-slate-100 hover:shadow-sm">
+                        <div class="flex flex-col items-center justify-center w-16 h-16 bg-slate-100 rounded-xl text-slate-600 shrink-0">
+                            <span class="text-xs font-bold" x-text="slot.start"></span>
+                            <div class="w-4 h-px bg-slate-300 my-0.5"></div>
+                            <span class="text-xs font-bold" x-text="slot.end"></span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between">
+                                <h3 class="text-sm font-bold text-slate-800" x-text="slot.subject"></h3>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase" 
+                                      :class="slot.type === 'core' ? 'bg-blue-100 text-blue-600' : 'bg-amber-100 text-amber-600'" 
+                                      x-text="slot.room"></span>
+                            </div>
+                            <p class="flex items-center gap-1 mt-1 text-xs text-slate-500">
+                                <i class="fas fa-chalkboard-teacher"></i> <span x-text="slot.teacher"></span>
+                            </p>
+                        </div>
+                    </div>
+                </template>
+                <div x-show="getScheduleForDay(activeDay).length === 0" class="py-8 text-center text-slate-400">
+                    <i class="mb-2 text-3xl fas fa-mug-hot"></i>
+                    <p class="text-sm">Sem aulas neste dia!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden overflow-hidden border lg:block glass-panel rounded-3xl border-white/60 print-layout">
+            <table class="w-full text-left border-collapse">
+                <thead class="text-xs font-bold uppercase border-b bg-slate-50/80 text-slate-500 border-slate-200">
+                    <tr>
+                        <th class="w-24 px-6 py-4 text-center border-r border-slate-100">Horário</th>
+                        <th class="px-4 py-4 text-center w-[18%]">Segunda</th>
+                        <th class="px-4 py-4 text-center w-[18%]">Terça</th>
+                        <th class="px-4 py-4 text-center w-[18%]">Quarta</th>
+                        <th class="px-4 py-4 text-center w-[18%]">Quinta</th>
+                        <th class="px-4 py-4 text-center w-[18%]">Sexta</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    <template x-for="time in timeSlots">
+                        <tr class="transition hover:bg-white/30">
+                            <td class="px-4 py-6 text-center border-r border-slate-100">
+                                <span class="block text-sm font-black text-slate-700" x-text="time.start"></span>
+                                <span class="block text-xs text-slate-400" x-text="time.end"></span>
+                            </td>
+                            
+                            <template x-for="day in ['seg', 'ter', 'qua', 'qui', 'sex']">
+                                <td class="h-full px-2 py-2 align-top">
+                                    <div class="h-full w-full rounded-xl p-3 flex flex-col justify-between table-cell-hover min-h-[100px]"
+                                         :class="getSlotClass(day, time.id)">
+                                        
+                                        <div x-show="getSlot(day, time.id)">
+                                            <div class="flex items-start justify-between mb-2">
+                                                <span class="text-xs font-black tracking-tight uppercase text-slate-800" x-text="getSlot(day, time.id)?.subject"></span>
+                                            </div>
+                                            <div class="flex items-center gap-1 text-[10px] text-slate-600 mb-1">
+                                                <i class="fas fa-user-tie text-[var(--color-primary)]"></i>
+                                                <span x-text="getSlot(day, time.id)?.teacher"></span>
+                                            </div>
+                                            <div class="inline-block px-2 py-0.5 rounded-md bg-white/50 border border-black/5 text-[9px] font-bold text-slate-500">
+                                                <i class="mr-1 fas fa-map-marker-alt"></i> <span x-text="getSlot(day, time.id)?.room"></span>
+                                            </div>
+                                        </div>
+
+                                        <div x-show="!getSlot(day, time.id)" class="flex items-center justify-center h-full opacity-30">
+                                            <i class="fas fa-minus text-slate-300"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        function timetableData() {
+            return {
+                theme: 'aurora',
+                activeDay: 'seg',
+                gender: "{{ user.gender|default:'F' }}",
+                is_premium: "{{ is_premium|yesno:'true,false' }}" === 'true',
+
+                days: [
+                    {id: 'seg', label: 'Segunda'},
+                    {id: 'ter', label: 'Terça'},
+                    {id: 'qua', label: 'Quarta'},
+                    {id: 'qui', label: 'Quinta'},
+                    {id: 'sex', label: 'Sexta'}
+                ],
+
+                timeSlots: [
+                    {id: 1, start: '07:30', end: '08:20'},
+                    {id: 2, start: '08:20', end: '09:10'},
+                    {id: 3, start: '09:30', end: '10:20'},
+                    {id: 4, start: '10:20', end: '11:10'},
+                    {id: 5, start: '11:10', end: '12:00'},
+                ],
+
+                // Mock Schedule Data (Matriz)
+                // Formato: 'dia_slot': { subject, teacher, room, colorClass }
+                scheduleMatrix: {
+                    'seg_1': { subject: 'Matemática', teacher: 'Prof. Alberto', room: 'Sala 3B', type: 'core' },
+                    'seg_2': { subject: 'Matemática', teacher: 'Prof. Alberto', room: 'Sala 3B', type: 'core' },
+                    'seg_3': { subject: 'História', teacher: 'Prof. Cláudia', room: 'Sala 3B', type: 'humanas' },
+                    'seg_4': { subject: 'Geografia', teacher: 'Prof. Marcos', room: 'Sala 3B', type: 'humanas' },
+                    
+                    'ter_1': { subject: 'Física', teacher: 'Prof. Roberto', room: 'Lab 1', type: 'exatas' },
+                    'ter_2': { subject: 'Física', teacher: 'Prof. Roberto', room: 'Lab 1', type: 'exatas' },
+                    'ter_3': { subject: 'Química', teacher: 'Prof. Ana', room: 'Lab 2', type: 'exatas' },
+                    
+                    'qua_1': { subject: 'Português', teacher: 'Prof. Sonia', room: 'Sala 3B', type: 'linguagens' },
+                    'qua_2': { subject: 'Redação', teacher: 'Prof. Sonia', room: 'Sala 3B', type: 'linguagens' },
+                    'qua_3': { subject: 'Inglês', teacher: 'Prof. John', room: 'Sala 3B', type: 'linguagens' },
+                    
+                    'qui_1': { subject: 'Biologia', teacher: 'Prof. Carla', room: 'Lab 3', type: 'bio' },
+                    'qui_2': { subject: 'Matemática', teacher: 'Prof. Alberto', room: 'Sala 3B', type: 'core' },
+                    'qui_3': { subject: 'Ed. Física', teacher: 'Prof. Pedro', room: 'Quadra', type: 'sport' },
+                    
+                    'sex_1': { subject: 'Filosofia', teacher: 'Prof. Tiago', room: 'Sala 3B', type: 'humanas' },
+                    'sex_2': { subject: 'Sociologia', teacher: 'Prof. Tiago', room: 'Sala 3B', type: 'humanas' },
+                    'sex_3': { subject: 'Artes', teacher: 'Prof. Bia', room: 'Ateliê', type: 'art' },
+                },
+
+                init() {
+                    if (this.is_premium) this.theme = this.gender === 'F' ? 'premium-fem' : 'premium-masc';
+                    else this.theme = this.gender === 'F' ? 'pink' : (this.gender === 'M' ? 'blue' : 'aurora');
+                    
+                    // Auto-selecionar o dia atual
+                    const daysMap = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+                    const today = daysMap[new Date().getDay()];
+                    if (today !== 'dom' && today !== 'sab') {
+                        this.activeDay = today;
+                    }
+                },
+
+                getSlot(day, slotId) {
+                    return this.scheduleMatrix[`${day}_${slotId}`];
+                },
+
+                getScheduleForDay(day) {
+                    const slots = [];
+                    this.timeSlots.forEach(time => {
+                        const data = this.getSlot(day, time.id);
+                        if (data) {
+                            slots.push({ ...data, start: time.start, end: time.end });
+                        }
+                    });
+                    return slots;
+                },
+
+                getSlotClass(day, slotId) {
+                    const data = this.getSlot(day, slotId);
+                    if (!data) return '';
+                    
+                    const colors = {
+                        'core': 'bg-blue-100/50 border border-blue-200 text-blue-900',
+                        'humanas': 'bg-orange-100/50 border border-orange-200 text-orange-900',
+                        'exatas': 'bg-red-100/50 border border-red-200 text-red-900',
+                        'linguagens': 'bg-yellow-100/50 border border-yellow-200 text-yellow-900',
+                        'bio': 'bg-green-100/50 border border-green-200 text-green-900',
+                        'sport': 'bg-emerald-100/50 border border-emerald-200 text-emerald-900',
+                        'art': 'bg-purple-100/50 border border-purple-200 text-purple-900',
+                    };
+                    return colors[data.type] || 'bg-slate-100';
+                },
+                
+                openTalkio() { alert("Chat Talkio"); }
+            }
+        }
+    </script>
+    
+    <div x-cloak x-show="talkioOpen" class="fixed inset-0 z-[100] flex justify-center items-center">
+        <div @click="talkioOpen = false" x-show="talkioOpen" x-transition.opacity class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl flex overflow-hidden">
+             <div class="flex items-center justify-center w-full h-full text-gray-500">Talkio Drawer Carregado (Placeholder)</div>
+        </div>
+    </div>
+
+</body>
+</html>

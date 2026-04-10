@@ -1,0 +1,47 @@
+
+{% extends 'aluno/base_lumenios.html' %}
+{% block content %}
+<div class="p-6 mx-auto space-y-6 max-w-7xl">
+    <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-bold font-display text-slate-800 dark:text-white">
+            <i class="fas fa-users mr-2 text-nio-600"></i> Gestão de Funcionario
+        </h1>
+        <a href="{% url 'humanex:funcionario_create' %}" class="px-6 py-2 font-bold text-white transition shadow-lg bg-nio-600 rounded-xl hover:bg-nio-700 shadow-nio-500/30">
+            <i class="mr-2 fas fa-plus"></i> Novo Registro
+        </a>
+    </div>
+
+    <div class="overflow-hidden border shadow-xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-slate-200 dark:border-slate-800 rounded-2xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-xs tracking-wider uppercase bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                        <th class="p-4 font-bold border-b dark:border-slate-700">ID</th>
+                        <th class="p-4 font-bold border-b dark:border-slate-700">Descrição</th>
+                        <th class="p-4 font-bold text-right border-b dark:border-slate-700">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    {% for item in object_list %}
+                    <tr class="transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                        <td class="p-4 font-mono text-xs text-slate-400">{ item.id|truncatechars:8 }</td>
+                        <td class="p-4 font-bold text-slate-700 dark:text-slate-200">{ item }</td>
+                        <td class="p-4 space-x-2 text-right">
+                            <a href="{% url 'humanex:funcionario_update' item.pk %}" class="text-indigo-600 hover:text-indigo-800"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'humanex:funcionario_delete' item.pk %}" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="p-10 text-center text-slate-400">
+                            <i class="block mb-3 text-4xl fas fa-inbox opacity-20"></i>
+                            Nenhum registro encontrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

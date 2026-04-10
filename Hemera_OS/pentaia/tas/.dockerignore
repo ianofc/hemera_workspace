@@ -1,0 +1,40 @@
+# Git e IDEs
+.git
+.gitignore
+.vscode
+.idea
+
+# Node.js
+node_modules
+npm-debug.log
+dist
+build
+.vite
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Bancos de dados locais
+*.sqlite3
+db.sqlite3
+
+# Arquivos de ambiente
+.env
+.env.local
+
+# Logs
+logs
+*.log
+
+# Docker
+docker-compose.yml
+Dockerfile

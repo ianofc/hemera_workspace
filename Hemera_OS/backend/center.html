@@ -1,0 +1,38 @@
+<div class="items-center justify-center flex-1 hidden gap-6 md:flex">
+    <a href="{{% url '{ns_social}:home' %}}" class="p-2 group" title="Feed"><i class="text-2xl transition fas fa-home text-violet-600"></i></a>
+    <a href="{{% url '{ns_social}:reels' %}}" class="p-2 group" title="Reels"><i class="text-2xl transition fas fa-film text-slate-400 group-hover:text-violet-600"></i></a>
+    <a href="{{% url '{ns_social}:explore' %}}" class="p-2 group" title="Explorar"><i class="text-2xl transition far fa-compass text-slate-400 group-hover:text-violet-600"></i></a>
+    
+    <div class="w-px h-8 mx-2 bg-slate-300/50"></div>
+    
+    {{% if 'DIRETOR' in user.role or 'DIRECAO' in user.role %}}
+        <a href="{{% url '{ns_dir}:dashboard' %}}" class="p-2 group" title="Direção"><i class="text-2xl transition fas fa-chart-line text-slate-400 group-hover:text-violet-600"></i></a>
+        <a href="#" class="p-2 group" title="Relatórios"><i class="text-2xl transition fas fa-file-contract text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'SECRETARIA' in user.role %}}
+        <a href="{{% url '{ns_hub}:dashboard' %}}" class="p-2 group" title="Secretaria"><i class="text-2xl transition fas fa-building text-slate-400 group-hover:text-violet-600"></i></a>
+        <a href="#" class="p-2 group" title="Alunos"><i class="text-2xl transition fas fa-user-graduate text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'COORDENADOR' in user.role or 'COORDENACAO' in user.role %}}
+        <a href="{{% url '{ns_coord}:dashboard' %}}" class="p-2 group" title="Coordenação"><i class="text-2xl transition fas fa-clipboard-check text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'RH' in user.role %}}
+        <a href="{{% url '{ns_rh}:dashboard' %}}" class="p-2 group" title="Recursos Humanos"><i class="text-2xl transition fas fa-id-card text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'FINANCEIRO' in user.role %}}
+        <a href="{{% url '{ns_fin}:dashboard' %}}" class="p-2 group" title="Financeiro"><i class="text-2xl transition fas fa-file-invoice-dollar text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'CRM' in user.role or 'VENDAS' in user.role %}}
+        <a href="{{% url '{ns_crm}:dashboard' %}}" class="p-2 group" title="CRM"><i class="text-2xl transition fas fa-handshake text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% elif 'PROFESSOR' in user.role %}}
+        <a href="{{% url '{ns_ped}:listar_turmas' %}}" class="p-2 group" title="Minhas Turmas"><i class="text-2xl transition fas fa-chalkboard-user text-slate-400 group-hover:text-violet-600"></i></a>
+        <a href="{{% url '{ns_plat}:dashboard' %}}" class="p-2 group" title="Portal Docente"><i class="text-2xl transition fas fa-graduation-cap text-slate-400 group-hover:text-violet-600"></i></a>
+
+    {{% else %}}
+        {{% if user.nivel_ensino != 'bebe' %}}
+        <a href="{{% url '{ns_core}:student_library' %}}" class="p-2 group" title="Biblioteca"><i class="text-2xl transition fas fa-book-open text-slate-400 group-hover:text-violet-600"></i></a>
+        <a href="{{% url '{ns_plat}:dashboard' %}}" class="p-2 group" title="Ambiente de Estudos"><i class="text-2xl transition fas fa-graduation-cap text-slate-400 group-hover:text-violet-600"></i></a>
+        {{% endif %}}
+    {{% endif %}}
+</div>

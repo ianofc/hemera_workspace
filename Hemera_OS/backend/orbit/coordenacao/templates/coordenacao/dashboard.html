@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IO Coordenação | NioCortex</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Suavização de Fonte */
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .module-transition { cursor: pointer; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-slate-50">
+
+    {% include 'components/global_loader.html' %}
+
+    <div class="sticky top-0 z-40 h-16 px-4 border-b navbar bg-white/80 backdrop-blur-md border-slate-200">
+        <div class="w-auto navbar-start lg:w-1/3">
+            {% include 'coordenacao/components/navbar/left.html' %}
+        </div>
+        <div class="hidden navbar-center lg:flex">
+            {% include 'coordenacao/components/navbar/center.html' %}
+        </div>
+        <div class="justify-end flex-1 w-auto navbar-end lg:w-1/3">
+            {% include 'core/components/navbar/right.html' %}
+        </div>
+    </div>
+
+    <main class="flex-1 p-6 overflow-x-hidden">
+        <div class="mx-auto space-y-6 max-w-7xl">
+            <div class="flex items-end justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">Coordenação</h1>
+                    <p class="text-sm text-slate-500">Visão Geral e Indicadores</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-sm">Filtrar</button>
+                    <button class="btn btn-sm btn-primary bg-purple-600 border-none text-white">Novo Registro</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                <div class="bg-white border shadow stats border-slate-100">
+                    <div class="stat">
+                        <div class="stat-figure text-purple-600 opacity-20">
+                            <i class="fas fa-clipboard-list text-3xl"></i>
+                        </div>
+                        <div class="stat-title">Total Registros</div>
+                        <div class="stat-value text-purple-600">25.6K</div>
+                        <div class="stat-desc">21% mais que mês passado</div>
+                    </div>
+                </div>
+                </div>
+            
+            <div class="mt-4 lg:hidden">
+                <h3 class="mb-2 font-bold">Acesso Rápido</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% include 'coordenacao/components/navbar/center.html' %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include 'core/components/navbar/drawers.html' %}
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% load static %}
+
+<div class="relative w-full aspect-[9/16] bg-black rounded-[2.5rem] overflow-hidden shadow-2xl mb-12 border border-white/10 group" 
+     id="post-{{ post.id }}">
+
+    <div class="absolute inset-0 z-0">
+        {% if post.video %}
+            <video class="object-cover w-full h-full" 
+                   autoplay loop muted playsinline 
+                   poster="{{ post.imagem.url|default:'' }}">
+                <source src="{{ post.video.url|default:post.video.url|default:post.video }}" type="video/mp4">
+            </video>
+            <div class="absolute p-2 border rounded-full pointer-events-none top-6 right-6 bg-black/20 backdrop-blur-md border-white/10">
+                <i class="text-xs text-white fas fa-volume-mute"></i>
+            </div>
+        {% elif post.imagem %}
+            <img src="{{ post.imagem.url|default:post.imagem.url|default:post.imagem }}" 
+                 class="w-full h-full object-cover transition-transform duration-[5s] hover:scale-110">
+        {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-gray-900 via-indigo-950 to-black animate-pulse"></div>
+        {% endif %}
+
+        <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/90"></div>
+    </div>
+
+    <div class="absolute top-0 left-0 z-20 flex items-center justify-between w-full p-5">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full p-[2px] bg-gradient-to-r from-pink-500 to-violet-600">
+                <img src="{{ post.autor.profile.avatar.url|default:'https://ui-avatars.com/api/?name='|add:post.autor.username }}" 
+                     class="object-cover w-full h-full border-2 border-black rounded-full">
+            </div>
+            <div class="flex flex-col shadow-black drop-shadow-md">
+                <span class="text-sm font-bold tracking-wide text-white">{{ post.autor.username }}</span>
+                {% if post.location %}
+                <span class="text-white/70 text-[10px] uppercase font-medium">{{ post.location }}</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <button class="text-white/80 hover:text-white drop-shadow-md">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+    </div>
+
+    <div class="absolute z-30 flex flex-col items-center w-16 gap-6 right-2 bottom-20">
+        
+        <div class="flex flex-col items-center gap-1">
+            {% if not post.is_system %}
+                <button hx-post="{% url 'yourlife_social:toggle_like' post.id %}" hx-swap="none"
+                        class="relative flex items-center justify-center w-12 h-12 transition-transform group/icon active:scale-75">
+                    <div class="absolute inset-0 rounded-full bg-black/20 backdrop-blur-sm"></div>
+                    <div id="like-icon-{{ post.id }}">
+                        {% if post.user_liked %}
+                            <i class="text-2xl fas fa-heart text-rose-500 drop-shadow-lg"></i>
+                        {% else %}
+                            <i class="text-2xl text-white transition-colors fas fa-heart drop-shadow-lg group-hover/icon:text-rose-500"></i>
+                        {% endif %}
+                    </div>
+                </button>
+            {% else %}
+                <div class="relative flex items-center justify-center w-12 h-12 cursor-default opacity-80">
+                    <div class="absolute inset-0 rounded-full bg-white/10 backdrop-blur-sm"></div>
+                    <i class="text-2xl text-yellow-400 fas fa-star drop-shadow-lg"></i>
+                </div>
+            {% endif %}
+            <span class="text-xs font-bold text-white drop-shadow-md">{{ post.total_likes|default:"0" }}</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1">
+            <button class="relative flex items-center justify-center w-12 h-12 transition-transform group/icon active:scale-75">
+                <div class="absolute inset-0 rounded-full bg-black/20 backdrop-blur-sm"></div>
+                <i class="text-2xl text-white transition-colors fas fa-comment-dots drop-shadow-lg group-hover/icon:text-blue-400"></i>
+            </button>
+            <span class="text-xs font-bold text-white drop-shadow-md">{{ post.total_comentarios|default:"0" }}</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1">
+            <button class="relative flex items-center justify-center w-12 h-12 transition-transform group/icon active:scale-75">
+                <div class="absolute inset-0 rounded-full bg-black/20 backdrop-blur-sm"></div>
+                <i class="text-xl text-white transition-colors fas fa-paper-plane drop-shadow-lg group-hover/icon:text-green-400"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="absolute bottom-0 left-0 z-20 flex flex-col w-full gap-3 p-5 pr-20">
+        
+        <div class="overflow-y-auto max-h-32 scrollbar-hide">
+            <p class="text-white text-[15px] font-medium leading-snug drop-shadow-md text-shadow-sm">
+                <span class="mr-1 font-bold text-white">{{ post.autor.username }}</span>
+                {{ post.conteudo|linebreaksbr }}
+            </p>
+        </div>
+
+        {% if not post.is_system %}
+        <div class="relative w-full mt-2 group/input">
+            <div class="absolute inset-0 transition-all border rounded-full bg-white/10 backdrop-blur-md border-white/10 group-hover/input:bg-white/20"></div>
+            <form class="relative flex items-center px-4 py-2.5 gap-2">
+                <input type="text" 
+                       placeholder="Adicione um comentário..." 
+                       class="w-full p-0 text-xs font-medium text-white bg-transparent border-none placeholder-white/70 focus:ring-0 placeholder-shadow"
+                       autocomplete="off">
+                <button type="submit" class="transition-colors text-white/90 hover:text-indigo-400">
+                    <i class="text-sm fas fa-arrow-up"></i>
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>

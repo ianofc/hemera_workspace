@@ -1,0 +1,38 @@
+<div class="p-4">
+    <h3 class="text-xl font-bold text-gray-800 mb-4 px-2">{{ title }}</h3>
+    
+    <div class="space-y-3 max-h-[60vh] overflow-y-auto custom-scrollbar">
+        {% for u in users_list %}
+        <div class="flex items-center justify-between p-2 hover:bg-slate-50 rounded-xl transition-colors">
+            <div class="flex items-center gap-3">
+                <a href="{% url 'yourlife_social:profile_detail' u.username %}">
+                    {% if u.avatar %}
+                        <img src="{{ u.avatar.url }}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+                    {% else %}
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                            {{ u.first_name|first|upper }}
+                        </div>
+                    {% endif %}
+                </a>
+                <div>
+                    <a href="{% url 'yourlife_social:profile_detail' u.username %}" class="font-bold text-slate-800 text-sm hover:text-indigo-600 block">
+                        {{ u.get_full_name }}
+                    </a>
+                    <span class="text-xs text-slate-500">@{{ u.username }}</span>
+                </div>
+            </div>
+            
+            {% if request.user != u %}
+                <a href="{% url 'yourlife_social:profile_detail' u.username %}" class="px-3 py-1 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100">
+                    Ver Perfil
+                </a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="text-center py-8 text-slate-500">
+            <i class="fas fa-users-slash text-3xl mb-2 opacity-50"></i>
+            <p>{{ empty_msg }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>

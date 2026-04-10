@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  zios_app:
+    build: .
+    ports: ["8001:8001"]
+    env_file: .env
+    depends_on: [redis, db]
+  redis:
+    image: redis:alpine
+  db:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_PASSWORD: password

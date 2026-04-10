@@ -1,0 +1,42 @@
+<div class="items-center justify-center flex-1 hidden gap-1 md:flex">
+    
+    <a href="{% url 'yourlife_social:home' %}" 
+       class="relative flex items-center justify-center h-12 transition-colors rounded-lg w-14 group"
+       title="Início">
+        {% if request.resolver_match.url_name == 'home' %}
+            <i class="text-2xl text-white fa-solid fa-house drop-shadow-md"></i>
+            <div class="absolute w-1 h-1 bg-white rounded-full -bottom-1"></div>
+        {% else %}
+            <i class="text-2xl transition-colors fa-solid fa-house text-slate-500 group-hover:text-slate-300"></i>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'yourlife_social:reels' %}" 
+       class="relative flex items-center justify-center h-12 transition-colors rounded-lg w-14 group"
+       title="Reels">
+        {% if request.resolver_match.url_name == 'reels' %}
+            <i class="text-2xl text-white fa-solid fa-clapperboard drop-shadow-md"></i>
+            <div class="absolute w-1 h-1 bg-white rounded-full -bottom-1"></div>
+        {% else %}
+            <i class="text-2xl transition-colors fa-solid fa-clapperboard text-slate-500 group-hover:text-slate-300"></i>
+        {% endif %}
+    </a>
+
+    <a href="{% url 'yourlife_social:explore' %}" 
+       class="relative flex items-center justify-center h-12 transition-colors rounded-lg w-14 group"
+       title="Explorar">
+        {% if request.resolver_match.url_name == 'explore' %}
+            <i class="text-2xl text-white fa-solid fa-compass drop-shadow-md"></i>
+            <div class="absolute w-1 h-1 bg-white rounded-full -bottom-1"></div>
+        {% else %}
+            <i class="text-2xl transition-colors fa-regular fa-compass text-slate-500 group-hover:text-slate-300"></i>
+        {% endif %}
+    </a>
+
+    <a href="#" 
+       class="relative flex items-center justify-center h-12 transition-colors rounded-lg w-14 group"
+       title="Grupos">
+        <i class="text-2xl transition-colors fa-solid fa-users text-slate-500 group-hover:text-slate-300"></i>
+    </a>
+
+</div>

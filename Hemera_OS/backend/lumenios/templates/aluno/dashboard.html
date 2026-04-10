@@ -1,0 +1,422 @@
+{% extends 'aluno/base_lumenios.html' %}
+{% load static %}
+
+{% block title %}Dashboard | Aluno{% endblock %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto px-6 space-y-12 pb-20">
+
+    <section class="relative rounded-[2.5rem] overflow-hidden shadow-2xl h-[380px] group bg-slate-900 border border-slate-800">
+        <div class="absolute inset-0 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80" 
+                 class="w-full h-full object-cover transition-transform duration-[5s] ease-in-out group-hover:scale-110 opacity-60"
+                 alt="Ambiente de Estudos">
+        </div>
+        
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/95 via-purple-900/80 to-transparent mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+
+        <div class="absolute inset-0 flex items-center px-8 md:px-16 lg:px-20">
+            <div class="relative z-10 max-w-3xl space-y-6">
+                <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold tracking-wider text-indigo-200 uppercase border rounded-full shadow-lg bg-white/10 backdrop-blur-md border-white/20">
+                        <span class="relative flex w-2 h-2">
+                            <span class="absolute inline-flex w-full h-full bg-indigo-400 rounded-full opacity-75 animate-ping"></span>
+                            <span class="relative inline-flex w-2 h-2 bg-indigo-500 rounded-full"></span>
+                        </span>
+                        Ambiente Escolar Online
+                    </span>
+                </div>
+                
+                <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <h1 class="text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl font-display drop-shadow-xl">
+                        Olá, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">{{ user.first_name|default:user.username }}</span>.
+                        <br><span class="text-4xl md:text-5xl opacity-90">Hora de evoluir! 🚀</span>
+                    </h1>
+                </div>
+                
+                <div class="animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <p class="max-w-xl text-lg font-medium leading-relaxed text-indigo-100/90 drop-shadow-md">
+                        Você tem <strong class="text-white border-b-2 border-indigo-400/50 px-1">{{ matriculas.count }} disciplinas</strong> ativas. 
+                        Sua jornada de conhecimento continua agora.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <a href="{% url 'lumenios:disciplinas' %}" 
+                       class="flex items-center gap-3 px-8 py-4 font-bold transition-all bg-white shadow-xl text-indigo-950 rounded-2xl hover:bg-indigo-50 hover:shadow-indigo-500/30 hover:-translate-y-1 group/btn">
+                        <div class="flex items-center justify-center w-6 h-6 text-white bg-indigo-600 rounded-full group-hover/btn:scale-110 transition-transform">
+                            <i class="text-xs fas fa-play ml-0.5"></i>
+                        </div>
+                        Minhas Aulas
+                    </a>
+                    <a href="{% url 'lumenios:biblioteca' %}" 
+                       class="flex items-center gap-3 px-8 py-4 font-bold text-white transition-all border shadow-xl border-white/30 bg-white/10 backdrop-blur-md rounded-2xl hover:bg-white/20 hover:border-white/50 hover:-translate-y-1">
+                        <i class="fas fa-book-reader"></i> Biblioteca
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        
+        <div class="lg:col-span-2 relative rounded-[2rem] bg-gradient-to-br from-violet-600 to-fuchsia-700 p-10 text-white overflow-hidden shadow-2xl shadow-purple-900/20 flex flex-col justify-center min-h-[300px] group transition-all hover:shadow-purple-900/40">
+            <div class="absolute top-0 right-0 w-96 h-96 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/10 blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 -translate-x-1/3 translate-y-1/3 rounded-full bg-indigo-500/30 blur-3xl"></div>
+            
+            <div class="relative z-10 max-w-lg">
+                <span class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wide uppercase border rounded-lg bg-white/20 backdrop-blur-md border-white/20">
+                    <i class="mr-1 fas fa-star text-yellow-300"></i> Destaque da Semana
+                </span>
+                <h3 class="mb-3 text-3xl font-bold md:text-4xl font-display">Feira de Ciências 2025</h3>
+                <p class="mb-8 text-lg leading-relaxed text-purple-100">
+                    Prepare seu projeto! Confira o edital oficial do MEC, monte sua equipe e inove. O futuro começa na sua imaginação.
+                </p>
+                <a href="https://www.gov.br/mec/pt-br" target="_blank" 
+                   class="inline-flex items-center gap-2 px-6 py-3 font-bold text-purple-700 transition-all bg-white shadow-lg rounded-xl hover:bg-purple-50 hover:scale-105 hover:shadow-xl">
+                    Ver Edital Oficial <i class="fas fa-external-link-alt text-xs opacity-50"></i>
+                </a>
+            </div>
+            
+            <i class="absolute transition-transform duration-500 opacity-20 fas fa-flask text-[12rem] -right-8 -bottom-12 text-white rotate-12 group-hover:rotate-6 group-hover:scale-110"></i>
+        </div>
+
+        <div class="flex flex-col justify-center p-8 bg-white/80 backdrop-blur-xl border border-white/60 rounded-[2rem] shadow-glass relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            
+            <h4 class="flex items-center gap-3 mb-6 text-xl font-bold text-slate-800">
+                <div class="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-lg">
+                    <i class="text-orange-500 fas fa-history"></i>
+                </div>
+                Últimas Aulas
+            </h4>
+            
+            <div class="flex-1 space-y-4 overflow-y-auto max-h-[220px] custom-scrollbar pr-2">
+                {% for mat in matriculas|slice:":3" %}
+                <a href="{% url 'lumenios:sala_de_aula' mat.curso.id %}" 
+                   class="flex items-center gap-4 p-3 transition-all border border-transparent cursor-pointer rounded-2xl bg-white/60 hover:bg-white hover:border-indigo-100 hover:shadow-md group">
+                    <div class="flex items-center justify-center w-12 h-12 text-xl text-white transition-transform rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md group-hover:scale-110 shrink-0">
+                        {% if forloop.first %}<i class="fas fa-play text-xs"></i>{% else %}<i class="fas fa-book-open text-xs"></i>{% endif %}
+                    </div>
+                    
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold truncate text-slate-700 group-hover:text-indigo-700 transition-colors">{{ mat.curso.titulo }}</p>
+                        <p class="text-xs font-medium truncate text-slate-400">Continuar de onde parou</p>
+                        
+                        <div class="w-full h-1 mt-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500 rounded-full" style="width: {{ mat.progresso|default:5 }}%"></div>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="flex flex-col items-center justify-center py-8 text-center opacity-60">
+                    <i class="fas fa-wind text-4xl text-slate-300 mb-2"></i>
+                    <p class="text-sm text-slate-500">Nenhuma atividade recente.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="flex items-end justify-between mb-8 px-2">
+            <div class="flex items-center gap-4">
+                <div class="w-1.5 h-10 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full shadow-lg shadow-indigo-500/30"></div>
+                <div>
+                    <h3 class="text-3xl font-display font-bold text-slate-800">Minhas Disciplinas</h3>
+                    <p class="text-sm text-slate-500 font-medium">Acesse o conteúdo das suas matérias.</p>
+                </div>
+            </div>
+            <a href="{% url 'lumenios:disciplinas' %}" class="group flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors hover:text-indigo-800 bg-white px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-slate-100">
+                Ver grade completa 
+                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {% for mat in matriculas|slice:":4" %}
+            <a href="{% url 'lumenios:sala_de_aula' mat.curso.id %}" 
+               class="relative flex flex-col p-4 transition-all duration-300 bg-white border border-white shadow-lg group rounded-[2rem] hover:shadow-2xl hover:-translate-y-2 hover:border-indigo-100">
+                
+                <div class="relative h-48 mb-4 overflow-hidden rounded-[1.5rem] bg-slate-100 shadow-inner">
+                    {% if mat.curso.imagem_capa %}
+                        <img src="{{ mat.curso.imagem_capa.url }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
+                    {% else %}
+                        <div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-slate-100 to-indigo-50 text-indigo-200">
+                            <i class="text-6xl fas fa-book-open opacity-50"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="absolute inset-0 bg-indigo-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
+                        <div class="flex items-center justify-center w-14 h-14 bg-white rounded-full shadow-xl transform scale-50 group-hover:scale-100 transition-all duration-300">
+                            <i class="ml-1 text-xl text-indigo-600 fas fa-play"></i>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-3 left-3">
+                        <span class="px-2 py-1 text-[10px] font-bold text-white uppercase bg-black/30 backdrop-blur-md rounded-lg border border-white/20">
+                            {{ mat.curso.get_categoria_display|default:"Geral" }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="px-2 pb-2 flex-1 flex flex-col">
+                    <h4 class="mb-1 text-lg font-bold leading-tight text-slate-800 transition-colors group-hover:text-indigo-700 line-clamp-1">
+                        {{ mat.curso.titulo }}
+                    </h4>
+                    
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-[10px] text-slate-500 overflow-hidden">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <p class="text-xs font-medium text-slate-500 truncate">Prof. {{ mat.curso.professor.first_name }}</p>
+                    </div>
+
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Progresso</span>
+                            <span class="text-[10px] font-bold text-indigo-600">{{ mat.progresso|stringformat:".0f" }}%</span>
+                        </div>
+                        <div class="w-full h-2 mb-1 overflow-hidden bg-slate-100 rounded-full">
+                            <div class="h-full transition-all duration-1000 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
+                                 style="width: {{ mat.progresso|default:0 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+                <div class="col-span-full py-20 flex flex-col items-center justify-center text-center bg-slate-50/50 border-2 border-dashed border-slate-200 rounded-[3rem] group hover:border-indigo-200 transition-colors">
+                    <div class="flex items-center justify-center w-24 h-24 mb-6 bg-white rounded-full shadow-lg text-indigo-200 group-hover:text-indigo-500 transition-colors">
+                        <i class="text-5xl fas fa-inbox"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-700">Nenhuma disciplina encontrada</h3>
+                    <p class="max-w-md mt-2 mb-8 text-slate-500">Parece que você ainda não foi matriculado em nenhuma turma oficial.</p>
+
+                    <a href="{% url 'lumenios:sala_de_aula_demo' %}" class="inline-flex items-center gap-3 px-8 py-3.5 font-bold text-white transition-all bg-indigo-600 rounded-2xl hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-1 shadow-indigo-200 shadow-lg">
+                        <i class="fas fa-eye"></i> 
+                        <span>Visualizar Sala de Aula (Modo Demo)</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div onclick="window.location.href='{% url 'lumenios:zios' %}?q=Física Eletrodinâmica'" 
+             class="relative p-10 overflow-hidden text-white bg-indigo-900 shadow-2xl rounded-[2.5rem] group flex items-center justify-between cursor-pointer transition-all hover:shadow-indigo-900/40 hover:-translate-y-1 border border-indigo-800">
+            
+            <div class="relative z-10 space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold text-indigo-100 uppercase bg-indigo-800/80 rounded-lg border border-indigo-600/50 backdrop-blur-md">
+                    <i class="text-yellow-400 fas fa-bolt animate-pulse"></i> Recomendado pela IA
+                </span>
+                <h3 class="text-3xl font-display font-bold">Física: Eletrodinâmica</h3>
+                <p class="text-indigo-200 text-sm font-medium max-w-xs">Baseado nas suas últimas notas e dúvidas.</p>
+            </div>
+            
+            <div class="flex items-center justify-center w-16 h-16 transition-all border rounded-full bg-white/10 backdrop-blur-md group-hover:bg-white group-hover:text-indigo-900 border-white/20 shadow-lg group-hover:scale-110">
+                <i class="text-2xl fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+            
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-purple-600 rounded-full blur-[120px] opacity-60 pointer-events-none group-hover:opacity-80 transition-opacity"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+        </div>
+
+        <div onclick="window.location.href='{% url 'lumenios:zios' %}?q=Geopolítica Oriente Médio'" 
+             class="relative p-10 overflow-hidden text-white bg-emerald-900 shadow-2xl rounded-[2.5rem] group flex items-center justify-between cursor-pointer transition-all hover:shadow-emerald-900/40 hover:-translate-y-1 border border-emerald-800">
+            
+            <div class="relative z-10 space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold text-emerald-100 uppercase bg-emerald-800/80 rounded-lg border border-emerald-600/50 backdrop-blur-md">
+                    <i class="fas fa-globe text-teal-300"></i> Atualidades
+                </span>
+                <h3 class="text-3xl font-display font-bold">Geopolítica Atual</h3>
+                <p class="text-emerald-200 text-sm font-medium max-w-xs">Pesquisa completa sobre conflitos no Oriente Médio.</p>
+            </div>
+            
+            <div class="flex items-center justify-center w-16 h-16 transition-all border rounded-full bg-white/10 backdrop-blur-md group-hover:bg-white group-hover:text-emerald-900 border-white/20 shadow-lg group-hover:scale-110">
+                <i class="text-2xl fas fa-book-reader transform group-hover:rotate-12 transition-transform"></i>
+            </div>
+            
+            <div class="absolute -right-20 -top-20 w-80 h-80 bg-teal-500 rounded-full blur-[120px] opacity-40 pointer-events-none group-hover:opacity-60 transition-opacity"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+        
+        <div class="flex flex-col p-6 border border-white shadow-lg lg:col-span-1 bg-white/70 backdrop-blur-xl rounded-[2rem]">
+            <h4 class="flex items-center gap-2 mb-6 font-bold text-slate-800">
+                <i class="text-red-500 fas fa-fire text-xl"></i> Prazos Próximos
+            </h4>
+            
+            <div class="flex-1 space-y-4">
+                <div class="flex items-center gap-4 p-3 transition-all cursor-pointer rounded-2xl hover:bg-white hover:shadow-md group border border-transparent hover:border-red-100"
+                     onclick="window.location.href='{% url 'lumenios:zios' %}?q=Revisão Matemática Prova'">
+                    <div class="flex flex-col items-center justify-center w-14 h-14 text-red-500 transition-colors border border-red-100 bg-red-50 rounded-2xl group-hover:bg-red-500 group-hover:text-white shadow-sm">
+                        <span class="text-xl font-bold leading-none">20</span>
+                        <span class="text-[9px] font-bold uppercase tracking-wider">Out</span>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold transition-colors text-slate-700 group-hover:text-red-600">Matemática</div>
+                        <div class="flex items-center gap-1.5 text-xs text-slate-400 mt-1">
+                            <span class="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></span> Prova Bimestral
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 p-3 transition-all cursor-pointer rounded-2xl hover:bg-white hover:shadow-md group border border-transparent hover:border-orange-100"
+                     onclick="window.location.href='{% url 'lumenios:zios' %}?q=Geografia Trabalho Entrega'">
+                    <div class="flex flex-col items-center justify-center w-14 h-14 text-orange-500 transition-colors border border-orange-100 bg-orange-50 rounded-2xl group-hover:bg-orange-500 group-hover:text-white shadow-sm">
+                        <span class="text-xl font-bold leading-none">22</span>
+                        <span class="text-[9px] font-bold uppercase tracking-wider">Out</span>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold transition-colors text-slate-700 group-hover:text-orange-600">Geografia</div>
+                        <div class="flex items-center gap-1.5 text-xs text-slate-400 mt-1">
+                            <i class="fas fa-file-alt"></i> Entrega Trabalho
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6 lg:col-span-2">
+            <div class="flex items-center justify-between px-2">
+                <h4 class="font-bold text-slate-800 text-lg">Materiais Extras</h4>
+                <a href="{% url 'lumenios:biblioteca' %}" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline uppercase tracking-wide">Ver biblioteca</a>
+            </div>
+            
+            <a href="{% url 'lumenios:zios' %}?q=Biologia Celular" 
+               class="flex items-center gap-5 p-5 transition-all bg-white border border-slate-100 shadow-md cursor-pointer rounded-[2rem] hover:shadow-xl hover:border-green-200 hover:-translate-y-1 group">
+                <div class="flex items-center justify-center w-16 h-16 text-3xl text-green-600 transition-transform bg-green-50 border border-green-100 rounded-2xl group-hover:scale-110 shadow-inner">
+                    <i class="fas fa-dna"></i>
+                </div>
+                <div class="flex-1">
+                    <h5 class="text-lg font-bold text-slate-800 transition-colors group-hover:text-green-700">Biologia Celular</h5>
+                    <p class="text-sm text-slate-500 mt-1">Vídeo-aula interativa e resumo gerado por IA.</p>
+                </div>
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-300 group-hover:bg-green-600 group-hover:text-white transition-all">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+            
+            <a href="{% url 'lumenios:zios' %}?q=História Revolução Francesa" 
+               class="flex items-center gap-5 p-5 transition-all bg-white border border-slate-100 shadow-md cursor-pointer rounded-[2rem] hover:shadow-xl hover:border-blue-200 hover:-translate-y-1 group">
+                <div class="flex items-center justify-center w-16 h-16 text-3xl text-blue-600 transition-transform bg-blue-50 border border-blue-100 rounded-2xl group-hover:scale-110 shadow-inner">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="flex-1">
+                    <h5 class="text-lg font-bold text-slate-800 transition-colors group-hover:text-blue-700">Revolução Francesa</h5>
+                    <p class="text-sm text-slate-500 mt-1">Linha do tempo e principais personagens.</p>
+                </div>
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-300 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex flex-col justify-center p-8 text-white shadow-xl lg:col-span-1 bg-slate-900 rounded-[2rem] border border-slate-800 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-950"></div>
+            <div class="relative z-10">
+                <h4 class="flex items-center justify-center gap-2 mb-6 font-bold text-center text-lg">
+                    <i class="text-indigo-400 fas fa-stopwatch animate-pulse"></i> Revisão Rápida
+                </h4>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href="{% url 'lumenios:zios' %}?q=Logaritmo" class="px-4 py-2 text-xs font-bold transition-all border rounded-xl bg-white/5 hover:bg-indigo-600 hover:border-indigo-500 border-white/10 hover:shadow-lg hover:-translate-y-0.5">Logaritmo</a>
+                    <a href="{% url 'lumenios:zios' %}?q=Vanguardas Europeias" class="px-4 py-2 text-xs font-bold transition-all border rounded-xl bg-white/5 hover:bg-purple-600 hover:border-purple-500 border-white/10 hover:shadow-lg hover:-translate-y-0.5">Vanguardas</a>
+                    <a href="{% url 'lumenios:zios' %}?q=Genética" class="px-4 py-2 text-xs font-bold transition-all border rounded-xl bg-white/5 hover:bg-emerald-600 hover:border-emerald-500 border-white/10 hover:shadow-lg hover:-translate-y-0.5">Genética</a>
+                    <a href="{% url 'lumenios:zios' %}?q=Dilatação Térmica" class="px-4 py-2 text-xs font-bold transition-all border rounded-xl bg-white/5 hover:bg-orange-600 hover:border-orange-500 border-white/10 hover:shadow-lg hover:-translate-y-0.5">Dilatação</a>
+                    <a href="{% url 'lumenios:zios' %}?q=Tabela Periódica" class="px-4 py-2 text-xs font-bold transition-all border rounded-xl bg-white/5 hover:bg-pink-600 hover:border-pink-500 border-white/10 hover:shadow-lg hover:-translate-y-0.5">Química</a>
+                </div>
+                <p class="text-[10px] text-center text-slate-500 mt-6 uppercase tracking-widest font-bold">Powered by Zios AI AI</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div class="relative overflow-hidden rounded-[2.5rem] bg-black text-white shadow-2xl min-h-[260px] group border border-slate-800" x-data="nasaWidget()" x-init="fetchApod()">
+            <img :src="data.url" class="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-[10s] ease-linear group-hover:scale-110" x-show="!loading" style="display:none;">
+            
+            <div x-show="loading" class="absolute inset-0 flex items-center justify-center bg-slate-950">
+                <div class="flex flex-col items-center gap-3">
+                    <i class="text-3xl text-indigo-500 fas fa-satellite animate-spin-slow"></i>
+                    <span class="text-xs text-indigo-400 font-mono tracking-widest">CONNECTING TO NASA...</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex flex-col justify-end h-full p-10 bg-gradient-to-t from-black via-black/60 to-transparent">
+                <div class="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 mb-3 text-[10px] font-bold uppercase border rounded-full border-white/20 bg-white/10 backdrop-blur-md w-fit">
+                        <i class="fas fa-rocket text-indigo-400"></i> Espaço Sideral (NASA APOD)
+                    </span>
+                    <h4 class="text-2xl font-bold leading-tight font-display mb-2 text-shadow" x-text="data.title || 'Carregando universo...'"></h4>
+                    <p class="text-sm text-slate-300 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" x-text="data.explanation"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-center p-10 text-white border shadow-2xl bg-slate-900 rounded-[2.5rem] border-slate-800 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-indigo-500/20 rounded-full blur-[80px]"></div>
+            <div class="absolute bottom-0 left-0 w-40 h-40 bg-pink-500/20 rounded-full blur-[80px]"></div>
+
+            <div class="relative z-10 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-500/30">
+                    <i class="text-3xl fas fa-gamepad"></i>
+                </div>
+                <h4 class="mb-2 text-2xl font-bold font-display">Desafios Relâmpago</h4>
+                <p class="text-indigo-200 mb-8 max-w-md mx-auto text-sm">Teste seus conhecimentos agora e ganhe pontos de experiência no Lumenio.</p>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button @click="startTrivia('science')" class="flex items-center gap-2 px-5 py-3 text-sm font-bold transition-all border shadow-lg rounded-xl bg-white/5 hover:bg-indigo-600 border-white/10 hover:shadow-indigo-500/50 hover:-translate-y-1">
+                        🧪 Ciências
+                    </button>
+                    <button @click="startTrivia('history')" class="flex items-center gap-2 px-5 py-3 text-sm font-bold transition-all border shadow-lg rounded-xl bg-white/5 hover:bg-amber-600 border-white/10 hover:shadow-amber-500/50 hover:-translate-y-1">
+                        🏛️ História
+                    </button>
+                    <button @click="startTrivia('geography')" class="flex items-center gap-2 px-5 py-3 text-sm font-bold transition-all border shadow-lg rounded-xl bg-white/5 hover:bg-emerald-600 border-white/10 hover:shadow-emerald-500/50 hover:-translate-y-1">
+                        🌍 Geografia
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+    function nasaWidget() {
+        return {
+            loading: true,
+            data: {},
+            async fetchApod() {
+                try {
+                    // API Key DEMO (Rate Limited, mas funciona para dev)
+                    const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
+                    if(res.ok) {
+                        this.data = await res.json();
+                    } else {
+                        throw new Error('Falha na NASA');
+                    }
+                } catch (e) { 
+                    // Fallback visual elegante
+                    this.data = { 
+                        title: 'Explorando o Cosmos', 
+                        url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600',
+                        explanation: 'Não foi possível conectar ao satélite da NASA agora, mas continue explorando as estrelas!'
+                    } 
+                } finally {
+                    this.loading = false;
+                }
+            }
+        }
+    }
+
+    function startTrivia(category) {
+        // Redireciona para o Zios AI para iniciar um Quiz Interativo
+        window.location.href = "{% url 'lumenios:zios' %}?q=Criar um Quiz sobre " + category;
+    }
+</script>
+{% endblock %}

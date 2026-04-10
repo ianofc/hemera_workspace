@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Seja Premium - NioCortex">
+    <title>NioCortex Premium | Upgrade</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/perfis.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        background: 'var(--bg-body)',
+                        text: 'var(--text-main)',
+                        premium: {
+                            light: '#FEF3C7',
+                            DEFAULT: '#F59E0B',
+                            dark: '#B45309'
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow-gold': '0 0 40px rgba(245, 158, 11, 0.4)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-15px)' } },
+                        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F59E0B 0%, #FFD700 50%, #B45309 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .gold-border {
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #F59E0B;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #F59E0B;
+        }
+    </style>
+</head>
+
+<body x-data="{ billing: 'monthly', gender: '{{ user.gender|default:'F' }}' }" 
+      x-init="theme = (gender === 'F') ? 'pink' : 'blue'"
+      :class="theme === 'pink' ? 'theme-pink' : 'theme-blue'"
+      class="relative flex flex-col min-h-screen overflow-x-hidden font-sans antialiased selection:bg-amber-500 selection:text-white">
+
+    <div class="fixed inset-0 z-0 transition-colors duration-700 pointer-events-none">
+        <div class="absolute top-[-20%] left-[50%] -translate-x-1/2 w-[1000px] h-[1000px] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 bg-amber-400 animate-float"></div>
+        <div class="absolute bottom-[0%] right-[0%] w-[800px] h-[800px] rounded-full mix-blend-multiply filter blur-[150px] opacity-20 bg-purple-600 animate-float" style="animation-delay: 2s"></div>
+        <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(var(--text-muted) 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+
+    <nav class="sticky top-0 z-40 w-full px-4 py-2 transition-colors duration-300 shadow-sm glass-nav">
+        <div class="flex items-center justify-between h-16 mx-auto max-w-7xl">
+            <div class="flex items-center gap-4">
+                <a href="{% url 'core:aluno_dashboard' %}" class="flex items-center gap-3 group">
+                    <div class="flex items-center justify-center w-10 h-10 text-lg font-bold text-white transition-transform shadow-lg rounded-xl group-hover:scale-110 bg-gradient-to-br from-amber-400 to-orange-600">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight font-display text-slate-800">Nio<span class="text-amber-500">Premium</span></span>
+                </a>
+            </div>
+            <a href="{% url 'core:aluno_dashboard' %}" class="text-sm font-bold transition text-slate-500 hover:text-slate-800">Voltar ao Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="relative z-10 w-full px-4 py-12 mx-auto max-w-7xl">
+        
+        <div class="max-w-3xl mx-auto mb-16 text-center">
+            <span class="px-4 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-widest border border-amber-200 mb-4 inline-block">
+                Desbloqueie seu Potencial
+            </span>
+            <h1 class="mb-6 text-4xl font-black leading-tight md:text-6xl font-display text-slate-900">
+                Estude como um <br>
+                <span class="gold-gradient-text">Gênio</span>
+            </h1>
+            <p class="mb-8 text-lg leading-relaxed text-slate-600">
+                Acesso ilimitado ao <strong>Zios AI AI</strong>, análises preditivas de notas, personalização exclusiva e destaque na comunidade.
+            </p>
+
+            <div class="flex items-center justify-center gap-4">
+                <span class="text-sm font-bold" :class="billing === 'monthly' ? 'text-slate-800' : 'text-slate-400'">Mensal</span>
+                <button 
+                    class="relative h-8 transition-colors rounded-full w-14 bg-slate-200 focus:outline-none"
+                    :class="billing === 'yearly' ? 'bg-amber-500' : 'bg-slate-300'"
+                    @click="billing = billing === 'monthly' ? 'yearly' : 'monthly'"
+                >
+                    <div class="absolute w-6 h-6 transition-all bg-white rounded-full shadow-sm top-1"
+                         :class="billing === 'yearly' ? 'left-7' : 'left-1'"></div>
+                </button>
+                <span class="flex items-center gap-2 text-sm font-bold" :class="billing === 'yearly' ? 'text-slate-800' : 'text-slate-400'">
+                    Anual 
+                    <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full border border-green-200">-20% OFF</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="grid max-w-4xl grid-cols-1 gap-8 mx-auto mb-20 md:grid-cols-2">
+            
+            <div class="relative p-8 transition duration-500 border glass-panel rounded-3xl border-white/50 grayscale opacity-80 hover:grayscale-0 hover:opacity-100">
+                <h3 class="mb-2 text-xl font-bold text-slate-500">Plano Básico</h3>
+                <div class="flex items-baseline gap-1 mb-6">
+                    <span class="text-4xl font-bold text-slate-800">R$ 0</span>
+                    <span class="text-slate-500">/sempre</span>
+                </div>
+                <ul class="mb-8 space-y-4 text-sm text-slate-600">
+                    <li class="flex items-center gap-3"><i class="text-green-500 fas fa-check"></i> Acesso às aulas e notas</li>
+                    <li class="flex items-center gap-3"><i class="text-green-500 fas fa-check"></i> Chat básico (Talkio)</li>
+                    <li class="flex items-center gap-3"><i class="text-green-500 fas fa-check"></i> Agenda escolar</li>
+                    <li class="flex items-center gap-3 opacity-50"><i class="fas fa-times text-slate-400"></i> Sem IA Preditiva</li>
+                    <li class="flex items-center gap-3 opacity-50"><i class="fas fa-times text-slate-400"></i> Sem Personalização</li>
+                </ul>
+                <button class="w-full py-3 font-bold transition border-2 rounded-xl border-slate-200 text-slate-500 hover:bg-slate-50">
+                    Seu plano atual
+                </button>
+            </div>
+
+            <div class="relative p-8 overflow-hidden transform border-2 glass-panel rounded-3xl border-amber-400/50 shadow-glow-gold md:-translate-y-4">
+                <div class="absolute top-0 right-0 px-4 py-1 text-xs font-bold text-white shadow-md bg-gradient-to-l from-amber-500 to-orange-500 rounded-bl-xl">
+                    RECOMENDADO
+                </div>
+                
+                <h3 class="flex items-center gap-2 mb-2 text-xl font-bold text-amber-600">
+                    <i class="fas fa-crown"></i> NioCortex Premium
+                </h3>
+                
+                <div class="flex items-baseline gap-1 mb-2">
+                    <span class="text-5xl font-black text-slate-800" x-text="billing === 'monthly' ? 'R$ 19,90' : 'R$ 199,90'"></span>
+                    <span class="text-slate-500" x-text="billing === 'monthly' ? '/mês' : '/ano'"></span>
+                </div>
+                <p class="mb-6 text-xs font-medium text-amber-600" x-show="billing === 'yearly'">Equivalente a R$ 16,65/mês</p>
+                <p class="mb-6 text-xs font-medium text-slate-400" x-show="billing === 'monthly'">Cancele quando quiser</p>
+
+                <ul class="mb-8 space-y-4 text-sm text-slate-700">
+                    <li class="flex items-center gap-3"><div class="flex items-center justify-center w-6 h-6 text-xs rounded-full bg-amber-100 text-amber-600"><i class="fas fa-brain"></i></div> <strong>Zios AI AI</strong> Ilimitado</li>
+                    <li class="flex items-center gap-3"><div class="flex items-center justify-center w-6 h-6 text-xs rounded-full bg-amber-100 text-amber-600"><i class="fas fa-chart-pie"></i></div> Analytics Avançado de Notas</li>
+                    <li class="flex items-center gap-3"><div class="flex items-center justify-center w-6 h-6 text-xs rounded-full bg-amber-100 text-amber-600"><i class="fas fa-check-circle"></i></div> Selo de Verificado & Avatar Gold</li>
+                    <li class="flex items-center gap-3"><div class="flex items-center justify-center w-6 h-6 text-xs rounded-full bg-amber-100 text-amber-600"><i class="fas fa-lock"></i></div> Chat Secreto (Criptografado)</li>
+                    <li class="flex items-center gap-3"><div class="flex items-center justify-center w-6 h-6 text-xs rounded-full bg-amber-100 text-amber-600"><i class="fas fa-paint-brush"></i></div> Temas Exclusivos</li>
+                </ul>
+
+                <a :href="`{% url 'core:checkout' %}?plano=Premium&price=${billing === 'monthly' ? '19.90' : '199.90'}&ciclo=${billing === 'monthly' ? 'Mensal' : 'Anual'}`" 
+                   class="block w-full py-4 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 text-white font-bold text-center shadow-lg hover:shadow-amber-500/40 hover:scale-[1.02] transition-all relative overflow-hidden group">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        QUERO SER PREMIUM <i class="fas fa-arrow-right"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                </a>
+                <p class="text-[10px] text-center text-slate-400 mt-3">Pagamento seguro via Mercado Pago</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div class="p-6 text-center transition glass-panel rounded-2xl hover:bg-white/60">
+                <i class="mb-4 text-4xl text-purple-500 fas fa-robot"></i>
+                <h3 class="mb-2 font-bold text-slate-800">IA Pessoal de Estudos</h3>
+                <p class="text-sm text-slate-500">O Zios AI analisa suas notas e sugere materiais específicos onde você tem dificuldade.</p>
+            </div>
+            <div class="p-6 text-center transition glass-panel rounded-2xl hover:bg-white/60">
+                <i class="mb-4 text-4xl text-blue-500 fas fa-id-badge"></i>
+                <h3 class="mb-2 font-bold text-slate-800">Carteirinha Vitalícia</h3>
+                <p class="text-sm text-slate-500">Gere sua carteirinha digital com QR Code válido e design exclusivo premium.</p>
+            </div>
+            <div class="p-6 text-center transition glass-panel rounded-2xl hover:bg-white/60">
+                <i class="mb-4 text-4xl text-green-500 fas fa-shield-alt"></i>
+                <h3 class="mb-2 font-bold text-slate-800">Privacidade Total</h3>
+                <p class="text-sm text-slate-500">Crie chats secretos e criptografados no Talkio para conversas privadas.</p>
+            </div>
+        </div>
+
+        <div class="max-w-2xl mx-auto mt-20">
+            <h2 class="mb-8 text-2xl font-bold text-center text-slate-800">Dúvidas Frequentes</h2>
+            <div class="space-y-4">
+                <div x-data="{ open: false }" class="overflow-hidden glass-panel rounded-xl">
+                    <button @click="open = !open" class="flex items-center justify-between w-full px-6 py-4 font-bold text-left text-slate-700">
+                        Como funciona o pagamento?
+                        <i class="transition-transform fas fa-chevron-down" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" class="px-6 pb-4 text-sm text-slate-500">
+                        Aceitamos Pix e Cartão de Crédito via Mercado Pago. O acesso é liberado imediatamente após a confirmação.
+                    </div>
+                </div>
+                <div x-data="{ open: false }" class="overflow-hidden glass-panel rounded-xl">
+                    <button @click="open = !open" class="flex items-center justify-between w-full px-6 py-4 font-bold text-left text-slate-700">
+                        Posso cancelar depois?
+                        <i class="transition-transform fas fa-chevron-down" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" class="px-6 pb-4 text-sm text-slate-500">
+                        Sim! No plano mensal você pode cancelar a qualquer momento sem multa.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 mt-20 text-xs text-center text-slate-400">
+        <p>&copy; 2025 NioCortex Education. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>

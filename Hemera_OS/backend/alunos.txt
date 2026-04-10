@@ -1,0 +1,201 @@
+ Creating user for: TATIANE MARTINS ARAUJO -> User: tatiane_araujo / Pass: TATIANE123456
+   Creating user for: RAY JOSÉ DA CONCEIÇÃO SANTOS -> User: ray_santos / Pass: RAY123456
+   Creating user for: ELLEN ENEDINA TELES FERNANDES -> User: ellen_fernandes / Pass: ELLEN123456
+   Creating user for: TAINÁ MENDES DE SOUZA -> User: taina_souza / Pass: TAINÁ123456
+   Creating user for: RICKELME SOUZA SILVA -> User: rickelme_silva / Pass: RICKELME123456
+   Creating user for: GABRIELA MARTINS SOUZA -> User: gabriela_souza / Pass: GABRIELA123456
+   Creating user for: ANDRYA DANIELLY -> User: andrya_danielly / Pass: ANDRYA123456
+   Creating user for: RUBENS ALVES FERREIRA -> User: rubens_ferreira / Pass: RUBENS123456
+   Creating user for: DHEIVERSON JESUS DOS ANJOS -> User: dheiverson_anjos / Pass: DHEIVERSON123456
+   Creating user for: FRANCISCA STEFANY SANTOS ARAUJO -> User: francisca_araujo / Pass: FRANCISCA123456
+   Creating user for: GABRIEL ATHAYDE ARAUJO SILVA -> User: gabriel_silva / Pass: GABRIEL123456
+   Creating user for: GABRIEL VINICIUS MARIANO SANTIAGO -> User: gabriel_santiago / Pass: GABRIEL123456
+   Creating user for: GABRIELLY SOUZA SANTOS -> User: gabrielly_santos / Pass: GABRIELLY123456
+   Creating user for: INÁCIO SILVA OLIVEIRA -> User: inacio_oliveira / Pass: INÁCIO123456
+   Creating user for: JHONATA FRANÇA DA SILVA PONTES -> User: jhonata_pontes / Pass: JHONATA123456
+   Creating user for: LETICIA SANTOS DE JESUS  -> User: leticia_jesus / Pass: LETICIA123456
+   Creating user for: MARIANE SILVA SOUZA -> User: mariane_souza / Pass: MARIANE123456
+   Creating user for: MARIA CLARA DE OLIVEIRA -> User: maria_oliveira / Pass: MARIA123456
+   Creating user for: MARIA EDUARDA PONTES MUNIZ DA SILVA -> User: maria_silva / Pass: MARIA123456
+   Creating user for: PEDRO CAUAN ALVES LIMA -> User: pedro_lima / Pass: PEDRO123456
+   Creating user for: PEDRO HENRIQUE SANTOS MACHADO -> User: pedro_machado / Pass: PEDRO123456
+   Creating user for: FRANCIELE ALVES -> User: franciele_alves / Pass: FRANCIELE123456
+   Creating user for: GUILHERME S. PEREIRA -> User: guilherme_pereira / Pass: GUILHERME123456
+   Creating user for: EMERSON GABRIEL -> User: emerson_gabriel / Pass: EMERSON123456
+   Creating user for: ISIS CATARINE S. C. -> User: isis_c. / Pass: ISIS123456
+   Creating user for: ZILMARIA DOS S. T.  -> User: zilmaria_t. / Pass: ZILMARIA123456
+   Creating user for: VITORIA -> User: vitoria / Pass: VITORIA123456
+   Creating user for: EDUARDO DE SOUZA SANTOS -> User: eduardo_santos / Pass: EDUARDO123456
+   Creating user for: OTAVIO DE SOUZA -> User: otavio_souza / Pass: OTAVIO123456
+   Creating user for: DANIELLY DOS ANJOS SOUZA -> User: danielly_souza / Pass: DANIELLY123456
+   Creating user for: ACASSIO DA SILVA MARTINS -> User: acassio_martins / Pass: ACASSIO123456
+   Creating user for: ANDRYA DANIELLY ARAUJO DOS SANTOS -> User: andrya_santos / Pass: ANDRYA123456
+   Creating user for: CLEILSON MEDEIROS DE SOUZA -> User: cleilson_souza / Pass: CLEILSON123456
+   Creating user for: PEDRO HENRIQUE FERREIRA GOMES -> User: pedro_gomes / Pass: PEDRO123456
+   Creating user for: ELVIS ALENCAR DOS SANTOS SILVA -> User: elvis_silva / Pass: ELVIS123456
+   Creating user for: RAFAELLA DE SOUZA SANTOS -> User: rafaella_santos / Pass: RAFAELLA123456
+   Creating user for: JOVANA ALVES DOS SANTOS -> User: jovana_santos / Pass: JOVANA123456
+   Creating user for: RAILA SOUZA AMORIM -> User: raila_amorim / Pass: RAILA123456
+   Creating user for: ALAN NOVAES DA SILVA -> User: alan_silva / Pass: ALAN123456
+   Creating user for: AMANDA GREGORIO ALVES -> User: amanda_alves / Pass: AMANDA123456
+   Creating user for: ANALY JESUS DOS SANTOS -> User: analy_santos / Pass: ANALY123456
+   Creating user for: ANA JULIA DORADO DE JESUS -> User: ana_jesus / Pass: ANA123456
+   Creating user for: ARYEL CAIQUE SANTOS MENDES -> User: aryel_mendes / Pass: ARYEL123456
+   Creating user for: BÁRBARA PEREIRA DE OLIVEIRA  -> User: barbara_oliveira / Pass: BÁRBARA123456
+   Creating user for: BENJAMIM SANTANA RODRIGUES -> User: benjamim_rodrigues / Pass: BENJAMIM123456
+   Creating user for: CAIO GOIS SOUZA -> User: caio_souza / Pass: CAIO123456
+   Creating user for: CARLOS DANIEL DINIZ OLIVEIRA -> User: carlos_oliveira / Pass: CARLOS123456
+   Creating user for: DAVISON OLIVEIRA SILVA -> User: davison_silva / Pass: DAVISON123456
+   Creating user for: EDINEI ARAUJO DE SOUZA -> User: edinei_souza / Pass: EDINEI123456
+   Creating user for: ELOISE SILVA FERREIRA -> User: eloise_ferreira / Pass: ELOISE123456
+   Creating user for: ELVITON JUNIOR PEREIRA DOS ANJOS -> User: elviton_anjos / Pass: ELVITON123456
+   Creating user for: FLAVIO PINTO ALVES  -> User: flavio_alves / Pass: FLAVIO123456
+   Creating user for: GISELE SANTOS ANTUNES -> User: gisele_antunes / Pass: GISELE123456
+   Creating user for: GLEICE LIMA MENDES -> User: gleice_mendes / Pass: GLEICE123456
+   Creating user for: GUILHERME ARAUJO DE NOVAES -> User: guilherme_novaes / Pass: GUILHERME123456
+   Creating user for: GUILHERME PINA DE OLIVEIRA -> User: guilherme_oliveira / Pass: GUILHERME123456
+   Creating user for: IASMIM SILVA OLIVEIRA -> User: iasmim_oliveira / Pass: IASMIM123456
+   Creating user for: INGRED DREGER DE JESUS -> User: ingred_jesus / Pass: INGRED123456
+   Creating user for: ITALO MENDES SANTOS -> User: italo_santos / Pass: ITALO123456
+   Creating user for: JAIELE MARQUES DE OLIVEIRA  -> User: jaiele_oliveira / Pass: JAIELE123456
+   Creating user for: JULIANE ANJOS MENDES -> User: juliane_mendes / Pass: JULIANE123456
+   Creating user for: KEILLA OLIVIERA DE SOUZA -> User: keilla_souza / Pass: KEILLA123456
+   Creating user for: LAIANE SOUZA SANTOS -> User: laiane_santos / Pass: LAIANE123456
+   Creating user for: LEILTON ALVES DA SILVA -> User: leilton_silva / Pass: LEILTON123456
+   Creating user for: LILIAN SIMONI MORAES ALVES -> User: lilian_alves / Pass: LILIAN123456
+   Creating user for: LUCAS WENDEL MATOS DE OLIVEIRA -> User: lucas_oliveira / Pass: LUCAS123456
+   Creating user for: LUIS DANIEL DIAS BRANDÃO -> User: luis_brandao / Pass: LUIS123456
+   Creating user for: MARCOS ANTONIO SOUZA DE JESUS -> User: marcos_jesus / Pass: MARCOS123456
+   Creating user for: MICHEL SANTOS OLIVEIRA -> User: michel_oliveira / Pass: MICHEL123456
+   Creating user for: NATALÍ BARBOSA DOS ANJOS -> User: natali_anjos / Pass: NATALÍ123456
+   Creating user for: RENATO DA SILVA FRANÇA -> User: renato_franca / Pass: RENATO123456
+   Creating user for: STEFANE OLIVEIRA DOS ANJOS -> User: stefane_anjos / Pass: STEFANE123456
+   Creating user for: THAINÁ SILVA MELO -> User: thaina_melo / Pass: THAINÁ123456
+   Creating user for: THAUÃ VICTOR DE OLIVEIRA SANTOS -> User: thaua_santos / Pass: THAUÃ123456
+   Creating user for: VANDERSON DOS REIS SILVA -> User: vanderson_silva / Pass: VANDERSON123456
+   Creating user for: WEVERTON GASPAR DE SOUZA -> User: weverton_souza / Pass: WEVERTON123456
+   Creating user for: Fabrício Reis de Oliveira -> User: fabricio_oliveira / Pass: Fabrício123456
+   Creating user for: Gutierry Oliveira Souza -> User: gutierry_souza / Pass: Gutierry123456
+   Creating user for: Igor Nunes da Silva -> User: igor_silva / Pass: Igor123456
+   Creating user for: Ismael Gomes Batista -> User: ismael_batista / Pass: Ismael123456
+   Creating user for: João Miguel Santos Araujo -> User: joao_araujo / Pass: João123456
+   Creating user for: Joaquim Araujo de Carvalho -> User: joaquim_carvalho / Pass: Joaquim123456
+   Creating user for: Karina Almeida Carvalho -> User: karina_carvalho / Pass: Karina123456
+   Creating user for: Lucas Manoel Nunes -> User: lucas_nunes / Pass: Lucas123456
+   Creating user for: Maria Eduarda Marques Araujo -> User: maria_araujo / Pass: Maria123456
+   Creating user for: Rafael Silva Teixeira -> User: rafael_teixeira / Pass: Rafael123456
+   Creating user for: Raí Pereira da Rocha -> User: rai_rocha / Pass: Raí123456
+   Creating user for: Vitor Gabriel Santos Silva -> User: vitor_silva / Pass: Vitor123456
+   Creating user for: Vitória Rosa de Oliveira -> User: vitoria_oliveira / Pass: Vitória123456
+   Creating user for: MICAEL CAMBUI DE SOUZA -> User: micael_souza / Pass: MICAEL123456
+   Creating user for: ADSON ARAUJO ALVES -> User: adson_alves / Pass: ADSON123456
+   Creating user for: ANA CLARA ARAUJO BARROS -> User: ana_barros / Pass: ANA123456
+   Creating user for: ANNA VITORIA FIDELES DE SOUZA -> User: anna_souza / Pass: ANNA123456
+   Creating user for: ARYEL MATHEUS OLIVEIRA LOPES -> User: aryel_lopes / Pass: ARYEL123456
+   Creating user for: BISMARK ANJOS DOS SANTOS -> User: bismark_santos / Pass: BISMARK123456
+   Creating user for: DAFINE SOFIA RODRIGUES DE SOUZA -> User: dafine_souza / Pass: DAFINE123456
+   Creating user for: DEIVISON RUFINO DE SOUZA -> User: deivison_souza / Pass: DEIVISON123456
+   Creating user for: ELLEN KAILANE ARAUJO DOS SANTOS -> User: ellen_santos / Pass: ELLEN123456
+   Creating user for: EMILLY OLIVEIRA BRANDÃO -> User: emilly_brandao / Pass: EMILLY123456
+   Creating user for: ERIC OLIVEIRA GUIMARÃES -> User: eric_guimaraes / Pass: ERIC123456
+   Creating user for: ERICK RIAN DE OLIVEIRA FERREIRA -> User: erick_ferreira / Pass: ERICK123456
+   Creating user for: ENZO GABRIEL MENDES SANTANA -> User: enzo_santana / Pass: ENZO123456
+   Creating user for: FRANCINY ANJOS VIEIRA -> User: franciny_vieira / Pass: FRANCINY123456
+   Creating user for: IAGO MATHEUS BARBOSA SILVA -> User: iago_silva / Pass: IAGO123456
+   Creating user for: JOANA RAISSA SILVA DE ARAÚJO -> User: joana_araujo / Pass: JOANA123456
+   Creating user for: JULIA DE SOUZA SANTOS -> User: julia_santos / Pass: JULIA123456
+   Creating user for: KELLY NAIANE DE NOVAIS ANJOS -> User: kelly_anjos / Pass: KELLY123456
+   Creating user for: LARA LORRANE ROCHA FERREIRA -> User: lara_ferreira / Pass: LARA123456
+   Creating user for: LUNNA RIHANNA ALVES SANTOS -> User: lunna_santos / Pass: LUNNA123456
+   Creating user for: MAINARA DE SOUZA OLIVEIRA -> User: mainara_oliveira / Pass: MAINARA123456
+   Creating user for: MARINA DA SILVA FERREIRA -> User: marina_ferreira / Pass: MARINA123456
+   Creating user for: MATHEUS SOUZA DOS SANTOS -> User: matheus_santos / Pass: MATHEUS123456
+   Creating user for: MIRELE SILVA BRANDÃO -> User: mirele_brandao / Pass: MIRELE123456
+   Creating user for: NATALIA MENDES -> User: natalia_mendes / Pass: NATALIA123456
+   Creating user for: RAQUEL RODRIGUES ALVES -> User: raquel_alves / Pass: RAQUEL123456
+   Creating user for: SAMILLY SOUZA LEITE -> User: samilly_leite / Pass: SAMILLY123456
+   Creating user for: SHEILA SILVIA DE OLIVEIRA -> User: sheila_oliveira / Pass: SHEILA123456
+   Creating user for: VITÓRIA EDUARDA BARROS ALVES -> User: vitoria_alves / Pass: VITÓRIA123456
+   Creating user for: WELLINGTON PAULO SANTOS BARRETO -> User: wellington_barreto / Pass: WELLINGTON123456
+   Creating user for: NATIELE MENDES DE JESUS -> User: natiele_jesus / Pass: NATIELE123456
+   Creating user for: CARLOS EDUARDO JESUS DA SILVA -> User: carlos_silva / Pass: CARLOS123456
+   Creating user for: ISABELLA JESUS NOVAIS DA SILVA -> User: isabella_silva / Pass: ISABELLA123456
+   Creating user for: ISABELA GOMES ARAUJO -> User: isabela_araujo / Pass: ISABELA123456
+   Creating user for: ELOISA NICOLE -> User: eloisa_nicole / Pass: ELOISA123456
+   Creating user for: MANUEL SILVA MELO FILHO -> User: manuel_filho / Pass: MANUEL123456
+   Creating user for: GUSTAVO DE OLIVEIRA MATOS  -> User: gustavo_matos / Pass: GUSTAVO123456
+   Creating user for: GABRIEL GOMES ALMEIDA -> User: gabriel_almeida / Pass: GABRIEL123456
+   Creating user for: ERIC JOSÉ LIMA MORAIS -> User: eric_morais / Pass: ERIC123456
+   Creating user for: LUIS FELIPE BENÍCIO -> User: luis_benicio / Pass: LUIS123456
+   Creating user for: KAIKE FABIO NEVES DE SOUSA -> User: kaike_sousa / Pass: KAIKE123456
+   Creating user for: PAMELA  -> User: pamela / Pass: PAMELA123456
+   Creating user for: MARIA EDUARDA -> User: maria_eduarda / Pass: MARIA123456
+   Creating user for: LAURA -> User: laura / Pass: LAURA123456
+   Creating user for: ISABEL -> User: isabel / Pass: ISABEL123456
+   Creating user for: ISADORA -> User: isadora / Pass: ISADORA123456
+   Creating user for: PEDRO LUCAS SANTANA -> User: pedro_santana / Pass: PEDRO123456
+   Creating user for: REINALDO -> User: reinaldo / Pass: REINALDO123456
+   Creating user for: WENDEL -> User: wendel / Pass: WENDEL123456
+   Creating user for: MARLEY -> User: marley / Pass: MARLEY123456
+   Creating user for: CRISTAL -> User: cristal / Pass: CRISTAL123456
+   Creating user for: RAFAELA -> User: rafaela / Pass: RAFAELA123456
+   Creating user for: JOÃO MATHEUS -> User: joao_matheus / Pass: JOÃO123456
+   Creating user for: JOÃO VITOR -> User: joao_vitor / Pass: JOÃO123456
+   Creating user for: GABRIEL SEBASTIAN -> User: gabriel_sebastian / Pass: GABRIEL123456
+   Creating user for: PEDRO ARIEL -> User: pedro_ariel / Pass: PEDRO123456
+   Creating user for: KAROLAYNE -> User: karolayne / Pass: KAROLAYNE123456
+   Creating user for: ANA VITORIA -> User: ana_vitoria / Pass: ANA123456
+   Creating user for: REBECA -> User: rebeca / Pass: REBECA123456
+   Creating user for: LARA VICTORIA -> User: lara_victoria / Pass: LARA123456
+   Creating user for: DEVID -> User: devid / Pass: DEVID123456
+   Creating user for: LUNA -> User: luna / Pass: LUNA123456
+   Creating user for: PEDRO GABRIEL -> User: pedro_gabriel / Pass: PEDRO123456
+   Creating user for: FABRICIA -> User: fabricia / Pass: FABRICIA123456
+   Creating user for: ANA CLAUDIA -> User: ana_claudia / Pass: ANA123456
+   Creating user for: LAISANI -> User: laisani / Pass: LAISANI123456
+   Creating user for: VIVIAN -> User: vivian / Pass: VIVIAN123456
+   Creating user for: CAMILA NOVARS DOS SANTOS -> User: camila_santos / Pass: CAMILA123456
+   Creating user for: BRENO MENDES DE SOUZA -> User: breno_souza / Pass: BRENO123456
+   Creating user for: ELOISA ALVES -> User: eloisa_alves / Pass: ELOISA123456
+   Creating user for: NILANE AMORIN CIRINO -> User: nilane_cirino / Pass: NILANE123456
+   Creating user for: LINCESY ALVES DOS SANTOS -> User: lincesy_santos / Pass: LINCESY123456
+   Creating user for: ELOÁ BARRETO FRAGA -> User: eloa_fraga / Pass: ELOÁ123456
+   Creating user for: LUIZ HENRIQUE MIRANDA SENA -> User: luiz_sena / Pass: LUIZ123456
+   Creating user for: ELOÁ SANTOS RIVAS -> User: eloa_rivas / Pass: ELOÁ123456
+   Creating user for: PEDRO HENRIQUE SOUZA MARTINS -> User: pedro_martins / Pass: PEDRO123456
+   Creating user for: JHULLIE BRANDÃO TEIXEIRA -> User: jhullie_teixeira / Pass: JHULLIE123456
+   Creating user for: GABRIELA TELES CIDREIRA -> User: gabriela_cidreira / Pass: GABRIELA123456
+   Creating user for: ALISSON FEITOSA -> User: alisson_feitosa / Pass: ALISSON123456
+   Creating user for: GEOVANNA RIBEIRO MARTINS -> User: geovanna_martins / Pass: GEOVANNA123456
+   Creating user for: PEDRO CORDEIRO SANTOS -> User: pedro_santos / Pass: PEDRO123456
+   Creating user for: LUKA THIERRY SÁ TELES DE ARAÚJO -> User: luka_araujo / Pass: LUKA123456
+   Creating user for: MARIANA TEIXEIRA DE SOUZA -> User: mariana_souza / Pass: MARIANA123456
+   Creating user for: CLARA LUISA MIRANDA TEIXEIRA -> User: clara_teixeira / Pass: CLARA123456
+   Creating user for: PEDRO KAUAN SOUZA OLIVEIRA -> User: pedro_oliveira / Pass: PEDRO123456
+   Creating user for: THAUANY RODRIGUES DE SOUZA -> User: thauany_souza / Pass: THAUANY123456
+   Creating user for: JULIA SANTOS ARAÚJO -> User: julia_araujo / Pass: JULIA123456
+   Creating user for: ALEX VITORIO BARROS DO NASCIMENTO -> User: alex_nascimento / Pass: ALEX123456
+   Creating user for: JULIA TELES RIBEIRO -> User: julia_ribeiro / Pass: JULIA123456
+   Creating user for: ISABELA GOMES DE SOUZA -> User: isabela_souza / Pass: ISABELA123456
+   Creating user for: TULIO RIBEIRO DE AZEVEDO ROCHA -> User: tulio_rocha / Pass: TULIO123456
+   Creating user for: ANA CLARA BISPO SILVA -> User: ana_silva / Pass: ANA123456
+   Creating user for: CAUÁ SOUZA SILVA -> User: caua_silva / Pass: CAUÁ123456
+   Creating user for: ISABELLA XAVIER AMARAL -> User: isabella_amaral / Pass: ISABELLA123456
+   Creating user for: NICOLLY BRITO DE SOUZA -> User: nicolly_souza / Pass: NICOLLY123456
+   Creating user for: LARA VITORIA OLIVEIRA MENDES -> User: lara_mendes / Pass: LARA123456
+   Creating user for: PEDRO HENRIQUE SOUZA -> User: pedro_souza / Pass: PEDRO123456
+   Creating user for: MARIA EDUARDA BISPO DOS SANTOS -> User: maria_santos / Pass: MARIA123456
+   Creating user for: KAROLAINE SILVA SOUZA -> User: karolaine_souza / Pass: KAROLAINE123456
+   Creating user for: JOSYLEIA NASCIMENTO MENEZES -> User: josyleia_menezes / Pass: JOSYLEIA123456
+   Creating user for: JULIA CATHARINE SOUZA TELES -> User: julia_teles / Pass: JULIA123456
+   Creating user for: THIAGO ALCANTARA VIEIRA -> User: thiago_vieira / Pass: THIAGO123456
+   Creating user for: EMILLY VICTORIA SANTANA R. DOS SANTOS -> User: emilly_santos / Pass: EMILLY123456
+   Creating user for: KATHARINE LIMA FREITAS -> User: katharine_freitas / Pass: KATHARINE123456
+   Creating user for: ANA JULIA DALTRON AMARAL -> User: ana_amaral / Pass: ANA123456
+   Creating user for: MARIA CLARA ALVES FERREIRA -> User: maria_ferreira / Pass: MARIA123456
+   Creating user for: IAN SANTOS SILVA -> User: ian_silva / Pass: IAN123456
+------------------------------
+✅ Seeding Complete.
+   Created: 196
+   Existing: 2
+   Total Students Processed: 198

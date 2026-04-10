@@ -1,0 +1,307 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário Digital | NioCortex Lumina</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        nio: {
+                            50: '#f2f0ff', 100: '#e6e1ff', 200: '#d0c4ff', 300: '#b09aff',
+                            400: '#8e66ff', 500: '#7c3aed', 600: '#6d28d9', 700: '#5b21b6', 
+                            800: '#4c1d95', 900: '#3e1a75', 950: '#260e4b',
+                        },
+                        lumina: { cyan: '#00E5FF', pink: '#FF2E93', amber: '#F59E0B' }
+                    },
+                    animation: { 
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite' 
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .text-aurora {
+            background: linear-gradient(135deg, #F59E0B 0%, #FF2E93 50%, #6d28d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .neural-bg {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="relative flex flex-col min-h-screen overflow-x-hidden font-sans antialiased bg-slate-50 text-slate-800 selection:bg-lumina-amber selection:text-white">
+
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-5%] w-[700px] h-[700px] bg-lumina-amber/10 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-nio-400/15 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute inset-0 neural-bg opacity-40"></div>
+    </div>
+
+    <nav class="fixed z-50 w-full py-3 transition-all duration-300 shadow-sm glass-panel border-white/40">
+        <div class="flex items-center justify-between px-6 mx-auto max-w-7xl">
+            <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-3 group">
+                <div class="relative flex items-center justify-center w-10 h-10">
+                    <div class="absolute inset-0 transition-transform duration-300 bg-lumina-amber rounded-xl rotate-6 opacity-20 group-hover:rotate-12"></div>
+                    <div class="absolute inset-0 border shadow-sm bg-white/60 backdrop-blur rounded-xl border-white/50"></div>
+                    <i class="relative z-10 text-lg fas fa-book-open text-lumina-amber"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold leading-none font-display text-slate-900">Nio<span class="text-nio-600">Cortex</span></span>
+                    <span class="text-[10px] font-bold text-lumina-amber uppercase tracking-[0.2em] leading-none mt-1">Classroom</span>
+                </div>
+            </a>
+
+            <div class="items-center hidden gap-8 md:flex">
+                <a href="{% url 'stage_publico:index' %}" class="text-sm font-semibold transition text-slate-600 hover:text-nio-600">Voltar ao Início</a>
+                <a href="{% url 'yourlife_social:register' %}" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition shadow-lg">
+                    Testar Diário
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative z-10 px-6 pt-40 pb-20">
+        <div class="grid items-center grid-cols-1 gap-16 mx-auto max-w-7xl lg:grid-cols-2">
+            
+            <div class="space-y-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold tracking-wide uppercase border rounded-full bg-amber-50 border-amber-100 text-amber-700">
+                    <i class="fas fa-bolt"></i> Chamada em 10 segundos
+                </div>
+                
+                <h1 class="text-4xl font-black leading-tight md:text-6xl font-display text-slate-900">
+                    Menos Burocracia,<br>
+                    <span class="text-aurora">Mais Ensino.</span>
+                </h1>
+                
+                <p class="max-w-lg text-lg leading-relaxed text-slate-600">
+                    Esqueça o diário de papel e as planilhas lentas. O NioCortex permite registros instantâneos, funciona offline e notifica os pais automaticamente.
+                </p>
+
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <a href="{% url 'yourlife_social:register' %}" class="px-8 py-4 font-bold text-center text-white transition transform shadow-lg bg-nio-600 rounded-xl shadow-nio-500/30 hover:bg-nio-700 hover:-translate-y-1">
+                        Começar Gratuitamente
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative animate-float" x-data="{
+                students: [
+                    { id: 1, name: 'Alice Mendes', status: 'present', photo: 'bg-purple-200' },
+                    { id: 2, name: 'Bruno Costa', status: 'present', photo: 'bg-blue-200' },
+                    { id: 3, name: 'Carla Dias', status: 'absent', photo: 'bg-pink-200' },
+                    { id: 4, name: 'Daniel Lima', status: 'present', photo: 'bg-green-200' },
+                ],
+                toggleStatus(index) {
+                    this.students[index].status = this.students[index].status === 'present' ? 'absent' : 'present';
+                },
+                save() {
+                    alert('Chamada registrada! Pais notificados.');
+                }
+            }">
+                <div class="relative z-20 bg-white border-4 border-slate-900 rounded-[2.5rem] shadow-2xl w-full max-w-xs mx-auto overflow-hidden ring-1 ring-slate-900/5">
+                    
+                    <div class="bg-nio-600 p-6 pt-10 text-white rounded-t-[2rem]">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <p class="text-xs font-bold tracking-wider uppercase text-nio-200">História • 8º Ano B</p>
+                                <h3 class="text-xl font-bold">Chamada de Hoje</h3>
+                            </div>
+                            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm">
+                                <i class="text-xs fas fa-calendar-day"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <div class="flex-1 p-2 text-center rounded-lg bg-white/10">
+                                <span class="block text-lg font-bold" x-text="students.filter(s => s.status === 'present').length"></span>
+                                <span class="text-[10px] text-nio-200">Presentes</span>
+                            </div>
+                            <div class="flex-1 p-2 text-center rounded-lg bg-white/10">
+                                <span class="block text-lg font-bold text-red-300" x-text="students.filter(s => s.status === 'absent').length"></span>
+                                <span class="text-[10px] text-nio-200">Ausentes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 space-y-3 overflow-y-auto bg-slate-50 h-80">
+                        <template x-for="(student, index) in students" :key="student.id">
+                            <div @click="toggleStatus(index)" 
+                                 class="bg-white p-3 rounded-xl border shadow-sm flex items-center justify-between cursor-pointer transition-all duration-200 hover:scale-[1.02]"
+                                 :class="student.status === 'absent' ? 'border-red-200 bg-red-50/50' : 'border-slate-100'">
+                                
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center justify-center w-10 h-10 text-xs font-bold rounded-full text-slate-600" :class="student.photo">
+                                        <span x-text="student.name.charAt(0)"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800" x-text="student.name"></p>
+                                        <p class="text-[10px]" 
+                                           :class="student.status === 'absent' ? 'text-red-500 font-bold' : 'text-slate-400'"
+                                           x-text="student.status === 'present' ? 'Presente' : 'Ausente'"></p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-center w-8 h-8 transition-colors rounded-full"
+                                     :class="student.status === 'present' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'">
+                                    <i class="fas" :class="student.status === 'present' ? 'fa-check' : 'fa-times'"></i>
+                                </div>
+                            </div>
+                        </template>
+                        
+                        <div class="py-2 text-center">
+                            <p class="text-xs italic text-slate-400">Toque para alternar</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white border-t border-slate-100">
+                        <button @click="save()" class="w-full py-3 text-sm font-bold text-white transition shadow-lg bg-nio-600 hover:bg-nio-700 rounded-xl active:scale-95">
+                            Salvar Chamada
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="absolute z-0 flex flex-col items-center gap-1 p-3 bg-white border shadow-xl -right-4 top-1/2 rounded-xl border-slate-100 animate-pulse">
+                    <i class="fas fa-wifi text-slate-300"></i>
+                    <span class="text-[10px] font-bold text-slate-500">Offline</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="relative z-10 py-24 bg-white border-t border-slate-200">
+        <div class="px-6 mx-auto max-w-7xl">
+            <div class="max-w-3xl mx-auto mb-16 text-center">
+                <h2 class="mb-4 text-3xl font-bold font-display text-slate-900">Funcionalidades do Diário</h2>
+                <p class="text-slate-500">Ferramentas desenhadas para a realidade da sala de aula brasileira.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                <div class="p-8 transition duration-300 border rounded-3xl bg-slate-50 border-slate-100 hover:border-nio-200 hover:bg-white hover:shadow-xl group">
+                    <div class="flex items-center justify-center mb-6 text-2xl transition shadow-sm w-14 h-14 bg-nio-100 rounded-2xl text-nio-600 group-hover:scale-110">
+                        <i class="fas fa-mobile-screen-button"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-bold text-slate-900 font-display">App Professor</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">
+                        Interface mobile-first otimizada. Funciona perfeitamente no celular, tablet ou computador, com a mesma experiência.
+                    </p>
+                </div>
+
+                <div class="p-8 transition duration-300 border rounded-3xl bg-slate-50 border-slate-100 hover:border-amber-200 hover:bg-white hover:shadow-xl group">
+                    <div class="flex items-center justify-center mb-6 text-2xl transition shadow-sm w-14 h-14 bg-amber-100 rounded-2xl text-amber-600 group-hover:scale-110">
+                        <i class="fas fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-bold text-slate-900 font-display">Sincronização Offline</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">
+                        Sem internet na sala? Sem problema. O NioCortex salva tudo localmente e sincroniza assim que o Wi-Fi voltar.
+                    </p>
+                </div>
+
+                <div class="p-8 transition duration-300 border rounded-3xl bg-slate-50 border-slate-100 hover:border-lumina-pink hover:bg-white hover:shadow-xl group">
+                    <div class="flex items-center justify-center mb-6 text-2xl transition bg-pink-100 shadow-sm w-14 h-14 rounded-2xl text-lumina-pink group-hover:scale-110">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-bold text-slate-900 font-display">Notificação aos Pais</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">
+                        Ao registrar uma falta ou ocorrência, o responsável recebe um aviso no app da família instantaneamente (configurável).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 border-t bg-slate-50 border-slate-200">
+        <div class="grid items-center max-w-6xl grid-cols-1 gap-12 px-6 mx-auto md:grid-cols-2">
+            
+            <div class="relative order-2 md:order-1">
+                <div class="absolute inset-0 rounded-full bg-gradient-to-r from-nio-500 to-lumina-amber opacity-10 blur-2xl"></div>
+                <div class="relative p-6 bg-white border shadow-lg rounded-2xl border-slate-200">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 pb-2 border-b border-slate-100">
+                            <div class="w-2 h-8 rounded-full bg-nio-500"></div>
+                            <h4 class="font-bold text-slate-800">Conteúdo Ministrado</h4>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="w-3/4 h-4 rounded bg-slate-100"></div>
+                            <div class="w-full h-4 rounded bg-slate-100"></div>
+                            <div class="w-5/6 h-4 rounded bg-slate-100"></div>
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <span class="px-2 py-1 text-xs border rounded bg-slate-100 text-slate-500 border-slate-200">BNCC: EF08HI02</span>
+                            <span class="px-2 py-1 text-xs border rounded bg-slate-100 text-slate-500 border-slate-200">História</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-1 md:order-2">
+                <h2 class="mb-6 text-3xl font-bold font-display text-slate-900">Registro de Conteúdo Simplificado</h2>
+                <p class="mb-6 text-lg leading-relaxed text-slate-600">
+                    Chega de digitar a mesma coisa várias vezes. Com o NioCortex, você pode:
+                </p>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-3 text-slate-600">
+                        <i class="text-green-500 fas fa-check-circle"></i>
+                        <span>Copiar conteúdo de aulas anteriores.</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                        <i class="text-green-500 fas fa-check-circle"></i>
+                        <span>Importar habilidades da BNCC automaticamente.</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                        <i class="text-green-500 fas fa-check-circle"></i>
+                        <span>Usar voz-para-texto para ditar o registro.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="relative z-10 py-10 text-center bg-white border-t border-slate-200">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <p class="text-xs text-slate-400">&copy; 2025 NioCortex Classroom. Tecnologia para quem ensina.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

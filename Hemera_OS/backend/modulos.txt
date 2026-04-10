@@ -1,0 +1,29 @@
+Módulos NioCortex (Gestão Escolar/ERP):
+
+
+
+prioris.direcao: Módulo de Direção.
+
+humanex.rh: Recursos Humanos (RH).
+
+ledger.financeiro: Financeiro.
+
+hub.secretaria: Secretaria.
+
+orbit.coordenacao: Coordenação.
+
+vionex.crm: CRM (Relacionamento com Cliente/Aluno).
+
+yourlife.social: Área Social.
+
+stage.publico: Área Pública (Site/Landing Page).
+
+core: O núcleo do sistema (onde estão os usuários e autenticação). repare q core não tem subpasta base dentro e deve permanecer assim.
+
+Módulos Lumenios (LMS - Pedagógico):
+
+
+
+lumenios.pedagogico: Gestão de turmas, alunos, notas e diários.
+
+lumenios.plataforma: Provavelmente a interface da plataforma de ensino ou área do aluno.

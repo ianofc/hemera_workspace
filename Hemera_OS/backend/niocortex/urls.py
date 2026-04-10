@@ -21,6 +21,11 @@ urlpatterns = [
     path('direcao/', include('prioris.direcao.urls')),
     path('crm/', include('vionex.crm.urls')),
     path('talkio-app/', include('talkio.chat.urls')),
+
+    # Rota raiz da API Hemera_OS para comunicação Headless
+    path('api/status/', include([
+        path('', __import__('niocortex.api').api.api_status, name='api_status')
+    ])),
 ]
 
 if settings.DEBUG:

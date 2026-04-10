@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'corsheaders', # ADICIONADO PARA PREPARAR O BACKEND PARA O FRONTEND (CORS)
+
     'channels',  # WebSockets e Gerenciamento de Background
 
     # Apps do Projeto
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # ADICIONADO APÓS SECURITY
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
@@ -149,3 +152,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MERCADO_PAGO_ACCESS_TOKEN = os.getenv('MP_ACCESS_TOKEN', 'seu_token_aqui')
+
+# --- CONFIGURAÇÃO DA API (CORS) ---
+CORS_ALLOW_ALL_ORIGINS = True # Libera o frontend React/Vite para consumir de qualquer origin local ou remota
+CORS_ALLOW_CREDENTIALS = True

@@ -1,0 +1,22 @@
+{% extends 'core/professor_dashboard_base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Excluir Aluno</h2>
+    
+    <div class="alert alert-warning" style="background-color: #fff3cd; padding: 15px; border: 1px solid #ffeeba;">
+        <p>Você tem certeza que deseja excluir o aluno <strong>"{{ objeto.nome }}"</strong>?</p>
+        <p style="color: red;"><strong>Atenção:</strong> Esta ação não pode ser desfeita.</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+                Sim, excluir
+            </button>
+            <a href="{% url 'pedagogico:lista_alunos' %}" style="margin-left: 10px;">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

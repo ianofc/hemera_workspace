@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário de Classe | NioStudent Kids</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/perfis.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        kids: {
+                            blue: '#60A5FA',
+                            pink: '#F472B6',
+                            yellow: '#FBBF24',
+                            green: '#34D399'
+                        }
+                    },
+                    boxShadow: { glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)' }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body x-data="appData({ gender: '{{ user.gender|default:'M' }}', is_premium: '{{ is_premium|yesno:'true,false' }}' })" 
+      x-init="init()"
+      class="font-sans antialiased min-h-screen bg-[#F0F9FF] text-slate-800 relative selection:bg-pink-300 selection:text-white">
+
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-blue-200/40 blur-3xl animate-float"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-pink-200/40 blur-3xl animate-float" style="animation-delay: 2s"></div>
+        <div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-yellow-200/40 blur-3xl animate-float" style="animation-delay: 4s"></div>
+    </div>
+
+    <nav class="sticky top-0 z-40 w-full px-4 py-3 shadow-sm glass-nav">
+        <div class="flex items-center justify-between max-w-5xl mx-auto">
+            <a href="{% url 'core:aluno_dashboard' %}" class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 text-xl font-bold text-white shadow-md rounded-2xl bg-gradient-to-br from-blue-400 to-pink-400">
+                    <i class="fas fa-shapes"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-bold font-display text-slate-700">Nio<span class="text-pink-500">Kids</span></span>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Área dos Pais</p>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-4">
+                <div class="hidden text-right sm:block">
+                    <p class="text-xs font-bold text-slate-400">Aluno(a)</p>
+                    <p class="text-sm font-bold text-slate-700">{{ user.first_name }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-full p-[2px] bg-gradient-to-r from-blue-300 to-pink-300">
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}https://i.pravatar.cc/150?img=12{% endif %}" class="object-cover w-full h-full border-2 border-white rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-5xl p-4 mx-auto space-y-8 sm:p-6">
+
+        <div class="flex flex-col items-end justify-between gap-4 sm:flex-row">
+            <div>
+                <h1 class="text-3xl font-black font-display text-slate-800">Diário de Hoje</h1>
+                <p class="flex items-center gap-2 font-medium text-slate-500">
+                    <i class="text-pink-400 far fa-calendar-alt"></i> Quarta-feira, 24 de Dezembro
+                </p>
+            </div>
+            <div class="flex p-1 border rounded-full shadow-sm bg-white/60 backdrop-blur border-white/50">
+                <button class="flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-white text-slate-400 hover:text-blue-500"><i class="fas fa-chevron-left"></i></button>
+                <div class="flex items-center px-4 text-sm font-bold cursor-pointer text-slate-600">Hoje</div>
+                <button class="flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-white text-slate-400 hover:text-blue-500"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            
+            <div class="relative p-6 overflow-hidden transition duration-300 border-b-4 glass-panel rounded-3xl border-b-green-400 group hover:-translate-y-1">
+                <div class="absolute text-6xl text-green-200 transition transform top-4 right-4 opacity-20 group-hover:scale-110 rotate-12"><i class="fas fa-utensils"></i></div>
+                <h3 class="flex items-center gap-2 mb-4 font-bold text-slate-700"><i class="text-green-500 fas fa-apple-alt"></i> Alimentação</h3>
+                
+                <div class="relative z-10 space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1 text-xs font-bold text-slate-500"><span>Lanche da Manhã</span> <span class="text-green-600">Comeu Tudo</span></div>
+                        <div class="w-full h-2 rounded-full bg-slate-100"><div class="w-full h-full bg-green-400 rounded-full shadow-sm"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 text-xs font-bold text-slate-500"><span>Almoço</span> <span class="text-yellow-600">Comeu Parcial</span></div>
+                        <div class="w-full h-2 rounded-full bg-slate-100"><div class="w-3/4 h-full bg-yellow-400 rounded-full shadow-sm"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1 text-xs font-bold text-slate-500"><span>Lanche da Tarde</span> <span class="text-green-600">Comeu Tudo</span></div>
+                        <div class="w-full h-2 rounded-full bg-slate-100"><div class="w-full h-full bg-green-400 rounded-full shadow-sm"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative p-6 overflow-hidden transition duration-300 border-b-4 glass-panel rounded-3xl border-b-blue-400 group hover:-translate-y-1">
+                <div class="absolute text-6xl text-blue-200 transition transform top-4 right-4 opacity-20 group-hover:scale-110 -rotate-12"><i class="fas fa-moon"></i></div>
+                <h3 class="flex items-center gap-2 mb-4 font-bold text-slate-700"><i class="text-blue-500 fas fa-bed"></i> Soneca</h3>
+                
+                <div class="relative z-10 flex flex-col items-center justify-center h-32">
+                    <span class="text-4xl font-black text-blue-500">1h 30m</span>
+                    <span class="mt-1 text-xs font-bold tracking-wide uppercase text-slate-400">Duração Total</span>
+                    <p class="px-3 py-1 mt-3 text-sm border border-blue-100 rounded-lg text-slate-600 bg-blue-50">De 13:00 às 14:30</p>
+                </div>
+            </div>
+
+            <div class="relative p-6 overflow-hidden transition duration-300 border-b-4 glass-panel rounded-3xl border-b-pink-400 group hover:-translate-y-1">
+                <div class="absolute text-6xl text-pink-200 transition transform top-4 right-4 opacity-20 group-hover:scale-110 rotate-6"><i class="fas fa-shower"></i></div>
+                <h3 class="flex items-center gap-2 mb-4 font-bold text-slate-700"><i class="text-pink-500 fas fa-baby"></i> Higiene</h3>
+                
+                <div class="relative z-10 space-y-3">
+                    <div class="flex items-center justify-between p-3 border border-pink-100 bg-pink-50/50 rounded-xl">
+                        <span class="text-sm font-bold text-slate-600">Trocas de Fralda</span>
+                        <span class="text-xl font-black text-pink-500">3</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-pink-100 bg-pink-50/50 rounded-xl">
+                        <span class="text-sm font-bold text-slate-600">Banho</span>
+                        <span class="text-lg text-green-500"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-pink-100 bg-pink-50/50 rounded-xl">
+                        <span class="text-sm font-bold text-slate-600">Escovação</span>
+                        <span class="text-lg text-green-500"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative p-6 overflow-hidden transition duration-300 border-b-4 glass-panel rounded-3xl border-b-yellow-400 group hover:-translate-y-1">
+                <div class="absolute text-6xl text-yellow-200 transition transform top-4 right-4 opacity-20 group-hover:scale-110 -rotate-6"><i class="fas fa-smile"></i></div>
+                <h3 class="flex items-center gap-2 mb-4 font-bold text-slate-700"><i class="text-yellow-500 fas fa-shapes"></i> Dia a Dia</h3>
+                
+                <div class="mb-4 text-center">
+                    <p class="mb-2 text-xs font-bold uppercase text-slate-400">Como eu estava hoje?</p>
+                    <div class="inline-flex gap-2 bg-slate-100 p-1.5 rounded-full">
+                        <i class="p-1 text-2xl opacity-50 fas fa-frown text-slate-300"></i>
+                        <i class="p-1 text-2xl opacity-50 fas fa-meh text-slate-300"></i>
+                        <i class="p-1 text-2xl text-yellow-500 transform scale-110 bg-white rounded-full shadow-sm fas fa-smile"></i>
+                        <i class="p-1 text-2xl opacity-50 fas fa-grin-beam text-slate-300"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-bold text-yellow-600">Feliz e Participativo</p>
+                </div>
+                <div class="p-3 border border-yellow-100 bg-yellow-50 rounded-xl">
+                    <p class="text-xs italic text-slate-600">"Participou muito bem da aula de música e brincou com os amigos no parque."</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            
+            <div class="p-6 lg:col-span-2 glass-panel rounded-3xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-slate-700"><i class="mr-2 text-purple-500 fas fa-camera"></i> Fotos do Dia</h3>
+                    <button class="text-xs font-bold text-blue-500 hover:underline">Ver todas</button>
+                </div>
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    <div class="relative overflow-hidden shadow-sm cursor-pointer aspect-square rounded-2xl group">
+                        <img src="https://source.unsplash.com/random/300x300/?kids,playing" class="object-cover w-full h-full transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 flex items-center justify-center text-white transition opacity-0 bg-black/20 group-hover:opacity-100"><i class="fas fa-search-plus"></i></div>
+                    </div>
+                    <div class="relative overflow-hidden shadow-sm cursor-pointer aspect-square rounded-2xl group">
+                        <img src="https://source.unsplash.com/random/300x300/?school,drawing" class="object-cover w-full h-full transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 flex items-center justify-center text-white transition opacity-0 bg-black/20 group-hover:opacity-100"><i class="fas fa-search-plus"></i></div>
+                    </div>
+                    <div class="relative overflow-hidden shadow-sm cursor-pointer aspect-square rounded-2xl group">
+                        <img src="https://source.unsplash.com/random/300x300/?lunch,kids" class="object-cover w-full h-full transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 flex items-center justify-center text-white transition opacity-0 bg-black/20 group-hover:opacity-100"><i class="fas fa-search-plus"></i></div>
+                    </div>
+                    <div class="relative overflow-hidden shadow-sm cursor-pointer aspect-square rounded-2xl group">
+                        <div class="flex flex-col items-center justify-center w-full h-full transition bg-slate-100 text-slate-400 hover:bg-slate-200">
+                            <i class="mb-1 text-2xl fas fa-images"></i>
+                            <span class="text-xs font-bold">+2 fotos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 border-l-4 glass-panel rounded-3xl border-l-purple-500 bg-purple-50/30">
+                <h3 class="mb-4 text-lg font-bold text-slate-700"><i class="mr-2 text-purple-500 fas fa-comment-alt"></i> Recadinho</h3>
+                
+                <div class="flex items-start gap-3 mb-4">
+                    <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 border-2 border-white rounded-full shadow-sm">
+                    <div class="p-3 bg-white border border-purple-100 shadow-sm rounded-r-2xl rounded-bl-2xl">
+                        <p class="mb-1 text-xs font-bold text-purple-600">Prof. Ana</p>
+                        <p class="text-sm leading-relaxed text-slate-600">
+                            Olá mamãe! O Ian estava super animado hoje. Ele adorou a atividade de pintura. <br><br>
+                            <strong>Lembrete:</strong> Amanhã é dia de trazer um brinquedo! 🧸
+                        </p>
+                    </div>
+                </div>
+
+                <button class="flex items-center justify-center w-full gap-2 py-3 text-sm font-bold text-white transition transform bg-purple-500 shadow-lg rounded-xl shadow-purple-500/30 hover:bg-purple-600 active:scale-95">
+                    <i class="fab fa-whatsapp"></i> Responder no Talkio
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="{% static 'js/dashboard_aluno.js' %}"></script>
+
+</body>
+</html>

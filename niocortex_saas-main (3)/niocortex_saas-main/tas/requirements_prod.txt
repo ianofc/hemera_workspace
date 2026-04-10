@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+gunicorn
+pydantic-settings
+sqlalchemy
+asyncpg
+numpy
+python-dotenv
+sentence-transformers
+requests

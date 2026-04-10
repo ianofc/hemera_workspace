@@ -1,0 +1,160 @@
+{% extends 'aluno/base_lumenios.html' %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto px-6 space-y-10" x-data="{ tab: 'proximas' }">
+
+    <div class="relative rounded-[3rem] overflow-hidden bg-slate-900 shadow-2xl p-10 md:p-12 min-h-[300px] flex flex-col justify-center group">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+        <div class="absolute top-0 left-0 w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 animate-pulse-slow"></div>
+        <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] translate-x-1/2 translate-y-1/2"></div>
+        
+        <div class="relative z-10 flex flex-col items-center justify-between gap-10 lg:flex-row">
+            <div class="max-w-2xl space-y-4 text-center lg:text-left">
+                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold tracking-wider uppercase border rounded-full shadow-sm text-emerald-300 bg-emerald-900/30 border-emerald-500/30 backdrop-blur-md">
+                    <i class="fas fa-chart-line"></i> Jornada Acadêmica
+                </span>
+                <h1 class="text-4xl font-bold leading-tight text-white md:text-6xl font-display">
+                    Suas <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">Conquistas</span>
+                </h1>
+                <p class="text-lg leading-relaxed text-slate-300">
+                    Acompanhe seu progresso, prepare-se para os próximos desafios e revise seus resultados.
+                </p>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="bg-white/10 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center min-w-[140px] transform hover:scale-105 transition shadow-lg">
+                    <p class="text-3xl font-bold text-white font-display">8.5</p>
+                    <p class="mt-1 text-xs font-bold tracking-wider text-indigo-200 uppercase">Média Geral</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center min-w-[140px] transform hover:scale-105 transition shadow-lg">
+                    <p class="text-3xl font-bold font-display text-emerald-400">92%</p>
+                    <p class="mt-1 text-xs font-bold tracking-wider uppercase text-emerald-200">Frequência</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center">
+        <div class="inline-flex p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <button @click="tab = 'proximas'" 
+                    :class="tab === 'proximas' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
+                    class="px-8 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+                <i class="far fa-calendar-alt"></i> Agendadas
+            </button>
+            <button @click="tab = 'resultados'" 
+                    :class="tab === 'resultados' ? 'bg-slate-800 text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
+                    class="px-8 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+                <i class="fas fa-check-circle"></i> Resultados
+            </button>
+        </div>
+    </div>
+
+    <div x-show="tab === 'proximas'" class="space-y-6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+        
+        <div class="flex flex-col items-center gap-6 p-6 border border-orange-100 shadow-sm bg-gradient-to-r from-orange-50 to-red-50 rounded-3xl md:flex-row animate-pulse-slow">
+            <div class="flex items-center justify-center w-16 h-16 text-2xl text-orange-600 bg-orange-100 rounded-2xl shrink-0">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h3 class="text-lg font-bold text-slate-800">Atenção! Prova de Matemática em 2 dias.</h3>
+                <p class="text-sm text-slate-500">O conteúdo abrange Trigonometria e Funções. Revise os módulos 3 e 4.</p>
+            </div>
+            <a href="{% url 'lumenios:zios' %}?q=Revisão Matemática Trigonometria" class="px-6 py-3 font-bold text-orange-600 transition bg-white border border-orange-200 shadow-md rounded-xl hover:bg-orange-50">
+                Revisar Agora
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="group bg-white border border-slate-200 rounded-[2rem] p-6 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+                
+                <div class="relative z-10">
+                    <span class="inline-block px-3 py-1 mb-4 text-xs font-bold text-indigo-700 bg-indigo-100 rounded-lg">Prova Bimestral</span>
+                    
+                    <h3 class="mb-1 text-xl font-bold text-slate-800">História Geral</h3>
+                    <p class="mb-6 text-sm text-slate-500"><i class="mr-1 far fa-clock"></i> 25 Out • 08:00h</p>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div class="flex -space-x-2">
+                            <span class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] text-slate-500 font-bold">Prof</span>
+                        </div>
+                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800">Ver Conteúdo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-white border border-slate-200 rounded-[2rem] p-6 hover:shadow-xl hover:border-purple-200 transition-all duration-300 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+                
+                <div class="relative z-10">
+                    <span class="inline-block px-3 py-1 mb-4 text-xs font-bold text-purple-700 bg-purple-100 rounded-lg">Trabalho em Grupo</span>
+                    
+                    <h3 class="mb-1 text-xl font-bold text-slate-800">Feira de Ciências</h3>
+                    <p class="mb-6 text-sm text-slate-500"><i class="mr-1 far fa-clock"></i> 30 Out • Entrega</p>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div class="flex -space-x-2">
+                            <span class="w-8 h-8 border-2 border-white rounded-full bg-slate-200"></span>
+                            <span class="w-8 h-8 border-2 border-white rounded-full bg-slate-300"></span>
+                        </div>
+                        <button class="text-sm font-bold text-purple-600 hover:text-purple-800">Detalhes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="tab === 'resultados'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="border-b bg-slate-50 border-slate-100">
+                        <tr>
+                            <th class="px-8 py-5 text-xs font-bold tracking-wider text-left uppercase text-slate-500">Disciplina</th>
+                            <th class="px-8 py-5 text-xs font-bold tracking-wider text-left uppercase text-slate-500">Avaliação</th>
+                            <th class="px-8 py-5 text-xs font-bold tracking-wider text-left uppercase text-slate-500">Data</th>
+                            <th class="px-8 py-5 text-xs font-bold tracking-wider text-center uppercase text-slate-500">Nota</th>
+                            <th class="px-8 py-5 text-xs font-bold tracking-wider text-right uppercase text-slate-500">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="transition hover:bg-indigo-50/30">
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center justify-center w-10 h-10 text-blue-600 bg-blue-100 rounded-xl"><i class="fas fa-square-root-alt"></i></div>
+                                    <span class="font-bold text-slate-700">Matemática</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6 text-sm text-slate-600">Prova Mensal 1</td>
+                            <td class="px-8 py-6 text-sm text-slate-500">10 Set, 2025</td>
+                            <td class="px-8 py-6 text-center">
+                                <span class="inline-block w-12 py-1 text-sm font-bold text-green-700 bg-green-100 rounded-lg">9.5</span>
+                            </td>
+                            <td class="px-8 py-6 text-right">
+                                <span class="text-xs font-bold tracking-wide text-green-600 uppercase"><i class="mr-1 fas fa-check"></i> Aprovado</span>
+                            </td>
+                        </tr>
+                        <tr class="transition hover:bg-indigo-50/30">
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center justify-center w-10 h-10 text-red-600 bg-red-100 rounded-xl"><i class="fas fa-flask"></i></div>
+                                    <span class="font-bold text-slate-700">Química</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6 text-sm text-slate-600">Trabalho Tabela Periódica</td>
+                            <td class="px-8 py-6 text-sm text-slate-500">05 Set, 2025</td>
+                            <td class="px-8 py-6 text-center">
+                                <span class="inline-block w-12 py-1 text-sm font-bold text-yellow-700 bg-yellow-100 rounded-lg">7.0</span>
+                            </td>
+                            <td class="px-8 py-6 text-right">
+                                <span class="text-xs font-bold tracking-wide text-green-600 uppercase"><i class="mr-1 fas fa-check"></i> Aprovado</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

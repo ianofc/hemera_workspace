@@ -1,0 +1,99 @@
+{% extends "social/base.html" %}
+
+{% block title %}Impressão de Documento{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+    <div class="flex items-center justify-between p-4 mb-6 text-white bg-gray-800 shadow-lg print:hidden rounded-xl">
+        <div>
+            <h2 class="flex items-center gap-2 font-bold">
+                <i class="text-green-400 fas fa-check-circle"></i> Documento Gerado
+            </h2>
+            <p class="mt-1 text-xs text-gray-400">Código de Validação: <span class="font-mono text-yellow-400">{{ documento.codigo_validacao }}</span></p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'secretariat:selecionar_aluno' %}" class="px-4 py-2 text-sm transition bg-gray-700 rounded-lg hover:bg-gray-600">
+                Voltar
+            </a>
+            <button onclick="window.print()" class="flex items-center gap-2 px-6 py-2 font-bold text-white transition bg-blue-600 rounded-lg shadow-lg hover:bg-blue-500">
+                <i class="fas fa-print"></i> Imprimir / PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="mx-auto text-black bg-white shadow-2xl print:shadow-none print:w-full print:m-0" 
+         style="width: 210mm; min-height: 297mm; padding: 20mm; position: relative;">
+        
+        <header class="flex items-center justify-between pb-4 mb-8 border-b-2 border-gray-800">
+            <div>
+                <h1 class="text-2xl font-bold tracking-widest uppercase">NioCortex School</h1>
+                <p class="text-sm text-gray-600">Excelência em Educação</p>
+            </div>
+            <div class="text-xs text-right text-gray-500">
+                <p>Rua da Educação, 123 - Centro</p>
+                <p>CNPJ: 00.000.000/0001-00</p>
+            </div>
+        </header>
+
+        <main class="py-4 font-serif text-lg leading-relaxed text-justify">
+            {{ documento.conteudo_final|safe }}
+        </main>
+
+        <footer class="absolute bottom-10 left-0 w-full px-[20mm] text-center">
+            
+            <div class="flex justify-center mb-12">
+                <div class="w-64 pt-2 border-t border-black">
+                    <p class="text-sm font-bold">{{ documento.emitido_por.first_name }} {{ documento.emitido_por.last_name }}</p>
+                    <p class="text-xs">Secretaria Académica</p>
+                </div>
+            </div>
+
+            <div class="flex items-end justify-between pt-2 text-xs text-gray-500 border-t border-gray-300">
+                <div class="text-left">
+                    <p>Documento emitido eletronicamente em {{ documento.data_emissao|date:"d/m/Y H:i" }}</p>
+                    <p>Autenticidade pode ser verificada com o código:</p>
+                    <p class="mt-1 font-mono text-sm font-bold text-black">{{ documento.codigo_validacao }}</p>
+                </div>
+                <div class="p-1 bg-white border border-gray-200">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data={{ documento.codigo_validacao }}" alt="QR Code" class="w-20 h-20 opacity-80">
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+</div>
+
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        /* Mostra apenas a folha A4 */
+        .max-w-4xl, .max-w-4xl * {
+            visibility: visible;
+        }
+        .max-w-4xl {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        /* Esconde a barra de controle explicitamente */
+        .print\:hidden {
+            display: none !important;
+        }
+        /* Remove sombras e fundos */
+        .bg-gray-100 {
+            background-color: white;
+        }
+        @page {
+            size: A4;
+            margin: 0;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "social/base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto animate-fade-in-down">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-8">
+        <h1 class="text-xl font-bold mb-6 text-gray-800 dark:text-white">{{ titulo }}</h1>
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+            <div><label class="form-label">Nome do Departamento</label> {{ form.nome }} </div>
+            <div><label class="form-label">Código Centro de Custo</label> {{ form.codigo_centro_custo }} </div>
+            <div><label class="form-label">Gestor Responsável</label> {{ form.responsavel }} </div>
+            
+            <div class="pt-4 flex justify-end gap-3">
+                <a href="{% url 'hr:listar_departamentos' %}" class="btn-secondary">Voltar</a>
+                <button type="submit" class="btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

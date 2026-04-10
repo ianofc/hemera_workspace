@@ -1,0 +1,57 @@
+
+<div id="global-preloader" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center flex-col gap-6 transition-all duration-500 ease-in-out invisible opacity-0">
+    
+    <div class="relative flex items-center justify-center">
+        <div class="absolute w-24 h-24 border-4 rounded-full border-slate-100"></div>
+        <div class="absolute w-24 h-24 border-4 rounded-full border-t-indigo-600 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+        
+        <div class="relative z-10 flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg">
+            <i id="loader-icon" class="text-3xl text-indigo-600 fas fa-cube animate-pulse"></i>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <h2 id="loader-title" class="text-xl font-black tracking-tight text-slate-800 animate-pulse">
+            Carregando...
+        </h2>
+        <p class="mt-1 text-xs font-bold tracking-widest uppercase text-slate-400">NioCortex Environment</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loader = document.getElementById('global-preloader');
+        const iconEl = document.getElementById('loader-icon');
+        const titleEl = document.getElementById('loader-title');
+        
+        // 1. Fade Out na entrada (se estiver visível por padrão no HTML estático, senão JS controla)
+        // Como definimos invisible opacity-0 no HTML acima, ele já começa oculto, 
+        // mas se você tiver um loader de entrada inicial, ele deve ser removido aqui.
+        
+        // 2. Listener de Transição
+        const links = document.querySelectorAll('.module-transition');
+        
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Pega dados do link clicado
+                const targetName = this.getAttribute('data-module-name');
+                const targetIcon = this.getAttribute('data-module-icon');
+                const targetColor = this.getAttribute('data-module-color') || 'text-indigo-600';
+                
+                // Se não tiver dados de módulo, ignora (ou usa padrão)
+                if (!targetName) return;
+
+                // Atualiza o Loader
+                if(titleEl) titleEl.innerText = targetName;
+                if(iconEl) {
+                    iconEl.className = `${targetIcon} text-3xl ${targetColor} animate-pulse`;
+                }
+
+                // Mostra o Loader
+                if(loader) {
+                    loader.classList.remove('invisible', 'opacity-0');
+                }
+            });
+        });
+    });
+</script>

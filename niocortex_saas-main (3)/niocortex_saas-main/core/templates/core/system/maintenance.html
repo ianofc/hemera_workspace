@@ -1,0 +1,26 @@
+
+{% extends 'social/layout/base.html' %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-slate-900">
+    <div class="max-w-lg p-10 text-center">
+        <div class="relative mb-6">
+            <div class="absolute inset-0 bg-indigo-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+            <i class="relative z-10 text-6xl text-indigo-400 fas fa-tools"></i>
+        </div>
+        <h1 class="mb-2 text-3xl font-black text-white">Módulo em Manutenção</h1>
+        <p class="mb-8 text-slate-400">
+            O módulo <strong>{{ module_name }}</strong> está passando por ajustes técnicos ou atualizações. 
+            O restante do NioCortex continua funcionando normalmente.
+        </p>
+        <div class="p-4 mb-8 text-left border bg-white/5 rounded-xl border-white/10">
+            <p class="font-mono text-xs text-red-400 break-all">
+                <span class="font-bold text-slate-500">ERRO TÉCNICO:</span><br>
+                {{ error_message|default:"Erro de inicialização do módulo." }}
+            </p>
+        </div>
+        <a href="/" class="px-6 py-3 font-bold text-white transition bg-indigo-600 hover:bg-indigo-500 rounded-xl">
+            Voltar para Home
+        </a>
+    </div>
+</div>
+{% endblock %}

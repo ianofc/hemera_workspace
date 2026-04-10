@@ -1,0 +1,141 @@
+/* static/css/perfis.css */
+
+/* --- VARIÁVEIS DE TEMA (ENGINE) --- */
+:root {
+    /* Padrão: Aurora Lumina Clean */
+    --color-primary: #7c3aed;
+    --color-secondary: #00E5FF;
+    --color-accent: #FF2E93;
+    --bg-body: #F0F2F5;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+    --gradient-sidebar: linear-gradient(135deg, #7c3aed 0%, #FF2E93 100%);
+    
+    /* Talkio Light */
+    --talkio-sidebar: #ffffff;
+    --talkio-chat: #8E9DBC;
+    --talkio-hover: #f4f4f5;
+    --talkio-bubble-out: #eeffde;
+    --talkio-bubble-in: #ffffff;
+    --talkio-meta: #a1a1aa;
+    --talkio-secret: #1c2e28;
+}
+
+/* Tema Rosa */
+.theme-pink {
+    --color-primary: #db2777;
+    --color-secondary: #f472b6;
+    --color-accent: #8b5cf6;
+    --bg-body: #fff0f5;
+    --gradient-sidebar: linear-gradient(135deg, #db2777 0%, #8b5cf6 100%);
+}
+
+/* Tema Azul */
+.theme-blue {
+    --color-primary: #2563eb;
+    --color-secondary: #0ea5e9;
+    --color-accent: #f59e0b;
+    --bg-body: #f0f9ff;
+    --gradient-sidebar: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+}
+
+/* Dark Mode */
+.theme-dark {
+    --color-primary: #818cf8;
+    --color-secondary: #2dd4bf;
+    --color-accent: #f472b6;
+    --bg-body: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.85);
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --gradient-sidebar: linear-gradient(135deg, #4f46e5 0%, #2dd4bf 100%);
+    
+    --talkio-sidebar: #17212b;
+    --talkio-chat: #0e1621;
+    --talkio-hover: #2b2d31;
+    --talkio-bubble-out: #2b5278;
+    --talkio-bubble-in: #182533;
+}
+
+/* =========================================
+   NOVOS TEMAS PREMIUM
+   ========================================= */
+
+/* Premium Feminino (Ruby Gold) */
+.theme-premium-fem {
+    --color-primary: #be123c; /* Ruby Red */
+    --color-secondary: #f59e0b; /* Gold */
+    --color-accent: #fbbf24;
+    --bg-body: #fff1f2; /* Light Red tint */
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --glass-border: 1px solid rgba(245, 158, 11, 0.4); /* Gold border */
+    --gradient-sidebar: linear-gradient(135deg, #be123c 0%, #f59e0b 100%);
+    --talkio-bubble-out: #fff1f2;
+}
+
+/* Premium Masculino (Emerald Gold) */
+.theme-premium-masc {
+    --color-primary: #059669; /* Emerald Green */
+    --color-secondary: #d97706; /* Dark Gold */
+    --color-accent: #fbbf24;
+    --bg-body: #f0fdf4; /* Light Green tint */
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --glass-border: 1px solid rgba(245, 158, 11, 0.4); /* Gold border */
+    --gradient-sidebar: linear-gradient(135deg, #059669 0%, #d97706 100%);
+    --talkio-bubble-out: #f0fdf4;
+}
+
+/* --- GLASSMORPHISM --- */
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+.glass-nav {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+.theme-dark .glass-nav {
+    background: rgba(15, 23, 42, 0.90);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- UTILITÁRIOS --- */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.custom-scroll::-webkit-scrollbar { width: 6px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; opacity: 0.3; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+.talkio-pattern {
+    background-image: url('https://web.telegram.org/img/bg_0.png'); 
+    background-size: cover;
+    background-attachment: fixed;
+}
+.talkio-drawer {
+    background-color: var(--talkio-sidebar);
+    color: var(--text-main);
+}
+
+[x-cloak] { display: none !important; }
+
+/* Efeito Premium */
+.text-premium {
+    background: linear-gradient(to right, #F59E0B, #FFD700, #F59E0B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}

@@ -1,0 +1,130 @@
+<div id="zios-widget" class="fixed z-50 flex flex-col items-end pointer-events-none bottom-6 right-6">
+
+    <div id="zios-chat-window" class="pointer-events-auto bg-white dark:bg-gray-800 w-80 md:w-96 h-[500px] rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col mb-4 transform transition-all duration-300 translate-y-10 opacity-0 invisible origin-bottom-right">
+        
+        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-t-2xl">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-md">
+                    <i class="text-sm text-white fas fa-brain"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-white">IO CONSCIOS</h3>
+                    <p class="text-xs text-indigo-100">Assistente Inteligente</p>
+                </div>
+            </div>
+            <button onclick="toggleZios AI()" class="text-white/80 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="zios-messages" class="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50 dark:bg-gray-900/50">
+            <div class="flex gap-2">
+                <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-xs text-indigo-600 bg-indigo-100 rounded-full">IO</div>
+                <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 dark:text-gray-200 max-w-[85%]">
+                    Olá, {{ user.first_name }}! Sou o Zios AI. Como posso ajudar você hoje?
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 bg-white border-t border-gray-100 dark:bg-gray-800 dark:border-gray-700 rounded-b-2xl">
+            <form id="zios-form" class="flex gap-2">
+                {% csrf_token %}
+                <input type="text" id="zios-input" class="flex-1 px-4 py-2 text-sm bg-gray-100 border-0 dark:bg-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 dark:text-white" placeholder="Digite sua dúvida..." autocomplete="off">
+                <button type="submit" class="flex items-center justify-center w-10 h-10 text-white transition bg-indigo-600 hover:bg-indigo-700 rounded-xl">
+                    <i class="text-xs fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <button onclick="toggleZios AI()" class="flex items-center justify-center text-white transition-transform duration-300 rounded-full shadow-lg pointer-events-auto w-14 h-14 bg-gradient-to-br from-indigo-600 to-purple-600 shadow-indigo-500/40 hover:scale-110 group">
+        <i class="text-xl fas fa-comment-dots group-hover:hidden"></i>
+        <i class="hidden text-xl fas fa-chevron-down group-hover:block"></i>
+    </button>
+
+</div>
+
+<script>
+    const chatWindow = document.getElementById('zios-chat-window');
+    const messagesArea = document.getElementById('zios-messages');
+    
+    function toggleZios AI() {
+        if (chatWindow.classList.contains('invisible')) {
+            chatWindow.classList.remove('invisible', 'opacity-0', 'translate-y-10');
+            setTimeout(() => document.getElementById('zios-input').focus(), 100);
+        } else {
+            chatWindow.classList.add('invisible', 'opacity-0', 'translate-y-10');
+        }
+    }
+
+    function appendMessage(text, isUser) {
+        const div = document.createElement('div');
+        div.className = isUser ? 'flex gap-2 flex-row-reverse' : 'flex gap-2';
+        
+        const avatar = isUser 
+            ? `<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-xs text-gray-600 bg-gray-200 rounded-full"><i class="fas fa-user"></i></div>`
+            : `<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-xs text-indigo-600 bg-indigo-100 rounded-full">IO</div>`;
+            
+        const bubbleColor = isUser ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200';
+        const round = isUser ? 'rounded-tr-none' : 'rounded-tl-none';
+
+        div.innerHTML = `
+            ${avatar}
+            <div class="${bubbleColor} p-3 rounded-2xl ${round} shadow-sm text-sm max-w-[85%]">
+                ${text}
+            </div>
+        `;
+        messagesArea.appendChild(div);
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+    }
+
+    document.getElementById('zios-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('zios-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // 1. Mostra msg do user
+        appendMessage(text, true);
+        input.value = '';
+
+        // 2. Loading
+        const loadingId = 'loading-' + Date.now();
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = loadingId;
+        loadingDiv.className = 'flex gap-2';
+        loadingDiv.innerHTML = `
+            <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-xs text-indigo-600 bg-indigo-100 rounded-full">IO</div>
+            <div class="p-3 text-sm text-gray-500 bg-white rounded-tl-none shadow-sm dark:bg-gray-700 rounded-2xl">
+                <i class="fas fa-circle-notch fa-spin"></i> Pensando...
+            </div>`;
+        messagesArea.appendChild(loadingDiv);
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+
+        // 3. Chama API
+        try {
+            const res = await fetch('/social/api/zios/chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+            
+            document.getElementById(loadingId).remove();
+            
+            if (data.reply) {
+                appendMessage(data.reply, false);
+            } else {
+                appendMessage("Desculpe, tive um erro de conexão neural.", false);
+            }
+
+        } catch (err) {
+            if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+            console.error(err);
+            appendMessage("Erro ao conectar com o servidor.", false);
+        }
+    });
+</script>

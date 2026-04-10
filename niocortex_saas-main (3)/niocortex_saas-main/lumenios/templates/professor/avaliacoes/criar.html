@@ -1,0 +1,308 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Nova Atividade | Cortex{% endblock %}
+
+{% block content %}
+
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-purple-200/20 dark:bg-purple-900/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob"></div>
+    <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-200/20 dark:bg-indigo-900/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-fuchsia-200/20 dark:bg-fuchsia-900/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-4000"></div>
+</div>
+
+<div class="max-w-7xl mx-auto space-y-8 relative">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/50 dark:border-gray-700/50 shadow-sm mb-3">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300">Nova Avaliação</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-800 to-indigo-800 dark:from-white dark:via-purple-300 dark:to-indigo-300 tracking-tight">
+                Criar Atividade
+            </h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1 font-medium flex items-center gap-2">
+                Para a turma <span class="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-lg text-xs font-bold border border-purple-200 dark:border-purple-800">{{ turma.nome }}</span>
+            </p>
+        </div>
+        
+        <div class="flex gap-3">
+            <a href="{{ url_for('alunos.turma', id_turma=turma.id) }}" class="px-5 py-2.5 bg-white/60 dark:bg-gray-800/60 text-gray-600 dark:text-gray-300 rounded-2xl text-sm font-bold border border-white/50 dark:border-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-700/80 transition-all shadow-glass">
+                Cancelar
+            </a>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl shadow-glass border border-white/50 dark:border-gray-700/50 p-8 ring-1 ring-black/5 dark:ring-white/5">
+                    <div class="space-y-6">
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5 ml-1">
+                                {{ form.titulo.label.text }} <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.titulo(class="w-full text-lg font-bold px-4 py-3 rounded-2xl border-0 bg-white/50 dark:bg-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:bg-white dark:focus:bg-gray-900 transition-all shadow-inner", id="titulo", placeholder="Ex: Avaliação Bimestral de História") }}
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5 ml-1">
+                                    {{ form.unidade.label.text }}
+                                </label>
+                                <div class="relative">
+                                    {{ form.unidade(class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer transition-all shadow-sm") }}
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                                        <i class="fas fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5 ml-1">
+                                    {{ form.data.label.text }}
+                                </label>
+                                {{ form.data(class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 transition-all shadow-sm") }}
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5 ml-1">
+                                    {{ form.tipo.label.text }}
+                                </label>
+                                <div class="relative">
+                                    {{ form.tipo(class="w-full px-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer transition-all shadow-sm", id="tipo_atividade") }}
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                                        <i class="fas fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5 ml-1">
+                                    {{ form.valor_total.label.text }}
+                                </label>
+                                <div class="relative">
+                                    {{ form.valor_total(class="w-full pl-8 pr-4 py-3 rounded-xl border-0 bg-white/50 dark:bg-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 transition-all shadow-sm font-mono font-bold", type="number", step="0.1") }}
+                                    <div class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-purple-500">
+                                        <i class="fas fa-star text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hidden bg-purple-50 dark:bg-purple-900/10 p-4 rounded-xl border border-purple-100 dark:border-purple-800 transition-all duration-300" id="num_questoes_container">
+                            <label class="block text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide mb-1.5 ml-1">
+                                {{ form.num_questoes.label.text }}
+                            </label>
+                            {{ form.num_questoes(class="w-full px-4 py-3 rounded-xl border-0 bg-white dark:bg-gray-800 ring-1 ring-purple-200 dark:ring-purple-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 placeholder-purple-300 shadow-inner", placeholder="Ex: 10") }}
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide ml-1">
+                                    Conteúdo / Enunciado
+                                </label>
+                                <span class="text-[10px] text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-md">Editor Rico</span>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+                                {{ form.descricao(class="rich-editor w-full", id="descricao") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                
+                <div class="relative bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-6 text-white shadow-xl shadow-purple-500/20 overflow-hidden ring-1 ring-white/10 group">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-fuchsia-400 rounded-full blur-[60px] opacity-20 mix-blend-overlay group-hover:opacity-30 transition-opacity"></div>
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-400 rounded-full blur-[60px] opacity-20 mix-blend-overlay"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                                <i class="fas fa-magic text-amber-300 text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-lg leading-tight">Cortex AI</h4>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-purple-200">Gerador de Conteúdo</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] font-bold uppercase text-indigo-200 mb-1.5 block">O que você precisa?</label>
+                                <textarea id="ia-tipo-questoes" rows="4"
+                                     class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-indigo-200/50 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none resize-none shadow-inner backdrop-blur-sm custom-scrollbar"
+                                     placeholder="Ex: Crie 5 questões dissertativas sobre a Era Vargas focando no Estado Novo, com sugestão de resposta."></textarea>
+                            </div>
+                            
+                            <button type="button" id="btn-gerar-questoes" 
+                                    class="w-full bg-white text-indigo-700 font-bold py-3.5 rounded-xl shadow-lg hover:bg-indigo-50 hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 text-sm group-hover:shadow-white/20">
+                                <i class="fas fa-bolt text-amber-500"></i>
+                                <span>Gerar Magia</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl shadow-glass border border-white/50 dark:border-gray-700/50 p-6 ring-1 ring-black/5 dark:ring-white/5">
+                    <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4 flex items-center gap-2">
+                        <i class="fas fa-paperclip text-indigo-500"></i> Arquivos Anexos
+                    </h4>
+                    
+                    <label class="block w-full cursor-pointer group">
+                        <div class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all bg-gray-50/50 dark:bg-gray-900/30 overflow-hidden">
+                            
+                            <div class="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            
+                            <div class="relative z-10 flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                <div class="w-12 h-12 rounded-full bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 dark:text-gray-300 group-hover:text-indigo-500 transition-colors"></i>
+                                </div>
+                                <p class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">
+                                    Clique para upload
+                                </p>
+                                <p class="text-xs text-gray-400">PDF, DOCX, PNG, JPG</p>
+                            </div>
+                            {{ form.arquivo_anexo(class="hidden") }}
+                        </div>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 text-base">
+                    <i class="fas fa-save"></i>
+                    <span>Salvar Atividade</span>
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .shadow-glass {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+    
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+        animation: blob 7s infinite alternate;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoSelect = document.getElementById('tipo_atividade');
+        const numQuestoesContainer = document.getElementById('num_questoes_container');
+        
+        function toggleNumQuestoes() {
+            if (tipoSelect.value === 'Prova') {
+                numQuestoesContainer.classList.remove('hidden');
+                setTimeout(() => numQuestoesContainer.classList.add('opacity-100'), 10);
+            } else {
+                numQuestoesContainer.classList.add('hidden');
+                numQuestoesContainer.classList.remove('opacity-100');
+            }
+        }
+
+        tipoSelect.addEventListener('change', toggleNumQuestoes);
+        toggleNumQuestoes(); 
+
+        // IA Integration
+        const btnGerar = document.getElementById('btn-gerar-questoes');
+        const promptInput = document.getElementById('ia-tipo-questoes');
+        const tituloInput = document.getElementById('titulo');
+
+        btnGerar.addEventListener('click', async function() {
+            const tema = tituloInput.value;
+            const instrucao = promptInput.value;
+            
+            if (!tema && !instrucao) {
+                Swal.fire({
+                    title: 'Faltam dados!',
+                    text: 'Preencha o título da atividade ou dê uma instrução específica para a IA.',
+                    icon: 'warning',
+                    confirmButtonColor: '#6366f1',
+                    background: '#ffffffcc',
+                    backdrop: `rgba(0,0,0,0.4)`
+                });
+                return;
+            }
+
+            const originalText = btnGerar.innerHTML;
+            btnGerar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando Conteúdo...';
+            btnGerar.disabled = true;
+            btnGerar.classList.add('opacity-75', 'cursor-not-allowed');
+            
+            try {
+                const response = await fetch("{{ url_for('alunos.gerar_questoes_ia') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        tema: tema, 
+                        tipo: instrucao + " (Formate a resposta em HTML limpo, usando <h3> para títulos de questões, <ul> para alternativas e <b> para destaques. Não use markdown ```html)" 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['descricao']) {
+                        CKEDITOR.instances['descricao'].setData(data.questoes);
+                    } else {
+                        document.getElementById('descricao').value = data.questoes;
+                    }
+                    
+                    Swal.fire({
+                        icon: 'success', 
+                        title: 'Mágica Realizada!', 
+                        text: 'O conteúdo foi gerado e inserido no editor.',
+                        showConfirmButton: false, 
+                        timer: 2000,
+                        confirmButtonColor: '#6366f1'
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Erro', 'A IA não conseguiu completar o pedido. Tente novamente.', 'error');
+            } finally {
+                btnGerar.innerHTML = originalText;
+                btnGerar.disabled = false;
+                btnGerar.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+    });
+</script> 
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "professor/base_professor.html" %}
+{% block title %}Confirmar Exclusão | Cortex{% endblock %}
+
+{% block content %}
+
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-red-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob"></div>
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-orange-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-4000"></div>
+</div>
+
+<div class="min-h-[70vh] flex items-center justify-center relative z-10 p-4">
+    
+    <div class="max-w-md w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-red-100 dark:border-red-900/30 p-8 md:p-10 text-center relative overflow-hidden animate-fade-in-up">
+        
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+
+        <div class="relative inline-block mb-6">
+            <div class="absolute inset-0 bg-red-400 rounded-full opacity-20 animate-ping"></div>
+            <div class="relative w-20 h-20 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full flex items-center justify-center shadow-inner">
+                <i class="fas fa-trash-alt text-3xl"></i>
+            </div>
+        </div>
+
+        <h1 class="text-2xl font-black text-slate-800 dark:text-white mb-3">
+            Excluir <span class="text-red-500">{{ tipo }}</span>?
+        </h1>
+
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+            Tem certeza que deseja remover <strong class="text-slate-800 dark:text-white">{{ obj.nome }}</strong>? 
+            <br>
+            <span class="text-red-500 font-bold text-xs uppercase tracking-wide mt-2 block">
+                <i class="fas fa-exclamation-triangle mr-1"></i> Esta ação não pode ser desfeita.
+            </span>
+        </p>
+
+        <form method="POST" class="space-y-3">
+            {% csrf_token %}
+            
+            <button type="submit" class="w-full py-4 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white rounded-2xl shadow-lg shadow-red-500/30 font-bold uppercase tracking-wider text-xs transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle"></i> Confirmar Exclusão
+            </button>
+
+            <a href="javascript:history.back()" class="block w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-2xl text-xs uppercase tracking-wider transition-colors">
+                Cancelar
+            </a>
+        </form>
+
+    </div>
+</div>
+
+<style>
+    .animate-blob { animation: blob 7s infinite; }
+    .animation-delay-2000 { animation-delay: 2s; }
+    .animation-delay-4000 { animation-delay: 4s; }
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+
+<div id="like-icon-{{ post.id }}">
+    {% if post.user_liked %}
+        <i class="text-2xl fas fa-heart text-rose-500 drop-shadow-lg"></i>
+    {% else %}
+        <i class="text-2xl text-white transition-colors fas fa-heart drop-shadow-lg group-hover/icon:text-rose-500"></i>
+    {% endif %}
+</div>

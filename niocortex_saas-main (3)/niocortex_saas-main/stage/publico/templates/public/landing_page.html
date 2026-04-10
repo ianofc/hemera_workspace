@@ -1,0 +1,581 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NioCortex Lumina | A Evolução da Inteligência Educacional</title>
+    <meta name="description" content="O primeiro sistema operacional escolar baseado na arquitetura do Neocórtex. Raciocínio, Criatividade e Controle para sua instituição.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        nio: {
+                            50: '#f2f0ff', 100: '#e6e1ff', 200: '#d0c4ff', 300: '#b09aff',
+                            400: '#8e66ff', 500: '#7c3aed', 600: '#6d28d9', 700: '#5b21b6',
+                            800: '#4c1d95', 900: '#3e1a75', 950: '#260e4b',
+                        },
+                        lumina: {
+                            cyan: '#00E5FF',
+                            pink: '#FF2E93',
+                            void: '#05050A'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'marquee': 'marquee 30s linear infinite',
+                        'blob': 'blob 10s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .text-aurora {
+            background: linear-gradient(135deg, #6200EA 0%, #D946EF 50%, #00E5FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+        }
+        .neural-bg {
+            background-image: radial-gradient(#6366f1 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        #preloader { transition: opacity 0.6s ease-out, visibility 0.6s ease-out; }
+    </style>
+</head>
+<body class="overflow-x-hidden font-sans antialiased bg-slate-50 text-slate-800 selection:bg-nio-500 selection:text-white" 
+      x-data="{ scrolled: false, mobileMenu: false, role: 'diretor' }">
+
+    <div id="preloader" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center flex-col gap-4">
+        <div class="relative">
+            <div class="w-16 h-16 border-4 rounded-full border-nio-100 border-t-nio-600 animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-xl font-bold text-nio-600">N</div>
+        </div>
+        <div class="text-sm font-bold tracking-widest uppercase text-nio-900 animate-pulse">Carregando Lumina...</div>
+        <script>
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const loader = document.getElementById('preloader');
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                }, 700);
+            });
+        </script>
+    </div>
+
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-nio-400/20 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-lumina-cyan/15 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[30%] w-[900px] h-[900px] bg-lumina-pink/10 rounded-full mix-blend-multiply filter blur-[130px] animate-blob animation-delay-4000"></div>
+        <div class="absolute inset-0 neural-bg opacity-40"></div>
+    </div>
+
+    <nav class="fixed z-50 w-full transition-all duration-300 border-b border-transparent"
+         :class="scrolled ? 'glass-panel py-3 shadow-sm border-white/40' : 'bg-transparent py-6'">
+        <div class="flex items-center justify-between px-6 mx-auto max-w-7xl">
+            
+            <a href="{% url 'stage_publico:index' %}" class="relative flex items-center gap-3 group">
+                <div class="relative flex items-center justify-center w-10 h-10">
+                    <div class="absolute inset-0 transition-transform duration-300 bg-nio-600 rounded-xl rotate-6 opacity-20 group-hover:rotate-12"></div>
+                    <div class="absolute inset-0 border shadow-sm bg-white/60 backdrop-blur rounded-xl border-white/50"></div>
+                    <svg class="relative z-10 w-6 h-6 text-nio-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 4L5 20" class="opacity-30"/>
+                        <path d="M5 4v16l14-16v16" />
+                        <circle cx="12" cy="12" r="2" fill="#00E5FF" stroke="none" class="animate-pulse"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold leading-none tracking-tight font-display text-slate-900">
+                        Nio<span class="text-nio-600">Cortex</span>
+                    </span>
+                    <span class="text-[10px] font-bold text-nio-400 uppercase tracking-[0.2em] leading-none mt-1 group-hover:text-lumina-pink transition-colors">Lumina</span>
+                </div>
+            </a>
+
+            <div class="items-center hidden gap-8 md:flex">
+                <a href="#filosofia" class="text-sm font-semibold transition-colors text-slate-600 hover:text-nio-600">A Evolução</a>
+                <a href="{% url 'stage_publico:about' %}" class="text-sm font-semibold transition-colors text-slate-600 hover:text-nio-600">Sobre Nós</a>
+                
+                <a href="{% url 'stage_publico:pricing' %}" class="text-sm font-semibold transition-colors text-slate-600 hover:text-nio-600">Ver Planos</a>
+                
+                <div class="w-px h-6 mx-2 bg-slate-300"></div>
+                
+                <a href="{% url 'yourlife_social:login' %}" class="text-sm font-bold text-slate-700 hover:text-nio-700">Login</a>
+                <a href="{% url 'yourlife_social:register' %}" class="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-nio-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 hover:bg-nio-800 shadow-lg shadow-nio-900/20">
+                    Começar Agora
+                    <i class="ml-2 text-xs transition-transform fas fa-arrow-right group-hover:translate-x-1"></i>
+                </a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="text-2xl md:hidden text-slate-700 focus:outline-none">
+                <i class="fas" :class="mobileMenu ? 'fa-times' : 'fa-bars'"></i>
+            </button>
+        </div>
+
+        <div x-show="mobileMenu" x-collapse class="border-b shadow-xl md:hidden bg-white/95 backdrop-blur-xl border-slate-200">
+            <div class="flex flex-col gap-4 p-6">
+                <a href="{% url 'stage_publico:about' %}" class="text-lg font-bold text-slate-700">Sobre Nós</a>
+                <a href="#filosofia" class="text-lg font-bold text-slate-700">A Evolução</a>
+                <a href="{% url 'stage_publico:pricing' %}" class="text-lg font-bold text-slate-700">Planos & Preços</a>
+                <hr class="border-slate-200">
+                <a href="{% url 'yourlife_social:login' %}" class="py-3 font-bold text-center border rounded-xl border-slate-200 text-slate-700">Entrar</a>
+                <a href="{% url 'yourlife_social:register' %}" class="py-3 font-bold text-center text-white rounded-xl bg-nio-600">Criar Conta</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative px-6 pt-40 pb-20 overflow-hidden lg:pt-52 lg:pb-32">
+        <div class="relative z-10 grid items-center gap-12 mx-auto max-w-7xl lg:grid-cols-12">
+            
+            <div class="space-y-8 text-center lg:col-span-6 lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-nio-100 shadow-sm animate-fade-in-down">
+                    <span class="relative flex w-2 h-2">
+                      <span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-lumina-cyan"></span>
+                      <span class="relative inline-flex w-2 h-2 rounded-full bg-nio-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">NioCortex Lumina v2.0</span>
+                </div>
+
+                <h1 class="text-5xl lg:text-7xl font-display font-black text-slate-900 leading-[1.1] tracking-tight">
+                    O Cérebro da sua <br>
+                    <span class="relative inline-block text-aurora">
+                        Instituição.
+                        <svg class="absolute left-0 w-full h-4 -bottom-2 text-nio-300 opacity-40" viewBox="0 0 200 9" fill="none"><path d="M2.00025 6.99997C25.7501 9.99995 84.8875 1.25026 200.003 1.99996" stroke="currentColor" stroke-width="3"></path></svg>
+                    </span>
+                </h1>
+
+                <p class="max-w-xl mx-auto text-lg leading-relaxed text-slate-600 lg:mx-0">
+                    O <strong>NioCortex</strong> funde a infraestrutura segura (Reptiliano) e a gestão humanizada (Límbico) com uma IA avançada (Neocórtex). Transforme dados em <strong>sabedoria educacional</strong>.
+                </p>
+
+                <div class="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+                    <a href="{% url 'yourlife_social:register' %}" class="px-8 py-4 text-lg shadow-xl btn-aurora shadow-nio-500/20">
+                        <i class="mr-2 fas fa-brain"></i> Ativar Inteligência
+                    </a>
+                    <a href="{% url 'stage_publico:demo' %}" class="px-8 py-4 text-lg btn-secondary-glass group">
+                        <i class="mr-2 transition-transform fas fa-play text-nio-500 group-hover:scale-125"></i> Ver Demo
+                    </a>
+                </div>
+
+                <div class="flex items-center justify-center gap-6 pt-4 text-sm font-medium lg:justify-start text-slate-500 opacity-80">
+                    <span class="flex items-center gap-1.5"><i class="fas fa-bolt text-lumina-cyan"></i> Setup Instantâneo</span>
+                    <span class="flex items-center gap-1.5"><i class="fas fa-lock text-lumina-cyan"></i> LGPD Ready</span>
+                </div>
+            </div>
+
+            <div class="relative lg:col-span-6 perspective-1000 group">
+                <div class="absolute transition duration-1000 -inset-4 bg-gradient-to-r from-nio-500 to-lumina-pink rounded-3xl blur-2xl opacity-20 group-hover:opacity-30"></div>
+                
+                <div class="relative p-2 transition-transform duration-700 transform bg-white border shadow-2xl border-slate-100 rounded-2xl rotate-y-6 rotate-x-6 group-hover:rotate-0">
+                    <img src="https://assets-global.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298b11fb9391f_DrawKit0012_Education_Thumbnail.png" alt="Dashboard" class="rounded-xl w-full h-auto grayscale-[20%] group-hover:grayscale-0 transition-all duration-700">
+                    
+                    <div class="absolute hidden p-4 border shadow-lg -left-8 top-20 bg-white/90 backdrop-blur rounded-xl border-slate-100 animate-float md:block">
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center justify-center w-10 h-10 text-green-600 bg-green-100 rounded-full"><i class="fas fa-arrow-trend-up"></i></div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Engajamento</p>
+                                <p class="text-sm font-bold text-slate-800">Neuroplasticidade +42%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute hidden p-4 border shadow-lg -right-8 bottom-20 bg-white/90 backdrop-blur rounded-xl border-slate-100 animate-float animation-delay-2000 md:block">
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-nio-100 text-nio-600"><i class="fas fa-robot"></i></div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">IO Zios AI</p>
+                                <p class="text-sm font-bold text-slate-800">Plano de Aula Gerado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-8 overflow-hidden border-y border-slate-100 bg-white/50 backdrop-blur-sm">
+        <div class="px-6 mx-auto mb-4 max-w-7xl">
+            <p class="text-center text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Instituições que evoluíram</p>
+        </div>
+        <div class="relative w-full overflow-hidden group">
+            <div class="flex whitespace-nowrap animate-marquee gap-24 items-center w-max group-hover:[animation-play-state:paused]">
+                {% for i in "12345678" %}
+                <span class="flex items-center gap-3 text-xl font-black uppercase transition-colors cursor-default font-display text-slate-300 hover:text-nio-600">
+                    <i class="fas fa-graduation-cap"></i> Colegio <span class="font-light">Futuro</span>
+                </span>
+                <span class="flex items-center gap-3 text-xl font-black uppercase transition-colors cursor-default font-display text-slate-300 hover:text-nio-600">
+                    <i class="fas fa-university"></i> Rede <span class="font-light">Alpha</span>
+                </span>
+                <span class="flex items-center gap-3 text-xl font-black uppercase transition-colors cursor-default font-display text-slate-300 hover:text-nio-600">
+                    <i class="fas fa-shapes"></i> Escola <span class="font-light">Lumina</span>
+                </span>
+                {% endfor %}
+            </div>
+            <div class="absolute top-0 left-0 z-10 w-32 h-full bg-gradient-to-r from-slate-50 to-transparent"></div>
+            <div class="absolute top-0 right-0 z-10 w-32 h-full bg-gradient-to-l from-slate-50 to-transparent"></div>
+        </div>
+    </section>
+
+    <section id="filosofia" class="relative py-24 overflow-hidden text-white bg-slate-900">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-nio-900/20 to-slate-900"></div>
+        
+        <div class="relative z-10 px-6 mx-auto max-w-7xl">
+            <div class="mb-16 text-center">
+                <span class="block mb-2 text-xs font-bold tracking-widest uppercase text-lumina-cyan">Arquitetura de Software</span>
+                <h2 class="mb-6 text-3xl font-bold lg:text-5xl font-display">A Teoria do Cérebro Trino <br><span class="text-nio-400">Aplicada à Gestão Escolar.</span></h2>
+                <p class="max-w-2xl mx-auto text-lg text-slate-400">
+                    Tal como na evolução biológica, o NioCortex organiza a sua escola em três camadas de inteligência, da sobrevivência à criação.
+                </p>
+            </div>
+
+            <div class="grid gap-8 md:grid-cols-3">
+                <div class="relative p-8 transition-all duration-500 border group bg-slate-800/50 rounded-3xl border-slate-700 hover:border-red-500/50 hover:-translate-y-2">
+                    <div class="absolute inset-0 transition-opacity opacity-0 bg-red-500/5 group-hover:opacity-100 rounded-3xl"></div>
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 text-3xl text-red-400 transition-colors shadow-lg rounded-2xl bg-slate-700 group-hover:bg-red-500 group-hover:text-white">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-white">Cérebro Reptiliano</h3>
+                    <p class="mb-4 text-xs font-bold tracking-wider text-red-400 uppercase">Instinto & Sobrevivência</p>
+                    <p class="text-sm leading-relaxed text-slate-400">
+                        A base vital. Controle de acessos, segurança de dados, backups criptografados e infraestrutura que nunca dorme. O instinto que mantém a escola viva e segura.
+                    </p>
+                </div>
+
+                <div class="relative p-8 transition-all duration-500 border group bg-slate-800/50 rounded-3xl border-slate-700 hover:border-yellow-500/50 hover:-translate-y-2">
+                    <div class="absolute inset-0 transition-opacity opacity-0 bg-yellow-500/5 group-hover:opacity-100 rounded-3xl"></div>
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 text-3xl text-yellow-400 transition-colors shadow-lg rounded-2xl bg-slate-700 group-hover:bg-yellow-500 group-hover:text-white">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-white">Cérebro Límbico</h3>
+                    <p class="mb-4 text-xs font-bold tracking-wider text-yellow-400 uppercase">Emoção & Relacionamento</p>
+                    <p class="text-sm leading-relaxed text-slate-400">
+                        O centro emocional. Comunicação com pais, acolhimento do aluno, feed social da turma e monitoramento do clima escolar para evitar conflitos.
+                    </p>
+                </div>
+
+                <div class="relative z-10 p-8 transition-all duration-500 transform border shadow-2xl group bg-gradient-to-b from-nio-900 to-nio-950 rounded-3xl border-nio-500 shadow-nio-500/20 md:scale-105 hover:-translate-y-2">
+                    <div class="absolute -top-4 -right-4 bg-nio-500 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-bounce">O DIFERENCIAL</div>
+                    <div class="flex items-center justify-center w-16 h-16 mb-6 text-3xl text-white transition-transform shadow-xl rounded-2xl bg-nio-700 group-hover:scale-110 shadow-nio-600/30">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="mb-2 text-2xl font-bold text-white">Neocórtex IO</h3>
+                    <p class="mb-4 text-xs font-bold tracking-wider uppercase text-lumina-cyan">Razão & Planejamento</p>
+                    <p class="mb-6 text-sm leading-relaxed text-slate-300">
+                        A camada evolutiva. <strong>IA Generativa</strong> que planeja aulas, cria estratégias financeiras e gera insights de neuroplasticidade organizacional.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="w-full h-1 overflow-hidden rounded-full bg-slate-700">
+                            <div class="h-full bg-lumina-cyan w-[90%] animate-pulse"></div>
+                        </div>
+                        <p class="font-mono text-xs text-right text-lumina-cyan">Processamento Cognitivo: Ativo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="funcionalidades" class="px-6 py-24 bg-slate-50">
+        <div class="mx-auto max-w-7xl">
+            <div class="flex flex-col items-end justify-between gap-6 mb-16 md:flex-row">
+                <div class="max-w-2xl">
+                    <h2 class="mb-4 text-4xl font-bold font-display text-slate-900">Neuroplasticidade Digital</h2>
+                    <p class="text-lg text-slate-600">Um sistema dividido em lobos funcionais que aprende e cria novas conexões conforme sua escola cresce.</p>
+                </div>
+                <a href="{% url 'yourlife_social:register' %}" class="flex items-center gap-2 font-bold transition text-nio-600 hover:text-nio-800 group">
+                    Explorar todos os módulos <i class="transition-transform fas fa-arrow-right group-hover:translate-x-1"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6 auto-rows-[300px]">
+                
+                <div class="relative flex flex-col row-span-2 p-8 overflow-hidden transition-all duration-300 bg-white border shadow-sm md:col-span-2 rounded-3xl border-slate-200 hover:shadow-xl group">
+                    <div class="absolute top-0 right-0 w-64 h-64 transition-transform origin-top-right rounded-bl-full opacity-50 bg-gradient-to-br from-nio-100 to-purple-100 group-hover:scale-110"></div>
+                    <div class="relative z-10 flex-grow">
+                        <div class="flex items-center justify-center w-12 h-12 mb-6 text-2xl rounded-xl bg-nio-100 text-nio-600"><i class="fas fa-lightbulb"></i></div>
+                        <h3 class="mb-2 text-2xl font-bold text-slate-900">Lobo Frontal (Criatividade)</h3>
+                        <p class="mb-6 text-slate-600">IA Generativa que atua como co-piloto do professor. Cria planos de aula alinhados à BNCC, sugere dinâmicas de grupo e elabora avaliações personalizadas.</p>
+                    </div>
+                    
+                    <div class="relative z-10 p-4 space-y-3 border bg-slate-50 border-slate-100 rounded-xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-slate-200"></div>
+                            <div class="p-2 text-xs bg-white border rounded-lg shadow-sm border-slate-200 text-slate-600">
+                                Crie uma prova de História sobre Roma Antiga para o 6º ano.
+                            </div>
+                        </div>
+                        <div class="flex flex-row-reverse items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-nio-600 flex items-center justify-center text-[8px] text-white">IO</div>
+                            <div class="p-2 text-xs border rounded-lg shadow-sm bg-nio-50 border-nio-100 text-nio-800">
+                                <span class="typing-effect">Gerando 5 questões com gabarito...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'stage_publico:feature_financial' %}" class="relative flex flex-col justify-between p-8 overflow-hidden text-white transition-all duration-300 shadow-sm md:col-span-2 rounded-3xl bg-slate-900 hover:shadow-xl group hover:scale-[1.01]">
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="flex items-center justify-center w-12 h-12 text-2xl text-green-400 rounded-xl bg-slate-800"><i class="fas fa-wallet"></i></div>
+                            <span class="px-3 py-1 text-xs font-bold text-green-400 rounded-full bg-green-500/20">+35% Receita</span>
+                        </div>
+                        <h3 class="mb-2 text-xl font-bold">Lobo Parietal (Lógica)</h3>
+                        <p class="text-sm text-slate-400">Gestão financeira precisa. Emissão de boletos, régua de cobrança automática e previsibilidade de fluxo de caixa.</p>
+                        <p class="mt-4 text-xs font-bold text-green-400 underline">Ver funcionalidades &rarr;</p>
+                    </div>
+                    <div class="relative z-10 flex items-end h-16 gap-2 mt-6">
+                        <div class="w-full h-2 overflow-hidden rounded-full bg-slate-800">
+                            <div class="bg-green-500 h-full w-[70%] group-hover:w-[85%] transition-all duration-1000 ease-out"></div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'stage_publico:feature_diary' %}" class="p-6 transition-all duration-300 bg-white border shadow-sm md:col-span-1 rounded-3xl border-slate-200 hover:shadow-lg group hover:border-nio-300">
+                    <div class="flex items-center justify-center w-10 h-10 mb-4 text-xl text-blue-600 transition-transform bg-blue-100 rounded-lg group-hover:scale-110"><i class="fas fa-database"></i></div>
+                    <h3 class="mb-2 text-lg font-bold text-slate-900">Lobo Temporal</h3>
+                    <p class="text-xs leading-relaxed text-slate-500">Memória institucional. Histórico escolar, documentos e diários armazenados vitaliciamente.</p>
+                    <p class="mt-4 text-xs font-bold text-nio-600">Saiba mais &rarr;</p>
+                </a>
+
+                <div class="relative p-6 overflow-hidden text-white transition-all duration-300 shadow-lg md:col-span-1 rounded-3xl bg-gradient-to-br from-lumina-pink to-purple-600 hover:shadow-xl group">
+                    <div class="absolute text-white transition-opacity transform -right-6 -bottom-6 text-9xl opacity-10 group-hover:opacity-20 group-hover:rotate-12">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="relative z-10 mb-2 text-lg font-bold">Sinapses Móveis</h3>
+                    <p class="relative z-10 text-xs leading-relaxed text-white/90">App para pais e alunos. Conexão escola-família em tempo real.</p>
+                    <div class="absolute z-10 bottom-6 left-6">
+                        <i class="fas fa-wifi animate-pulse"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white border-t border-slate-200">
+        <div class="px-6 mx-auto max-w-7xl">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl font-bold text-slate-900">Visão Adaptativa</h2>
+                <p class="mt-2 text-slate-500">O NioCortex muda de forma para atender quem o usa.</p>
+            </div>
+
+            <div class="flex justify-center gap-2 mb-8 p-1.5 bg-slate-100 rounded-full w-fit mx-auto">
+                <button @click="role = 'diretor'" 
+                        :class="role === 'diretor' ? 'bg-white text-nio-600 shadow-sm scale-105' : 'text-slate-500 hover:text-slate-700'"
+                        class="px-6 py-2 text-sm font-bold transition-all duration-300 rounded-full">Direção</button>
+                <button @click="role = 'prof'" 
+                        :class="role === 'prof' ? 'bg-white text-nio-600 shadow-sm scale-105' : 'text-slate-500 hover:text-slate-700'"
+                        class="px-6 py-2 text-sm font-bold transition-all duration-300 rounded-full">Professor</button>
+                <button @click="role = 'aluno'" 
+                        :class="role === 'aluno' ? 'bg-white text-nio-600 shadow-sm scale-105' : 'text-slate-500 hover:text-slate-700'"
+                        class="px-6 py-2 text-sm font-bold transition-all duration-300 rounded-full">Aluno</button>
+            </div>
+
+            <div class="max-w-5xl mx-auto bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-800 ring-4 ring-slate-100 h-[450px] relative transition-all duration-500">
+                <div class="flex gap-2 px-4 py-3 border-b bg-slate-800 border-slate-700">
+                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+
+                <div x-show="role === 'diretor'" x-transition.opacity.duration.500ms class="h-full p-8 bg-slate-900">
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div class="p-5 border bg-slate-800/50 rounded-xl border-slate-700">
+                            <p class="mb-1 text-xs tracking-wider uppercase text-slate-400">Receita Mensal</p>
+                            <p class="text-2xl font-bold text-white">R$ 145.200</p>
+                            <p class="mt-2 text-xs text-green-400">▲ 12% vs mês anterior</p>
+                        </div>
+                        <div class="p-5 border bg-slate-800/50 rounded-xl border-slate-700">
+                            <p class="mb-1 text-xs tracking-wider uppercase text-slate-400">Alunos Ativos</p>
+                            <p class="text-2xl font-bold text-white">1.204</p>
+                            <p class="mt-2 text-xs text-slate-500">Capacidade: 98%</p>
+                        </div>
+                        <div class="p-5 border bg-slate-800/50 rounded-xl border-slate-700">
+                            <p class="mb-1 text-xs tracking-wider uppercase text-slate-400">Inadimplência</p>
+                            <p class="text-2xl font-bold text-red-400">2.1%</p>
+                            <p class="mt-2 text-xs text-red-400/60">▼ 0.5% (Ação IA)</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center h-40 p-6 text-center border border-dashed bg-slate-800/30 rounded-xl border-slate-700">
+                        <i class="mb-2 text-3xl fas fa-chart-area text-slate-600"></i>
+                        <p class="text-sm text-slate-500">Visualização de Tendências de Evasão (Analytics)</p>
+                    </div>
+                </div>
+
+                <div x-show="role === 'prof'" x-transition.opacity.duration.500ms class="h-full p-8 bg-slate-50" style="display: none;">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Turma 5º Ano B</h3>
+                            <p class="text-sm text-slate-500">Matemática • Aula 14/40</p>
+                        </div>
+                        <button class="px-4 py-2 text-sm font-bold text-white rounded-lg shadow-lg bg-nio-600 shadow-nio-500/30">
+                            <i class="mr-2 fas fa-plus"></i> Nova Atividade
+                        </button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 transition-colors bg-white border shadow-sm rounded-xl border-slate-200 hover:border-nio-300">
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center w-10 h-10 font-bold text-purple-600 bg-purple-100 rounded-full">JS</div>
+                                <div>
+                                    <p class="font-bold text-slate-700">João Silva</p>
+                                    <p class="text-xs text-slate-400">Desempenho: Alto</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 text-xs font-bold text-green-700 bg-green-100 rounded">Presente</span>
+                                <span class="px-2 py-1 text-xs font-bold text-blue-700 bg-blue-100 rounded">Nota 9.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="role === 'aluno'" x-transition.opacity.duration.500ms class="flex flex-col items-center justify-center h-full p-8 text-center bg-white" style="display: none;">
+                    <div class="flex items-center justify-center w-24 h-24 mb-6 text-4xl text-white rounded-full shadow-xl bg-gradient-to-tr from-nio-500 to-lumina-pink shadow-nio-500/40 animate-pulse-slow">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="mb-2 text-3xl font-bold text-slate-900">Parabéns, Pedro!</h3>
+                    <p class="max-w-sm mx-auto mb-8 text-lg text-slate-500">
+                        Você completou todas as atividades da semana e ganhou a insígnia "Mestre dos Números".
+                    </p>
+                    <div class="flex gap-4">
+                        <button class="px-6 py-3 font-bold text-white transition bg-nio-600 rounded-xl hover:bg-nio-700">Ver Boletim</button>
+                        <button class="px-6 py-3 font-bold transition bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200">Próxima Aula</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative py-32 overflow-hidden bg-slate-900">
+        <div class="absolute inset-0 bg-nio-900/20"></div>
+        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-lumina-pink/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-nio-600/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+        
+        <div class="relative z-10 max-w-4xl px-6 mx-auto text-center">
+            <h2 class="mb-8 text-4xl font-black tracking-tight text-white lg:text-6xl font-display">
+                Pronto para ativar o <br>
+                <span class="text-aurora">Neocórtex da sua Escola?</span>
+            </h2>
+            <p class="max-w-2xl mx-auto mb-12 text-xl text-slate-400">
+                Junte-se às instituições que deixaram a gestão "reptiliana" no passado. O futuro é cognitivo.
+            </p>
+            
+            <div class="flex flex-col items-center justify-center gap-6 sm:flex-row">
+                <a href="{% url 'stage_publico:pricing' %}" class="w-full px-8 py-4 text-lg font-bold text-white transition-all duration-300 border group rounded-2xl bg-white/10 backdrop-blur-md border-white/20 hover:bg-white hover:text-nio-900 sm:w-auto">
+                    Conhecer Planos
+                    <i class="ml-2 transition-all opacity-0 fas fa-arrow-right group-hover:opacity-100 group-hover:translate-x-1"></i>
+                </a>
+                <a href="{% url 'yourlife_social:register' %}" class="w-full px-8 py-4 text-lg font-bold text-white transition-all duration-300 shadow-xl rounded-2xl bg-nio-600 shadow-nio-600/40 hover:bg-nio-500 hover:scale-105 sm:w-auto">
+                    Criar Conta Grátis
+                </a>
+            </div>
+            
+            <p class="mt-8 text-sm text-slate-500">Sem compromisso. 14 dias de teste completo.</p>
+        </div>
+    </section>
+
+    <footer class="pt-20 pb-10 border-t bg-slate-950 text-slate-400 border-slate-900">
+        <div class="px-6 mx-auto max-w-7xl">
+            <div class="grid grid-cols-1 gap-12 mb-16 md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-2 mb-6 text-white group">
+                        <div class="flex items-center justify-center w-8 h-8 text-sm transition-transform rounded-lg shadow-lg bg-nio-600 shadow-nio-600/20 group-hover:rotate-12">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span class="text-xl font-bold font-display">NioCortex</span>
+                    </a>
+                    <p class="mb-6 text-sm leading-relaxed">
+                        Construindo o sistema nervoso digital das escolas do futuro. Tecnologia, humanidade e performance cognitiva.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="flex items-center justify-center w-10 h-10 transition rounded-full bg-slate-900 hover:bg-nio-600 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="flex items-center justify-center w-10 h-10 transition rounded-full bg-slate-900 hover:bg-nio-600 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="mb-6 font-bold text-white">Plataforma</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="transition hover:text-nio-400">IO Zios AI (IA)</a></li>
+                        <li><a href="{% url 'stage_publico:feature_financial' %}" class="transition hover:text-nio-400">Gestão Financeira</a></li>
+                        <li><a href="{% url 'stage_publico:feature_diary' %}" class="transition hover:text-nio-400">Diário Digital</a></li>
+                        <li><a href="{% url 'stage_publico:pricing' %}" class="transition hover:text-nio-400">Planos</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="mb-6 font-bold text-white">Institucional</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="{% url 'stage_publico:about' %}" class="transition hover:text-nio-400">Sobre Nós</a></li>
+                        <li><a href="{% url 'stage_publico:contact' %}" class="transition hover:text-nio-400">Contato</a></li>
+                        <li><a href="{% url 'stage_publico:system_status' %}" class="transition hover:text-nio-400">Status do Sistema</a></li>
+                        <li><a href="{% url 'stage_publico:help_center' %}" class="transition hover:text-nio-400">Central de Ajuda</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="mb-6 font-bold text-white">Evolução Contínua</h4>
+                    <p class="mb-4 text-xs">Receba insights sobre neurociência e gestão escolar.</p>
+                    <form class="flex flex-col gap-2">
+                        <input type="email" placeholder="seu@email.com" class="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-nio-500 transition text-white">
+                        <button class="bg-nio-600 hover:bg-nio-500 text-white rounded-lg px-4 py-2.5 text-sm font-bold transition">Inscrever-se</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-between gap-4 pt-8 text-xs border-t border-slate-900 md:flex-row">
+                <p>&copy; 2025 NioCortex Tecnologia Educacional. Todos os direitos reservados.</p>
+                <div class="flex gap-6">
+                    <a href="{% url 'stage_publico:privacy_policy' %}" class="transition hover:text-white">Privacidade</a>
+                    <a href="{% url 'stage_publico:terms_of_use' %}" class="transition hover:text-white">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

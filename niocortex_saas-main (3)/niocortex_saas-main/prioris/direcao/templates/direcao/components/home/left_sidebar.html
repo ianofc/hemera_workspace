@@ -1,0 +1,34 @@
+<div class="space-y-6">
+    <div class="p-4 bg-white border shadow-sm border-slate-200 rounded-2xl">
+        <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center w-12 h-12 text-xl font-bold border-2 border-white rounded-full shadow-md bg-amber-100 text-amber-600">
+                {{ user.first_name|first }}{{ user.last_name|first }}
+            </div>
+            <div>
+                <h3 class="font-bold leading-tight text-slate-800">{{ user.get_full_name }}</h3>
+                <span class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Diretor Geral</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 bg-white border shadow-sm border-slate-200 rounded-2xl">
+        <h3 class="px-2 text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3">Gestão</h3>
+        <nav class="space-y-1">
+            <a href="{% url 'prioris_direcao:dashboard' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold transition text-amber-700 bg-amber-50 rounded-xl">
+                <i class="w-5 fas fa-grid-2"></i> Dashboard
+            </a>
+            
+            <a href="{% url 'prioris_direcao:conselho_classe' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold transition text-slate-600 hover:bg-slate-50 hover:text-amber-600 rounded-xl">
+                <i class="w-5 fas fa-users-rectangle"></i> Conselho de Classe
+            </a>
+
+            <a href="{% url 'prioris_direcao:diretrizes_bncc' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold transition text-slate-600 hover:bg-slate-50 hover:text-amber-600 rounded-xl">
+                <i class="w-5 fas fa-book-bookmark"></i> Diretrizes BNCC
+            </a>
+            
+            <a href="{% url 'prioris_direcao:governanca_shield' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-bold transition text-slate-600 hover:bg-slate-50 hover:text-amber-600 rounded-xl">
+                <i class="w-5 fas fa-shield-halved"></i> Governança
+            </a>
+        </nav>
+    </div>
+</div>

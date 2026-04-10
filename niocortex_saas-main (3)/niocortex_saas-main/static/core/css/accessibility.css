@@ -1,0 +1,52 @@
+/* --- ENGINE DE ACESSIBILIDADE --- */
+
+/* 1. Alto Contraste */
+body.a11y-high-contrast {
+    --bg-body: #000000 !important;
+    --bg-card: #000000 !important;
+    --bg-drawer: #000000 !important;
+    --text-main: #ffff00 !important; /* Amarelo */
+    --text-muted: #ffffff !important;
+    --primary: #00ffff !important; /* Ciano */
+    --border-color: #ffffff !important;
+    --shadow-color: none !important;
+}
+
+/* 2. Texto Maior */
+body.a11y-large-text {
+    font-size: 125% !important;
+}
+
+/* 3. Fonte Dislexia */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/npm/opendyslexic@2.1.0/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+}
+body.a11y-dyslexic {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+body.a11y-dyslexic * {
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+}
+
+/* 4. Modo Compacto */
+body.a11y-compact .p-6, 
+body.a11y-compact .p-5, 
+body.a11y-compact .p-4 {
+    padding: 0.5rem !important;
+}
+body.a11y-compact .gap-4, 
+body.a11y-compact .gap-3 {
+    gap: 0.25rem !important;
+}
+
+/* 5. Redução de Movimento */
+body.a11y-no-motion *,
+body.a11y-no-motion *::before,
+body.a11y-no-motion *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+}

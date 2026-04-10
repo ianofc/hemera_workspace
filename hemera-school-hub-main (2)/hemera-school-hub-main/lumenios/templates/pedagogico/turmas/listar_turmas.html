@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth bg-[#F0F2F5]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmas | NioStudent</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    },
+                    colors: {
+                        nio: {
+                            500: '#7c3aed',
+                            600: '#6d28d9',
+                            700: '#5b21b6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .neural-bg {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 font-sans antialiased min-h-screen relative bg-[#F0F2F5]">
+
+    <div class="absolute inset-0 pointer-events-none neural-bg opacity-30"></div>
+
+    <nav class="sticky top-0 z-40 flex items-center justify-between w-full px-6 py-3 shadow-sm glass-panel">
+        <a href="{% url 'core:dashboard' %}" class="flex items-center gap-2 transition hover:opacity-80">
+            <div class="flex items-center justify-center w-8 h-8 font-bold text-white rounded-lg bg-nio-600">N</div>
+            <span class="font-bold font-display text-slate-800">Voltar ao Feed</span>
+        </a>
+
+        <h1 class="text-lg font-bold font-display text-nio-700">Minhas Turmas</h1>
+        
+        <div>
+            <a href="{% url 'pedagogico:form_turmas' %}" class="transition text-nio-600 hover:text-nio-700" title="Nova Turma">
+                <i class="text-2xl fas fa-plus-circle"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-6xl p-6 mx-auto">
+
+        <h2 class="mb-6 text-xl font-bold font-display text-slate-900">
+            Turmas Disponíveis
+        </h2>
+
+        {% if turmas %}
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {% for turma in turmas %}
+                    <div class="flex flex-col justify-between h-full p-6 transition glass-card rounded-2xl hover:-translate-y-1 hover:shadow-md">
+                        
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold truncate text-slate-800" title="{{ turma.nome }}">
+                                    {{ turma.nome }}
+                                </h3>
+                                <span class="px-3 py-1 text-xs font-bold text-green-700 bg-green-100 border border-green-200 rounded-full">
+                                    {{ turma.ano_letivo }}
+                                </span>
+                            </div>
+
+                            <div class="mb-6 space-y-2 text-sm text-slate-600">
+                                <p class="flex items-center">
+                                    <i class="w-5 mr-2 text-center fas fa-users text-nio-600"></i>
+                                    <span>Alunos: <strong>{{ turma.alunos.count }}</strong></span>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="w-5 mr-2 text-center fas fa-fingerprint text-nio-600"></i>
+                                    <span class="font-mono text-xs text-slate-400">ID: {{ turma.id|stringformat:"s"|slice:":8" }}...</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-200/60">
+                            <a href="{% url 'pedagogico:editar_turma' turma.id %}" class="flex items-center gap-1 text-xs font-semibold transition text-slate-500 hover:text-nio-600">
+                                <i class="fas fa-cog"></i> Configurar
+                            </a>
+
+                            <a href="{% url 'pedagogico:detalhar_turma' turma.id %}"
+                               class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-white transition shadow-lg rounded-xl bg-nio-600 hover:bg-nio-500 shadow-nio-500/20">
+                                <i class="fas fa-eye"></i>
+                                Acessar
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-12 text-center glass-card rounded-2xl flex flex-col items-center justify-center min-h-[300px]">
+                <div class="flex items-center justify-center w-20 h-20 mb-6 rounded-full shadow-inner bg-slate-100">
+                    <i class="text-4xl text-slate-400 fas fa-inbox"></i>
+                </div>
+                <h3 class="mb-2 text-xl font-bold text-slate-800">Nenhuma turma encontrada</h3>
+                <p class="max-w-md mx-auto mb-8 text-slate-500">
+                    Você ainda não possui turmas cadastradas. Comece criando uma para gerenciar seus alunos.
+                </p>
+                <a href="{% url 'pedagogico:form_turmas' %}" class="flex items-center gap-2 px-8 py-3 font-bold text-white transition shadow-xl bg-nio-600 rounded-xl hover:bg-nio-500 shadow-nio-600/20">
+                    <i class="fas fa-plus"></i> Criar Turma
+                </a>
+            </div>
+        {% endif %}
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+<div class="items-center justify-center flex-1 hidden gap-6 md:flex">
+    {% if 'PROFESSOR' in user.role %}
+        <a href="{% url 'lumenios:dashboard_professor' %}" class="p-2 group" title="Sala dos Professores"><i class="text-2xl transition fas fa-layer-group text-emerald-600 group-hover:scale-110"></i></a>
+        {% if 'pedagogico:listar_turmas' %}
+        <a href="{% url 'pedagogico:listar_turmas' %}" class="p-2 group" title="Minhas Turmas"><i class="text-2xl transition fas fa-users text-slate-400 group-hover:text-emerald-600"></i></a>
+        {% endif %}
+        <a href="#" class="p-2 group" title="Planejamento"><i class="text-2xl transition fas fa-calendar-alt text-slate-400 group-hover:text-emerald-600"></i></a>
+        <div class="w-px h-8 mx-2 bg-slate-300/50"></div>
+        <a href="{% url 'yourlife_social:home' %}" class="p-2 group" title="Ir para YourLife+"><i class="text-2xl transition fas fa-heartbeat text-slate-400 group-hover:text-pink-500"></i></a>
+    {% else %}
+        <a href="{% url 'lumenios:dashboard_aluno' %}" class="p-2 group" title="Meu Painel"><i class="text-2xl text-indigo-600 transition fas fa-home group-hover:scale-110"></i></a>
+        <a href="{% url 'core:student_subjects' %}" class="p-2 group" title="Disciplinas"><i class="text-2xl transition fas fa-book text-slate-400 group-hover:text-indigo-600"></i></a>
+        <a href="{% url 'core:student_grades' %}" class="p-2 group" title="Boletim"><i class="text-2xl transition fas fa-chart-line text-slate-400 group-hover:text-indigo-600"></i></a>
+        <div class="w-px h-8 mx-2 bg-slate-300/50"></div>
+        <a href="{% url 'yourlife_social:home' %}" class="p-2 group" title="Ir para YourLife+"><i class="text-2xl transition fas fa-heartbeat text-slate-400 group-hover:text-pink-500"></i></a>
+    {% endif %}
+</div>

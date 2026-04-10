@@ -1,0 +1,341 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Career Center - NioCortex">
+    <title>Carreira e Vagas | NioCortex</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/perfis.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        accent: 'var(--color-accent)',
+                        background: 'var(--bg-body)',
+                        surface: 'var(--bg-card)',
+                        text: 'var(--text-main)',
+                        textMuted: 'var(--text-muted)',
+                        // Cores Profissionais
+                        linkedin: '#0077b5',
+                        success: '#10B981',
+                        talkio: {
+                            sidebar: 'var(--talkio-sidebar)',
+                            chat: 'var(--talkio-chat)',
+                            hover: 'var(--talkio-hover)',
+                            bubbleOut: 'var(--talkio-bubble-out)',
+                            bubbleIn: 'var(--talkio-bubble-in)',
+                            meta: 'var(--talkio-meta)',
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow': '0 0 15px var(--color-primary)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body x-data="careerData()" 
+      x-init="init()"
+      :class="{
+          'theme-pink': theme === 'pink',
+          'theme-blue': theme === 'blue',
+          'theme-dark': theme === 'dark',
+          'theme-premium-fem': theme === 'premium-fem',
+          'theme-premium-masc': theme === 'premium-masc'
+      }"
+      class="font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[var(--color-primary)] selection:text-white">
+
+    <div class="fixed inset-0 z-0 transition-colors duration-700 pointer-events-none">
+        <div class="absolute top-[-10%] left-[20%] w-[800px] h-[800px] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-float" :style="`background-color: var(--color-secondary)`"></div>
+        <div class="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-float" style="animation-delay: 2s; background-color: var(--color-primary)"></div>
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(var(--text-muted) 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+
+    <nav class="sticky top-0 z-40 w-full px-4 py-2 transition-colors duration-300 shadow-sm glass-nav">
+        <div class="flex items-center justify-between mx-auto h-16 max-w-7xl">
+            <div class="flex items-center flex-1 gap-4">
+                <a href="{% url 'core:aluno_dashboard' %}" class="flex items-center gap-3 group">
+                    <div class="flex items-center justify-center w-10 h-10 text-lg font-bold text-white transition-transform shadow-lg rounded-xl group-hover:scale-110" style="background: var(--gradient-sidebar)">N</div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-xl font-bold leading-none tracking-tight font-display hidden md:block" style="color: var(--text-main)">Nio<span style="color: var(--color-primary)">Student</span></span>
+                        <span class="text-[10px] uppercase font-bold tracking-widest opacity-60 hidden md:block" style="color: var(--text-muted)">Career Center</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="items-center justify-center flex-1 hidden gap-8 lg:flex">
+                <a href="{% url 'core:aluno_dashboard' %}" class="relative flex flex-col items-center p-2 group" title="Início">
+                    <i class="mb-1 text-2xl transition-colors duration-300 fas fa-home text-slate-400 group-hover:text-[var(--color-primary)]"></i>
+                </a>
+                <a href="#" class="relative flex flex-col items-center p-2 rounded-lg group" title="Vagas (Atual)">
+                    <i class="fas fa-briefcase text-2xl mb-1 transition-colors duration-300" style="color: var(--color-primary)"></i>
+                    <span class="absolute bottom-0 w-1.5 h-1.5 rounded-full" style="background-color: var(--color-primary)"></span>
+                </a>
+                {% if aluno.nivel_ensino != 'infantil' %}
+                <a href="{% url 'core:student_subjects' %}" class="relative flex flex-col items-center p-2 rounded-lg group hover:bg-black/5" title="Disciplinas">
+                    <i class="fas fa-graduation-cap text-2xl mb-1 transition-colors duration-300 group-hover:text-[var(--color-primary)] text-slate-400"></i>
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="flex items-center justify-end flex-1 gap-4">
+                <button @click="openTalkio()" class="relative flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-black/5">
+                    <img src="{% static 'imgs/talkio/Talkio_logo.png' %}" class="object-contain w-8 h-8 drop-shadow-sm">
+                </button>
+                <div class="relative ml-2 cursor-pointer group">
+                    <div class="w-10 h-10 rounded-full p-[2px]" :class="is_premium ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-indigo-400 to-purple-500'">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}https://i.pravatar.cc/150?img=32{% endif %}" class="object-cover w-full h-full border-2 border-white rounded-full">
+                    </div>
+                    <div class="absolute right-0 z-50 hidden w-64 mt-4 bg-white border shadow-2xl dark:bg-slate-800 rounded-2xl border-slate-100 group-hover:block animate-fade-in-up">
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-t-2xl">
+                            <div class="flex items-center gap-2">
+                                <p class="text-sm font-bold text-gray-800 truncate dark:text-white">{{ user.first_name }}</p>
+                                {% if is_premium %}<i class="fas fa-check-circle text-blue-500 text-xs"></i>{% endif %}
+                            </div>
+                            <p class="text-xs text-slate-500 capitalize">{{ aluno.nivel_ensino|default:"Aluno" }}</p>
+                        </div>
+                        <a href="{% url 'core:logout' %}" class="flex items-center gap-3 p-4 text-sm text-red-600 transition hover:bg-red-50 rounded-b-2xl"><i class="fas fa-power-off"></i> Sair do Sistema</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 w-full p-6 mx-auto max-w-7xl pt-10">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+            <div>
+                <h1 class="text-3xl font-extrabold font-display mb-1" style="color: var(--text-main)">Portal de Carreiras</h1>
+                <p class="text-sm font-medium opacity-80" style="color: var(--text-muted)">Encontre o estágio ou emprego que vai acelerar seu futuro.</p>
+            </div>
+            
+            <div class="glass-panel px-6 py-3 rounded-full flex items-center gap-4 border border-[var(--color-primary)]/30">
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] uppercase font-bold text-slate-400">Força do Perfil</span>
+                    <span class="text-sm font-bold text-[var(--color-primary)]">Intermediário (65%)</span>
+                </div>
+                <div class="w-10 h-10 relative">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle cx="20" cy="20" r="16" fill="transparent" stroke="#e2e8f0" stroke-width="4"></circle>
+                        <circle cx="20" cy="20" r="16" fill="transparent" stroke="var(--color-primary)" stroke-width="4" stroke-dasharray="100" stroke-dashoffset="35"></circle>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-slate-600">65%</span>
+                </div>
+                <button class="text-xs font-bold text-slate-500 hover:text-[var(--color-primary)]"><i class="fas fa-pencil-alt"></i></button>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <div class="flex-1 space-y-6">
+                
+                <div class="glass-panel p-4 rounded-2xl flex gap-3 overflow-x-auto scrollbar-hide items-center">
+                    <div class="relative flex-1 min-w-[200px]">
+                        <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" placeholder="Cargo, empresa ou palavra-chave..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-100/50 border-none text-sm focus:ring-2 focus:ring-[var(--color-primary)] transition">
+                    </div>
+                    <div class="h-8 w-px bg-slate-200"></div>
+                    <button @click="filter = 'all'" :class="filter === 'all' ? 'bg-[var(--color-primary)] text-white' : 'bg-slate-100 text-slate-600'" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">Todas</button>
+                    <button @click="filter = 'estagio'" :class="filter === 'estagio' ? 'bg-[var(--color-primary)] text-white' : 'bg-slate-100 text-slate-600'" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">Estágios</button>
+                    <button @click="filter = 'trainee'" :class="filter === 'trainee' ? 'bg-[var(--color-primary)] text-white' : 'bg-slate-100 text-slate-600'" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">Trainee</button>
+                    <button @click="filter = 'remote'" :class="filter === 'remote' ? 'bg-[var(--color-primary)] text-white' : 'bg-slate-100 text-slate-600'" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition"><i class="fas fa-globe mr-1"></i> Remoto</button>
+                </div>
+
+                <div class="space-y-4">
+                    
+                    <template x-for="job in jobs" :key="job.id">
+                        <div x-show="filter === 'all' || filter === job.typeSlug || (filter === 'remote' && job.isRemote)" 
+                             class="glass-panel p-5 rounded-2xl border border-transparent hover:border-[var(--color-primary)] transition hover:-translate-y-1 group relative overflow-hidden">
+                            
+                            <div class="absolute top-0 right-0 bg-gradient-to-bl from-green-100 to-white px-3 py-1 rounded-bl-xl border-l border-b border-green-100 flex items-center gap-1">
+                                <i class="fas fa-brain text-green-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-green-700" x-text="`Match: ${job.match}%`"></span>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 border border-slate-100 shrink-0">
+                                    <img :src="job.logo" class="w-full h-full object-contain">
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-lg text-slate-800 group-hover:text-[var(--color-primary)] transition" x-text="job.title"></h3>
+                                    <p class="text-sm font-medium text-slate-500 mb-2" x-text="`${job.company} • ${job.location}`"></p>
+                                    
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded border border-blue-100" x-text="job.type"></span>
+                                        <span class="px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-bold rounded border border-purple-100" x-text="job.area"></span>
+                                        <template x-if="job.isRemote">
+                                            <span class="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded border border-green-100">Remoto</span>
+                                        </template>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-4 border-t border-slate-100 pt-3">
+                                        <p class="text-xs text-slate-400 font-medium" x-text="`Publicado há ${job.daysAgo} dias`"></p>
+                                        <button class="px-4 py-1.5 bg-slate-800 text-white text-xs font-bold rounded-lg hover:bg-slate-700 transition shadow-lg">Ver Detalhes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+
+            <aside class="w-full lg:w-80 flex flex-col gap-6">
+                
+                <div class="glass-panel p-5 rounded-2xl relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-[var(--color-accent)]/10 rounded-full blur-xl"></div>
+                    
+                    <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-chalkboard-teacher text-[var(--color-primary)]"></i> Mentoria
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4">Converse com ex-alunos que já estão no mercado.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-2 rounded-xl bg-white/50 border border-white hover:border-[var(--color-primary)] transition cursor-pointer">
+                            <img src="https://i.pravatar.cc/150?img=68" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Mariana Costa</p>
+                                <p class="text-[10px] text-slate-500">Dev Senior @ Google</p>
+                            </div>
+                            <i class="fab fa-whatsapp ml-auto text-green-500"></i>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded-xl bg-white/50 border border-white hover:border-[var(--color-primary)] transition cursor-pointer">
+                            <img src="https://i.pravatar.cc/150?img=33" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Pedro Alves</p>
+                                <p class="text-[10px] text-slate-500">Product @ Nubank</p>
+                            </div>
+                            <i class="fab fa-whatsapp ml-auto text-green-500"></i>
+                        </div>
+                    </div>
+                    
+                    {% if not is_premium %}
+                    <div class="mt-4 p-3 bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl border border-amber-200 text-center">
+                        <p class="text-[10px] font-bold text-amber-700 mb-1"><i class="fas fa-crown"></i> Recurso Premium</p>
+                        <p class="text-[10px] text-amber-600">Desbloqueie acesso ilimitado aos mentores.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <h3 class="font-bold text-slate-800 mb-3 text-sm">Eventos & Workshops</h3>
+                    <div class="space-y-3">
+                        <div class="flex gap-3">
+                            <div class="w-12 h-12 bg-slate-100 rounded-lg flex flex-col items-center justify-center shrink-0">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">OUT</span>
+                                <span class="text-sm font-black text-slate-800">25</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 hover:text-[var(--color-primary)] cursor-pointer">Feira de Estágios 2025</p>
+                                <p class="text-[10px] text-slate-500">Campus Principal • 14h</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-12 h-12 bg-slate-100 rounded-lg flex flex-col items-center justify-center shrink-0">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">NOV</span>
+                                <span class="text-sm font-black text-slate-800">03</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 hover:text-[var(--color-primary)] cursor-pointer">Workshop: LinkedIn Perfeito</p>
+                                <p class="text-[10px] text-slate-500">Online (Zoom) • 19h</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+    </main>
+
+    <script>
+        function careerData() {
+            return {
+                filter: 'all',
+                theme: 'aurora',
+                
+                // Simulação de dados
+                gender: "{{ user.gender|default:'F' }}",
+                is_premium: "{{ is_premium|yesno:'true,false' }}" === 'true',
+
+                jobs: [
+                    {
+                        id: 1,
+                        title: 'Estágio em Desenvolvimento Front-end',
+                        company: 'TechFlow Solutions',
+                        location: 'São Paulo, SP',
+                        logo: 'https://logo.clearbit.com/google.com', // Placeholder
+                        type: 'Estágio',
+                        typeSlug: 'estagio',
+                        area: 'Tecnologia',
+                        isRemote: true,
+                        daysAgo: 2,
+                        match: 95
+                    },
+                    {
+                        id: 2,
+                        title: 'Programa de Trainee 2026',
+                        company: 'Banco Futuro',
+                        location: 'Rio de Janeiro, RJ',
+                        logo: 'https://logo.clearbit.com/nubank.com.br', // Placeholder
+                        type: 'Trainee',
+                        typeSlug: 'trainee',
+                        area: 'Finanças',
+                        isRemote: false,
+                        daysAgo: 5,
+                        match: 78
+                    },
+                    {
+                        id: 3,
+                        title: 'Assistente de Marketing Digital',
+                        company: 'Agência Criativa',
+                        location: 'Belo Horizonte, MG',
+                        logo: 'https://logo.clearbit.com/airbnb.com', // Placeholder
+                        type: 'Estágio',
+                        typeSlug: 'estagio',
+                        area: 'Marketing',
+                        isRemote: true,
+                        daysAgo: 1,
+                        match: 82
+                    }
+                ],
+
+                init() {
+                    if (this.is_premium) this.theme = this.gender === 'F' ? 'premium-fem' : 'premium-masc';
+                    else this.theme = this.gender === 'F' ? 'pink' : (this.gender === 'M' ? 'blue' : 'aurora');
+                },
+                
+                openTalkio() { alert("Chat Talkio"); }
+            }
+        }
+    </script>
+
+</body>
+</html>

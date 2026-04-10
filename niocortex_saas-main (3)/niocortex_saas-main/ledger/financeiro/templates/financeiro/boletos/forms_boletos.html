@@ -1,0 +1,63 @@
+{% extends "social/base.html" %}
+
+{% block title %}Gerar Boleto Avulso{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto animate-fade-in-down">
+    
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+        
+        <div class="px-8 py-6 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-600">
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                <i class="fas fa-file-invoice-dollar text-[#6200EA]"></i>
+                Gerar Cobrança Avulsa
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Criando boleto extra para o aluno <strong class="text-gray-700 dark:text-gray-200">{{ contrato.aluno.nome }}</strong>
+            </p>
+        </div>
+
+        <form method="POST" class="p-8 space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 rounded-xl text-sm flex items-start gap-2">
+                    <i class="fas fa-exclamation-circle mt-0.5"></i>
+                    <div>{{ form.non_field_errors }}</div>
+                </div>
+            {% endif %}
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Referência / Descrição</label>
+                {{ form.referencia }}
+                {% if form.referencia.errors %}
+                    <p class="text-xs text-red-500 mt-1">{{ form.referencia.errors.0 }}</p>
+                {% endif %}
+                <p class="text-[10px] text-gray-400 mt-1">Ex: Material Didático, Taxa de Evento, Uniforme.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Valor (R$)</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-2 text-gray-500">R$</span>
+                    {{ form.valor }}
+                </div>
+                {% if form.valor.errors %}
+                    <p class="text-xs text-red-500 mt-1">{{ form.valor.errors.0 }}</p>
+                {% endif %}
+                <p class="text-[10px] text-gray-400 mt-1">Se deixar em branco, usará o valor padrão da mensalidade (R$ {{ contrato.valor_mensalidade }}).</p>
+            </div>
+
+            <div class="pt-6 flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-700">
+                <a href="{% url 'financial:listar_contratos' %}" class="px-5 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition font-medium text-sm">
+                    Cancelar
+                </a>
+                <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#6200EA] text-white font-bold rounded-xl shadow-lg shadow-purple-500/20 hover:bg-[#5000BF] transition transform hover:-translate-y-0.5 text-sm">
+                    <i class="fas fa-paper-plane"></i>
+                    Gerar Boleto
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

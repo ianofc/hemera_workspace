@@ -1,0 +1,12 @@
+
+body {
+  background: radial-gradient(circle at top left, #e0e7ff, #f8fafc);
+  font-family: sans-serif;
+}
+.glass {
+  margin: 10%;
+  padding: 2rem;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+}

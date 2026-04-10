@@ -1,0 +1,28 @@
+{% extends 'direcao/layout/base.html' %}
+{% block content %}
+<div class="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm">
+    <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center justify-center w-12 h-12 text-xl bg-amber-100 text-amber-600 rounded-2xl">
+            <i class="fas fa-home"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800">Painel do Diretor</h1>
+            <p class="text-slate-500">Visão geral estratégica da instituição.</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 gap-6">
+        <div class="p-6 border bg-slate-50 rounded-2xl border-slate-100">
+            <span class="text-xs font-bold tracking-widest uppercase text-slate-400">Matrículas</span>
+            <p class="mt-2 text-3xl font-black text-slate-800">1.240</p>
+        </div>
+        <div class="p-6 border bg-slate-50 rounded-2xl border-slate-100">
+            <span class="text-xs font-bold tracking-widest uppercase text-slate-400">Retenção</span>
+            <p class="mt-2 text-3xl font-black text-emerald-600">98%</p>
+        </div>
+        <div class="p-6 border bg-slate-50 rounded-2xl border-slate-100">
+            <span class="text-xs font-bold tracking-widest uppercase text-slate-400">Inadimplência</span>
+            <p class="mt-2 text-3xl font-black text-rose-500">2.1%</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

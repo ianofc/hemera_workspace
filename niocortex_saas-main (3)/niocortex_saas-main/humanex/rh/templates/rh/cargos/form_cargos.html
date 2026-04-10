@@ -1,0 +1,20 @@
+{% extends "social/base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto animate-fade-in-down">
+    <div class="p-8 bg-white border border-gray-100 shadow-lg dark:bg-gray-800 rounded-xl dark:border-gray-700">
+        <h1 class="mb-6 text-xl font-bold text-gray-800 dark:text-white">{{ titulo }}</h1>
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+            <div><label class="form-label">Título do Cargo</label> {{ form.titulo }} </div>
+            <div><label class="form-label">CBO (Código Ocupação)</label> {{ form.cbo }} </div>
+            <div><label class="form-label">Salário Base (R$)</label> {{ form.salario_base }} </div>
+            
+            <div class="flex justify-end gap-3 pt-4">
+                <a href="{% url 'hr:listar_cargos' %}" class="btn-secondary">Voltar</a>
+                <button type="submit" class="btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+
+<div x-show="switcherOpen" x-cloak 
+     class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-10"
+     role="dialog" aria-modal="true"
+     @keydown.escape.window="switcherOpen = false">
+    
+    <div class="absolute inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xl" 
+         x-show="switcherOpen"
+         x-transition:enter="ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="switcherOpen = false"></div>
+
+    <div class="relative w-full max-w-4xl bg-white/10 border border-white/20 rounded-[2.5rem] shadow-2xl overflow-hidden glass-panel"
+         x-show="switcherOpen"
+         x-transition:enter="ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+         x-transition:leave="ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+         x-transition:leave-end="opacity-0 scale-95 translate-y-4">
+        
+        <div class="p-8 sm:p-12">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-black tracking-tight text-white">NioCortex Apps</h2>
+                    <p class="text-sm font-medium text-slate-300">Selecione um ambiente para acessar</p>
+                </div>
+                <button @click="switcherOpen = false" class="p-2 transition rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+                    <i class="text-xl fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+                
+                <a href="{% url 'yourlife_social:home' %}" 
+                   class="flex flex-col items-center gap-4 p-6 transition-all duration-300 border module-transition group rounded-3xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border-white/5 hover:border-violet-500/50 hover:bg-violet-500/20 hover:-translate-y-1"
+                   data-module-name="YourLife Social"
+                   data-module-icon="fas fa-heartbeat"
+                   data-module-color="text-violet-400">
+                    <div class="flex items-center justify-center w-16 h-16 text-3xl text-white transition-transform duration-300 shadow-lg rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-violet-500/30 group-hover:scale-110">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white group-hover:text-violet-300">Social</span>
+                </a>
+
+                <a href="{% url 'lumenios:dashboard_aluno' %}" 
+                   class="flex flex-col items-center gap-4 p-6 transition-all duration-300 border module-transition group rounded-3xl bg-gradient-to-br from-indigo-500/10 to-blue-500/10 border-white/5 hover:border-indigo-500/50 hover:bg-indigo-500/20 hover:-translate-y-1"
+                   data-module-name="Ambiente do Aluno"
+                   data-module-icon="fas fa-user-graduate"
+                   data-module-color="text-indigo-400">
+                    <div class="flex items-center justify-center w-16 h-16 text-3xl text-white transition-transform duration-300 shadow-lg rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 shadow-indigo-500/30 group-hover:scale-110">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white group-hover:text-indigo-300">Aluno</span>
+                </a>
+
+                {% if 'PROFESSOR' in user.role %}
+                <a href="{% url 'lumenios:dashboard_professor' %}" 
+                   class="flex flex-col items-center gap-4 p-6 transition-all duration-300 border module-transition group rounded-3xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/20 hover:-translate-y-1"
+                   data-module-name="Portal Docente"
+                   data-module-icon="fas fa-chalkboard-teacher"
+                   data-module-color="text-emerald-400">
+                    <div class="flex items-center justify-center w-16 h-16 text-3xl text-white transition-transform duration-300 shadow-lg rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 shadow-emerald-500/30 group-hover:scale-110">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white group-hover:text-emerald-300">Professor</span>
+                </a>
+                {% endif %}
+
+                {% if user.is_staff or 'GESTOR' in user.role %}
+                <a href="#" 
+                   class="flex flex-col items-center gap-4 p-6 transition-all duration-300 border module-transition group rounded-3xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-white/5 hover:border-amber-500/50 hover:bg-amber-500/20 hover:-translate-y-1"
+                   data-module-name="Gestão Financeira"
+                   data-module-icon="fas fa-chart-pie"
+                   data-module-color="text-amber-400">
+                    <div class="flex items-center justify-center w-16 h-16 text-3xl text-white transition-transform duration-300 shadow-lg rounded-2xl bg-gradient-to-br from-amber-600 to-orange-600 shadow-amber-500/30 group-hover:scale-110">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span class="text-sm font-bold text-white group-hover:text-amber-300">Financeiro</span>
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between px-8 py-4 text-xs font-medium border-t bg-black/20 border-white/10 text-slate-400">
+            <span>NioCortex v2.5</span>
+            <span>Sistema Unificado</span>
+        </div>
+    </div>
+</div>

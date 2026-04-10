@@ -1,0 +1,103 @@
+/* ============================================================
+   SISTEMA MÁSCARA ÚNICA - AURORA GLASS
+   ============================================================ */
+
+:root {
+    /* Vidro ainda mais translúcido para não marcar divisões */
+    --glass-bg: rgba(255, 255, 255, 0.18);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-blur: blur(30px) saturate(160%);
+}
+
+/* 1. Reset de Layout (Elimina a sensação de colunas/paredes) */
+html, body {
+    background: #fcfcfd !important;
+}
+
+main, section, .feed-container-fluid, #main-feed-area {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. A Máscara Glass (Aplicada apenas aos cards individuais) */
+.glass-clean {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    /* Sombras coloridas sutis em vez de pretas para não sujar o Aurora */
+    box-shadow: 0 15px 35px rgba(129, 140, 248, 0.05); 
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    transform: translateY(-5px) scale(1.005);
+    box-shadow: 0 25px 50px rgba(129, 140, 248, 0.1);
+}
+
+/* 3. Blobs Aurora Ultra-Fluídos */
+@keyframes aurora-run {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(100px, -50px) rotate(120deg) scale(1.2); }
+    66% { transform: translate(-50px, 100px) rotate(240deg) scale(0.8); }
+    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+.animate-blob {
+    animation: aurora-run 20s infinite linear;
+    /* plus-lighter faz a cor do blob brilhar através do vidro sem escurecer */
+    mix-blend-mode: plus-lighter; 
+    opacity: 0.6;
+    will-change: transform;
+}
+
+/* 4. Transições HTMX (Sem piscar a tela) */
+.htmx-request .real-content {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.htmx-request .skeleton-wrapper {
+    display: block !important;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.feed-fade-in {
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px);
+        filter: blur(15px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* 5. Skeletons Transparentes (Para não parecer uma parede cinza) */
+.skeleton-pulse {
+    background: rgba(255, 255, 255, 0.15);
+    animation: pulse-clean 2s ease-in-out infinite;
+}
+
+@keyframes pulse-clean {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.2; }
+}
+
+/* 6. Scrollbar Totalmente Invisível */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

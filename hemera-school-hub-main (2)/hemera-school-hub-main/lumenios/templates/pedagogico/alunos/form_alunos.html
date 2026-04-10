@@ -1,0 +1,76 @@
+{% extends "layouts/base_app.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto animate-fade-in-down">
+    
+    <h1 class="text-3xl font-bold mb-6 text-slate-800 dark:text-white flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#6200EA] rounded-lg flex items-center justify-center text-white text-lg shadow-md">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        {{ titulo|default:"Adicionar Aluno" }}
+    </h1>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8">
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="bg-red-50 text-red-700 p-3 rounded-lg mb-4 text-sm font-medium border border-red-200">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="space-y-5">
+                
+                <div>
+                    <label for="{{ form.nome.id_for_label }}" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+                        Nome do Aluno <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="nome" id="{{ form.nome.id_for_label }}" 
+                           value="{{ form.nome.value|default:'' }}"
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-[#6200EA] focus:border-transparent transition-all outline-none"
+                           placeholder="Ex: Ana Clara Silva" required>
+                    {% if form.nome.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.nome.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.matricula.id_for_label }}" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+                        Matrícula / RA <span class="text-gray-400 font-normal text-xs">(Opcional)</span>
+                    </label>
+                    <input type="text" name="matricula" id="{{ form.matricula.id_for_label }}" 
+                           value="{{ form.matricula.value|default:'' }}"
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-[#6200EA] focus:border-transparent transition-all outline-none"
+                           placeholder="Ex: 2025001">
+                </div>
+
+                <div>
+                    <label for="{{ form.turma.id_for_label }}" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+                        Turma <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        {{ form.turma }}
+                        </div>
+                    {% if form.turma.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.turma.errors.0 }}</p>
+                    {% endif %}
+                    <p class="text-xs text-gray-400 mt-1">Selecione a turma à qual este aluno pertence.</p>
+                </div>
+
+            </div>
+            
+            <div class="mt-8 flex items-center gap-4">
+                <button type="submit" class="flex-1 bg-[#6200EA] hover:bg-[#5000BF] text-white py-3 rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5">
+                    <i class="fas fa-save mr-2"></i> Salvar Aluno
+                </button>
+                
+                <a href="{% url 'pedagogico:listar_alunos' %}" class="px-6 py-3 rounded-xl text-gray-500 font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

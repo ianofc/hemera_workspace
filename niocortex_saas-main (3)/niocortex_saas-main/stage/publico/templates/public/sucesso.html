@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Iniciado | NioCortex</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        nio: { 500: '#7c3aed', 600: '#6d28d9', 900: '#3e1a75' },
+                        lumina: { cyan: '#00E5FF', pink: '#FF2E93' }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neural-bg {
+            background-image: radial-gradient(#6366f1 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen flex flex-col overflow-hidden relative">
+
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-nio-100/50 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-lumina-cyan/10 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute inset-0 neural-bg opacity-30"></div>
+    </div>
+
+    <nav class="absolute top-0 w-full z-50 p-6">
+        <div class="max-w-7xl mx-auto flex justify-center">
+            <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-3 group opacity-80 hover:opacity-100 transition">
+                <div class="w-8 h-8 bg-nio-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                    <i class="fas fa-brain text-sm"></i>
+                </div>
+                <span class="font-display font-bold text-xl text-slate-900 tracking-tight">Nio<span class="text-nio-600">Cortex</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center relative z-10 px-4">
+        <div class="glass-card max-w-md w-full p-10 text-center rounded-3xl relative overflow-hidden">
+            
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-nio-500 via-lumina-pink to-lumina-cyan"></div>
+
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce-slow shadow-lg shadow-green-500/20">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white text-3xl shadow-inner">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <h1 class="text-3xl font-display font-black text-slate-900 mb-3">Pagamento Iniciado!</h1>
+            <p class="text-slate-600 mb-8 leading-relaxed">
+                Recebemos o seu pedido. Assim que a instituição financeira confirmar o pagamento, você receberá os dados de acesso no seu e-mail.
+            </p>
+
+            <div class="space-y-4">
+                <a href="{% url 'yourlife_social:login' %}" class="block w-full py-4 bg-nio-600 text-white font-bold rounded-xl shadow-lg shadow-nio-600/30 hover:bg-nio-500 hover:scale-[1.02] transition-all duration-300">
+                    Ir para Login
+                </a>
+                <a href="{% url 'stage_publico:index' %}" class="block text-sm font-bold text-slate-400 hover:text-nio-600 transition">
+                    Voltar ao Início
+                </a>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 text-xs text-slate-400">
+                <p><i class="fas fa-envelope mr-1"></i> Verifique sua caixa de entrada e spam.</p>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

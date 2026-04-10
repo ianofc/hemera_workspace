@@ -1,0 +1,48 @@
+
+<div class="items-center justify-center flex-1 hidden gap-6 md:flex">
+    
+    {% if 'secretaria' in request.user.groups.all.0.name|lower or request.user.is_staff %}
+        <a href="{% url 'hub_secretaria:dashboard' %}" class="relative p-2 group" title="Hub Administrativo">
+            <i class="text-2xl transition-transform ph ph-buildings text-cyan-600 group-hover:scale-110"></i>
+            <span class="absolute w-1 h-1 transition-opacity -translate-x-1/2 rounded-full opacity-0 -bottom-1 left-1/2 bg-cyan-600 group-hover:opacity-100"></span>
+        </a>
+        
+        <a href="#" class="relative p-2 group" title="Relatórios">
+            <i class="text-2xl transition-transform ph ph-chart-pie-slice text-cyan-600 group-hover:scale-110"></i>
+        </a>
+
+    {% elif 'professor' in request.user.groups.all.0.name|lower %}
+        <a href="#" class="relative p-2 group" title="Sala dos Professores">
+            <i class="text-2xl transition-transform ph ph-chalkboard-teacher text-emerald-600 group-hover:scale-110"></i>
+            <span class="absolute w-1 h-1 transition-opacity -translate-x-1/2 rounded-full opacity-0 -bottom-1 left-1/2 bg-emerald-600 group-hover:opacity-100"></span>
+        </a>
+        <a href="#" class="relative p-2 group" title="Minhas Turmas">
+            <i class="text-2xl transition-transform ph ph-users-three text-emerald-600 group-hover:scale-110"></i>
+        </a>
+
+    {% else %}
+        <a href="/lumenios/aluno/dashboard/" class="relative p-2 group" title="Ambiente de Estudo">
+            <i class="text-2xl transition-transform ph ph-student text-violet-600 group-hover:scale-110"></i>
+            <span class="absolute w-1 h-1 transition-opacity -translate-x-1/2 rounded-full opacity-0 -bottom-1 left-1/2 bg-violet-600 group-hover:opacity-100"></span>
+        </a>
+        
+        <a href="#" class="relative p-2 group" title="Meu Desempenho">
+            <i class="text-2xl transition-transform ph ph-trend-up text-violet-600 group-hover:scale-110"></i>
+        </a>
+    {% endif %}
+
+    <div class="w-px h-6 mx-2 bg-gray-300"></div>
+
+    <a href="{% url 'yourlife_social:home' %}" class="relative p-2 group" title="Rede Social">
+        <i class="text-2xl text-pink-500 transition-transform ph ph-house group-hover:scale-110"></i>
+    </a>
+
+    <a href="{% url 'yourlife_social:explore' %}" class="relative p-2 group" title="Explorar">
+        <i class="text-2xl text-pink-500 transition-transform ph ph-compass group-hover:scale-110"></i>
+    </a>
+
+    <a href="#" class="relative p-2 group" title="Mensagens">
+        <i class="text-2xl text-blue-500 transition-transform ph ph-chat-circle-dots group-hover:scale-110"></i>
+    </a>
+
+</div>

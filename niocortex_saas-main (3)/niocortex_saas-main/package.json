@@ -1,0 +1,16 @@
+{
+  "name": "niocortex_saas",
+  "version": "1.0.0",
+  "description": "ERP Educacional Niocortex",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tailwindcss -i ./static/css/style.css -o ./static/css/output.css --watch",
+    "build": "tailwindcss -i ./static/css/style.css -o ./static/css/output.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

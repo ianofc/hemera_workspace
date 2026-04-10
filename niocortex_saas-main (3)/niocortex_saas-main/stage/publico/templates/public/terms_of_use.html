@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termos de Uso | NioCortex Lumina</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        nio: {
+                            50: '#f2f0ff', 100: '#e6e1ff', 200: '#d0c4ff', 300: '#b09aff',
+                            400: '#8e66ff', 500: '#7c3aed', 600: '#6d28d9', 700: '#5b21b6', 
+                            800: '#4c1d95', 900: '#3e1a75', 950: '#260e4b',
+                        },
+                        lumina: { cyan: '#00E5FF', pink: '#FF2E93', green: '#10B981' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .text-aurora {
+            background: linear-gradient(135deg, #00E5FF 0%, #6d28d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Estilização do Texto Legal */
+        .legal-content h2 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+        .legal-content h2:first-of-type {
+            border-top: none;
+            margin-top: 0;
+        }
+        .legal-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: #475569;
+        }
+        .legal-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+        .legal-content li {
+            margin-bottom: 0.5rem;
+        }
+        .legal-content strong {
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans antialiased bg-slate-50 text-slate-800 selection:bg-nio-500 selection:text-white">
+
+    <nav class="fixed z-50 w-full py-3 shadow-sm glass-panel border-white/40">
+        <div class="flex items-center justify-between px-6 mx-auto max-w-7xl">
+            <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-3 group">
+                <div class="relative flex items-center justify-center w-10 h-10">
+                    <div class="absolute inset-0 transition-transform duration-300 bg-slate-200 rounded-xl rotate-6 opacity-20 group-hover:rotate-12"></div>
+                    <div class="absolute inset-0 border shadow-sm bg-white/60 backdrop-blur rounded-xl border-white/50"></div>
+                    <i class="relative z-10 text-lg fas fa-file-contract text-slate-600"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold leading-none font-display text-slate-900">Nio<span class="text-nio-600">Cortex</span></span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none mt-1">Legal</span>
+                </div>
+            </a>
+
+            <div class="items-center hidden gap-8 md:flex">
+                <a href="{% url 'stage_publico:index' %}" class="text-sm font-semibold transition-colors text-slate-600 hover:text-nio-600">Voltar ao Site</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative z-10 px-6 pt-32 pb-10 text-center border-b border-slate-200 bg-white/50 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="mb-4 text-3xl font-black md:text-5xl font-display text-slate-900">
+                Termos de <span class="text-aurora">Uso</span>
+            </h1>
+            <p class="text-slate-500">Última atualização: 20 de Dezembro de 2025</p>
+        </div>
+    </header>
+
+    <section class="relative z-10 px-6 py-16">
+        <div class="grid grid-cols-1 gap-12 mx-auto max-w-7xl lg:grid-cols-12">
+            
+            <div class="hidden lg:col-span-3 lg:block">
+                <div class="sticky space-y-1 top-28">
+                    <p class="px-3 mb-4 text-xs font-bold tracking-wider uppercase text-slate-400">Navegação</p>
+                    
+                    <a href="#aceitacao" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">1. Aceitação</a>
+                    <a href="#servico" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">2. O Serviço</a>
+                    <a href="#cadastro" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">3. Cadastro e Segurança</a>
+                    <a href="#pagamentos" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">4. Planos e Pagamentos</a>
+                    <a href="#propriedade" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">5. Propriedade Intelectual</a>
+                    <a href="#responsabilidade" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">6. Responsabilidades</a>
+                    <a href="#cancelamento" class="block px-3 py-2 text-sm font-medium transition rounded-lg text-slate-600 hover:text-nio-600 hover:bg-white">7. Cancelamento</a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-9">
+                <div class="p-8 bg-white border shadow-sm md:p-12 rounded-2xl border-slate-200 legal-content">
+                    
+                    <div id="aceitacao">
+                        <p class="mb-6 text-lg font-medium lead text-slate-700">
+                            Bem-vindo ao NioCortex Lumina. Ao acessar ou utilizar nossa plataforma, você concorda em cumprir e estar vinculado a estes Termos de Uso. Se você não concordar com qualquer parte destes termos, você não deve utilizar nossos serviços.
+                        </p>
+                    </div>
+
+                    <h2 id="servico">2. Descrição do Serviço</h2>
+                    <p>O NioCortex Lumina é uma plataforma SaaS (Software as a Service) de gestão educacional e financeira que oferece ferramentas para escolas, professores e alunos, incluindo diário digital, gestão de notas, emissão de boletos e inteligência artificial pedagógica.</p>
+                    <p>Reservamo-nos o direito de modificar, suspender ou descontinuar qualquer aspecto do serviço a qualquer momento, com ou sem aviso prévio, embora nos esforcemos para comunicar mudanças significativas.</p>
+
+                    <h2 id="cadastro">3. Cadastro e Segurança da Conta</h2>
+                    <p>Para acessar certas funcionalidades, você deverá criar uma conta. Você concorda em:</p>
+                    <ul>
+                        <li>Fornecer informações verdadeiras, exatas, atuais e completas.</li>
+                        <li>Manter a confidencialidade de sua senha e credenciais de acesso.</li>
+                        <li>Notificar-nos imediatamente sobre qualquer uso não autorizado de sua conta.</li>
+                        <li>Assumir total responsabilidade por todas as atividades que ocorram em sua conta.</li>
+                    </ul>
+
+                    <h2 id="pagamentos">4. Planos e Pagamentos</h2>
+                    <p>O uso de certos recursos requer a assinatura de um plano pago (Sinapse Pro, Córtex Essential ou Lumina Ultimate).</p>
+                    <ul>
+                        <li><strong>Cobrança:</strong> As taxas são cobradas antecipadamente, de acordo com o ciclo escolhido (mensal ou anual).</li>
+                        <li><strong>Renovação Automática:</strong> As assinaturas são renovadas automaticamente, a menos que canceladas antes do final do período vigente.</li>
+                        <li><strong>Reajustes:</strong> Os preços podem ser reajustados anualmente, mediante aviso prévio de 30 dias.</li>
+                        <li><strong>Reembolso:</strong> Oferecemos uma garantia de satisfação de 7 dias para novas assinaturas.</li>
+                    </ul>
+
+                    <h2 id="propriedade">5. Propriedade Intelectual</h2>
+                    <p>Todo o conteúdo, design, código, interfaces e marcas presentes na plataforma são propriedade exclusiva do NioCortex ou de seus licenciadores e são protegidos pelas leis de direitos autorais e propriedade intelectual.</p>
+                    <p>O usuário mantém a propriedade sobre os dados (notas, planos de aula) inseridos na plataforma, concedendo ao NioCortex uma licença limitada para processar esses dados a fim de prestar o serviço.</p>
+
+                    <h2 id="responsabilidade">6. Limitação de Responsabilidade</h2>
+                    <p>O NioCortex é fornecido "no estado em que se encontra". Não garantimos que o serviço será ininterrupto ou livre de erros. Em nenhuma circunstância o NioCortex será responsável por danos indiretos, incidentais ou consequenciais (incluindo perda de dados ou lucros) decorrentes do uso do serviço.</p>
+
+                    <h2 id="cancelamento">7. Cancelamento e Rescisão</h2>
+                    <p>Você pode cancelar sua conta a qualquer momento através do painel de controle. O cancelamento entrará em vigor ao final do ciclo de faturamento atual.</p>
+                    <p>O NioCortex reserva-se o direito de suspender ou encerrar sua conta em caso de violação destes termos, uso abusivo ou ilegal da plataforma.</p>
+
+                    <div class="p-6 mt-8 border bg-slate-50 rounded-xl border-slate-200">
+                        <p class="text-sm text-slate-600">
+                            Dúvidas sobre estes termos? Entre em contato com nosso suporte jurídico:
+                            <a href="mailto:legal@niocortex.com.br" class="font-bold text-nio-600 hover:underline">legal@niocortex.com.br</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="relative z-10 py-10 text-center bg-white border-t border-slate-200">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <p class="text-xs text-slate-400">&copy; 2025 NioCortex Lumina.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

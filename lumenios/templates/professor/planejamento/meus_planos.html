@@ -1,0 +1,175 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Meus Planos de Aula - Cortex{% endblock %}
+
+{% block content %}
+<div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute top-0 rounded-full left-1/3 w-96 h-96 bg-emerald-200/20 dark:bg-emerald-900/20 blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob"></div>
+    <div class="absolute bottom-0 rounded-full right-1/4 w-96 h-96 bg-cyan-200/20 dark:bg-cyan-900/20 blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-2000"></div>
+    <div class="absolute rounded-full top-1/2 left-1/2 w-96 h-96 bg-purple-200/20 dark:bg-purple-900/20 blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-4000"></div>
+</div>
+
+<div class="relative space-y-8">
+    
+    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 mb-3 border rounded-full shadow-sm bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-white/50 dark:border-gray-700/50">
+                <i class="text-xs fas fa-archive text-emerald-600 dark:text-emerald-400"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Acervo Digital</span>
+            </div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-transparent md:text-4xl bg-clip-text bg-gradient-to-r from-gray-900 via-emerald-800 to-teal-800 dark:from-white dark:via-emerald-300 dark:to-teal-300">
+                Biblioteca de Planos
+            </h1>
+            <p class="mt-2 font-medium text-gray-600 dark:text-gray-400">
+                Histórico completo e gestão de todos os seus planejamentos pedagógicos.
+            </p>
+        </div>
+        
+        <a href="{{ url_for('planos.planejamentos') }}" 
+           class="relative inline-flex items-center justify-center gap-3 px-6 py-4 font-bold text-white transition-all transform shadow-lg group bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 rounded-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-1">
+            <span class="absolute inset-0 transition-opacity opacity-0 bg-white/20 rounded-2xl group-hover:opacity-100"></span>
+            <i class="text-lg fas fa-plus"></i>
+            <span>Novo Planejamento</span>
+        </a>
+    </div>
+
+    <div class="overflow-hidden border bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl border-white/50 dark:border-gray-700/50 shadow-glass ring-1 ring-black/5 dark:ring-white/5">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-200/50 dark:border-gray-700/50">
+                        <th class="px-8 py-6 text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">Planejamento</th>
+                        <th class="px-6 py-6 text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">Turma</th>
+                        <th class="px-6 py-6 text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">Data</th>
+                        <th class="px-6 py-6 text-xs font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400">Status</th>
+                        <th class="px-8 py-6 text-xs font-bold tracking-wider text-right text-gray-500 uppercase dark:text-gray-400">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100/50 dark:divide-gray-700/50">
+                    {% for plano in planos %}
+                    <tr class="transition-colors duration-200 group hover:bg-white/50 dark:hover:bg-gray-700/30">
+                        
+                        <td class="max-w-sm px-8 py-5">
+                            <div class="flex flex-col">
+                                <a href="{{ url_for('planos.planejamento', id_turma=plano.id_turma) }}" 
+                                   class="text-base font-bold text-gray-900 transition-colors dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-1" 
+                                   title="{{ plano.titulo }}">
+                                    {{ plano.titulo }}
+                                </a>
+                                <span class="mt-1 text-xs text-gray-500 dark:text-gray-400 line-clamp-1 group-hover:text-gray-600 dark:group-hover:text-gray-300">
+                                    {{ plano.conteudo | striptags }}
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-5">
+                            {% if plano.turma %}
+                                <a href="{{ url_for('alunos.turma', id_turma=plano.turma.id) }}" 
+                                   class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50/80 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+                                    <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                                    {{ plano.turma.nome }}
+                                </a>
+                            {% else %}
+                                <span class="text-xs italic text-gray-400">-</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+                                <div class="flex items-center justify-center w-8 h-8 text-gray-400 bg-gray-100 rounded-lg dark:bg-gray-700">
+                                    <i class="far fa-calendar-alt"></i>
+                                </div>
+                                {{ plano.data_prevista.strftime('%d/%m/%Y') if plano.data_prevista else 'N/A' }}
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-5">
+                            {% if plano.status == 'Concluido' or plano.id_atividade_gerada %}
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100/50 text-emerald-700 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800">
+                                    <span class="relative flex w-2 h-2">
+                                      <span class="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping bg-emerald-400"></span>
+                                      <span class="relative inline-flex w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    </span>
+                                    Concluído
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100/50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    Planejado
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-8 py-5 text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-2 transition-opacity opacity-80 group-hover:opacity-100">
+                                <a href="{{ url_for('planos.exportar_pdf', id_plano=plano.id) }}" 
+                                   class="flex items-center justify-center text-gray-400 transition-all bg-white border border-gray-200 shadow-sm w-9 h-9 rounded-xl dark:bg-gray-700 dark:border-gray-600 hover:border-red-200 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400 dark:hover:border-red-900/30" 
+                                   title="Baixar PDF">
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
+                                <a href="{{ url_for('planos.exportar_docx', id_plano=plano.id) }}" 
+                                   class="flex items-center justify-center text-gray-400 transition-all bg-white border border-gray-200 shadow-sm w-9 h-9 rounded-xl dark:bg-gray-700 dark:border-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400 dark:hover:border-blue-900/30" 
+                                   title="Baixar DOCX">
+                                    <i class="fas fa-file-word"></i>
+                                </a>
+                                
+                                <div class="w-px h-6 mx-2 bg-gray-200 dark:bg-gray-700"></div>
+                                
+                                <a href="{{ url_for('planos.planejamento', id_turma=plano.id_turma) }}" 
+                                   class="flex items-center justify-center transition-all border shadow-sm w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100 hover:scale-110 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/30 dark:hover:bg-emerald-900/40" 
+                                   title="Editar Plano">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-20 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="relative inline-flex mb-6">
+                                    <div class="absolute inset-0 bg-gray-400 blur-2xl opacity-20"></div>
+                                    <div class="relative flex items-center justify-center w-20 h-20 border border-gray-100 rounded-full bg-gray-50/50 dark:bg-gray-700/50 dark:border-gray-600">
+                                        <i class="text-3xl text-gray-300 fas fa-book-open dark:text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Nenhum plano encontrado</h3>
+                                <p class="max-w-sm mx-auto mb-6 text-sm text-gray-500 dark:text-gray-400">
+                                    Comece a organizar suas aulas criando seu primeiro planejamento pedagógico.
+                                </p>
+                                <a href="{{ url_for('planos.planejamentos') }}" class="font-bold transition-all text-emerald-600 dark:text-emerald-400 hover:underline underline-offset-4 decoration-2 decoration-emerald-200 dark:decoration-emerald-800">
+                                    Criar primeiro plano &rarr;
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* CSS Glass Aurora Helpers */
+    .shadow-glass {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    }
+    
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+        animation: blob 10s infinite alternate;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+</style>
+{% endblock %}

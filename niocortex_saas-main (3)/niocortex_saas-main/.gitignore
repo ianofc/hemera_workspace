@@ -1,0 +1,27 @@
+,
+ ,
+ 
+  0#
+  
+  
+  
+  ,,,,,,,,,, Ignorar Ambiente Virtual Python
+env/
+venv/
+.venv/
+
+# Ignorar Dependências do Node (Tailwind)
+node_modules/
+
+# Ignorar Arquivos de Sistema/IDE
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+
+# Ignorar Banco de Dados Local (se for SQLite)
+db.sqlite3
+*.sqlite3
+
+# Ignorar Variáveis de Ambiente (SEGURANÇA CRÍTICA)
+.env

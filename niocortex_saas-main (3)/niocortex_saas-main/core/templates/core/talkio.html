@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Talkio - Chat Escolar Seguro">
+    <title>Talkio | NioCortex</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/perfis.css' %}" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        talkio: {
+                            sidebar: '#ffffff',
+                            bg: '#f0f2f5',
+                            sent: 'var(--color-primary)',
+                            received: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Background Padrão do Chat (Estilo Telegram/WhatsApp) */
+        .chat-bg {
+            background-color: #e5ddd5;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        /* Ajuste para o modo secreto (Escuro/Matrix) */
+        .secret-mode .chat-bg {
+            background-color: #0f172a;
+            background-image: none;
+        }
+        .secret-mode .sent-bubble {
+            background-color: #10B981; /* Verde Matrix */
+            color: black;
+        }
+        
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    </style>
+</head>
+
+<body x-data="talkioApp()" x-init="init()" class="flex h-full overflow-hidden font-sans antialiased bg-white"
+      :class="{'secret-mode': activeChat && activeChat.isSecret}">
+
+    <aside class="absolute z-20 flex flex-col w-full h-full transition-transform duration-300 bg-white border-r md:w-80 lg:w-96 border-slate-200 md:relative"
+           :class="mobileShowChat ? '-translate-x-full md:translate-x-0' : 'translate-x-0'">
+        
+        <div class="flex items-center justify-between h-16 px-4 border-b bg-slate-50 border-slate-100 shrink-0">
+            <div class="flex items-center gap-3">
+                <a href="{% url 'core:aluno_dashboard' %}" class="flex items-center justify-center w-8 h-8 transition rounded-full hover:bg-slate-200 text-slate-500">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <img src="{% static 'imgs/talkio/Talkio_logo.png' %}" class="w-auto h-6">
+                <h1 class="font-bold tracking-tight text-slate-700">Talkio</h1>
+            </div>
+            <div class="flex gap-2">
+                <button class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500"><i class="fas fa-edit"></i></button>
+                <button class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-200 text-slate-500"><i class="fas fa-ellipsis-v"></i></button>
+            </div>
+        </div>
+
+        <div class="p-3">
+            <div class="relative">
+                <input type="text" placeholder="Pesquisar conversa..." class="w-full bg-slate-100 border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-[var(--color-primary)] transition">
+                <i class="fas fa-search absolute left-3 top-2.5 text-slate-400"></i>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll">
+            <template x-for="chat in chats" :key="chat.id">
+                <div @click="selectChat(chat)" 
+                     class="relative flex items-center gap-3 p-3 transition cursor-pointer hover:bg-slate-50 group"
+                     :class="activeChat && activeChat.id === chat.id ? 'bg-blue-50' : ''">
+                    
+                    <div class="relative w-12 h-12 shrink-0">
+                        <template x-if="chat.avatar.includes('http')"><img :src="chat.avatar" class="object-cover w-full h-full rounded-full"></template>
+                        <template x-if="!chat.avatar.includes('http')"><div class="flex items-center justify-center w-full h-full font-bold text-white rounded-full bg-gradient-to-br from-blue-400 to-purple-500" x-text="chat.avatar.substring(0,2)"></div></template>
+                        <div x-show="chat.online" class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                    </div>
+
+                    <div class="flex-1 min-w-0 pb-3 border-b border-slate-50 group-hover:border-transparent">
+                        <div class="flex items-baseline justify-between mb-1">
+                            <h3 class="flex items-center gap-1 text-sm font-bold truncate text-slate-800">
+                                <i x-show="chat.isSecret" class="fas fa-lock text-[10px] text-green-600"></i>
+                                <span x-text="chat.name"></span>
+                            </h3>
+                            <span class="text-[10px] text-slate-400" x-text="chat.time"></span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-slate-500 truncate max-w-[180px]" x-text="chat.lastMsg"></p>
+                            <span x-show="chat.unread > 0" class="bg-[var(--color-primary)] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" x-text="chat.unread"></span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </aside>
+
+    <main class="relative flex flex-col flex-1 w-full h-full transition-transform duration-300"
+          :class="mobileShowChat ? 'translate-x-0' : 'translate-x-full md:translate-x-0 absolute md:relative'">
+        
+        <div x-show="!activeChat" class="flex-col items-center justify-center hidden h-full md:flex bg-slate-50 text-slate-400">
+            <div class="flex items-center justify-center w-32 h-32 mb-6 rounded-full bg-slate-200">
+                <i class="text-5xl fas fa-comments text-slate-400"></i>
+            </div>
+            <h2 class="text-xl font-bold text-slate-600">Talkio Web</h2>
+            <p class="mt-2 text-sm">Selecione uma conversa para começar.</p>
+            <p class="px-3 py-1 mt-4 text-xs rounded-full bg-slate-200"><i class="mr-1 text-xs fas fa-lock"></i> Protegido por criptografia de ponta a ponta</p>
+        </div>
+
+        <div x-show="activeChat" class="flex flex-col w-full h-full">
+            
+            <header class="z-10 flex items-center justify-between h-16 px-4 bg-white border-b shadow-sm border-slate-200 shrink-0">
+                <div class="flex items-center gap-3">
+                    <button @click="mobileShowChat = false" class="md:hidden text-slate-500 hover:text-slate-800"><i class="fas fa-arrow-left"></i></button>
+                    <div class="relative w-10 h-10 cursor-pointer">
+                        <template x-if="activeChat?.avatar.includes('http')"><img :src="activeChat?.avatar" class="object-cover w-full h-full rounded-full"></template>
+                        <template x-if="!activeChat?.avatar.includes('http')"><div class="flex items-center justify-center w-full h-full font-bold text-white rounded-full bg-slate-300">U</div></template>
+                    </div>
+                    <div class="cursor-pointer">
+                        <h2 class="flex items-center gap-2 text-sm font-bold text-slate-800">
+                            <span x-text="activeChat?.name"></span>
+                            <span x-show="activeChat?.isSecret" class="bg-green-100 text-green-700 text-[9px] px-1.5 py-0.5 rounded border border-green-200 uppercase tracking-wide">Secreto</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Online agora</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 text-slate-500">
+                    <button class="hover:text-[var(--color-primary)]"><i class="fas fa-search"></i></button>
+                    <button class="hover:text-[var(--color-primary)]"><i class="fas fa-phone"></i></button>
+                    <button class="hover:text-[var(--color-primary)]"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </header>
+
+            <div class="flex flex-col flex-1 gap-2 p-4 overflow-y-auto chat-bg custom-scroll" id="messagesContainer">
+                <div class="flex justify-center my-4"><span class="px-3 py-1 text-xs font-medium rounded-full shadow-sm bg-white/50 backdrop-blur text-slate-600">Hoje</span></div>
+
+                <template x-for="msg in messages" :key="msg.id">
+                    <div class="flex w-full" :class="msg.sent ? 'justify-end' : 'justify-start'">
+                        <div class="max-w-[75%] md:max-w-[60%] rounded-2xl px-4 py-2 shadow-sm relative text-sm"
+                             :class="msg.sent ? (activeChat?.isSecret ? 'bg-green-600 text-white rounded-tr-none' : 'bg-[var(--color-primary)] text-white rounded-tr-none') : (activeChat?.isSecret ? 'bg-slate-800 text-slate-200 rounded-tl-none' : 'bg-white text-slate-800 rounded-tl-none')">
+                            
+                            <p x-text="msg.text" class="leading-relaxed"></p>
+                            
+                            <div class="flex items-center justify-end gap-1 mt-1 select-none opacity-70">
+                                <span class="text-[10px]" x-text="msg.time"></span>
+                                <i x-show="msg.sent" class="fas fa-check-double text-[10px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="p-3 bg-white border-t border-slate-200 shrink-0" :class="{'bg-slate-900 border-slate-800': activeChat?.isSecret}">
+                <div class="flex items-end max-w-4xl gap-2 mx-auto">
+                    <button class="flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-slate-100 text-slate-500 shrink-0"><i class="fas fa-plus"></i></button>
+                    
+                    <div class="flex-1 bg-slate-100 rounded-2xl flex items-center px-4 py-2 gap-2 border border-transparent focus-within:border-[var(--color-primary)] focus-within:bg-white transition"
+                         :class="{'bg-slate-800 border-slate-700 text-white focus-within:bg-slate-800 focus-within:border-green-500': activeChat?.isSecret}">
+                        <textarea x-model="newMessage" @keydown.enter.prevent="sendMessage()" placeholder="Digite uma mensagem..." class="w-full py-1 text-sm bg-transparent border-none outline-none resize-none max-h-32 custom-scroll" rows="1"></textarea>
+                        <button class="text-slate-400 hover:text-slate-600"><i class="far fa-smile"></i></button>
+                    </div>
+
+                    <button x-show="!newMessage" class="flex items-center justify-center w-10 h-10 transition rounded-full hover:bg-slate-100 text-slate-500 shrink-0"><i class="fas fa-microphone"></i></button>
+                    
+                    <button x-show="newMessage" @click="sendMessage()" class="w-10 h-10 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center shadow-lg hover:scale-110 transition shrink-0"
+                            :class="{'bg-green-600': activeChat?.isSecret}">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        function talkioApp() {
+            return {
+                mobileShowChat: false,
+                activeChat: null,
+                newMessage: '',
+                
+                // Dados Mockados
+                chats: [
+                    { id: 1, name: 'Prof. Alberto', lastMsg: 'Não esqueça o prazo do TCC.', time: '14:30', unread: 2, online: true, avatar: 'https://i.pravatar.cc/150?img=11', isSecret: false },
+                    { id: 2, name: 'Turma 3º Ano B', lastMsg: 'Ana: Alguém tem o resumo?', time: '14:25', unread: 5, online: true, avatar: 'group', isSecret: false },
+                    { id: 3, name: 'Coordenação (Privado)', lastMsg: 'Sua solicitação foi aprovada.', time: 'Ontem', unread: 0, online: false, avatar: 'https://i.pravatar.cc/150?img=5', isSecret: true },
+                    { id: 4, name: 'Pedro Santos', lastMsg: 'Valeu pela ajuda!', time: 'Ontem', unread: 0, online: false, avatar: 'https://i.pravatar.cc/150?img=33', isSecret: false },
+                ],
+
+                messages: [
+                    { id: 1, text: 'Olá professor, boa tarde!', time: '14:00', sent: true },
+                    { id: 2, text: 'Gostaria de tirar uma dúvida sobre o capítulo 4.', time: '14:01', sent: true },
+                    { id: 3, text: 'Boa tarde! Pode falar.', time: '14:05', sent: false },
+                ],
+
+                init() {
+                    // Recuperar tema do Django se necessário (Injeção via HTML)
+                    // Mas o Talkio tem identidade própria clean
+                },
+
+                selectChat(chat) {
+                    this.activeChat = chat;
+                    this.mobileShowChat = true; // Mostra chat no mobile
+                    
+                    // Simula carregar mensagens diferentes
+                    this.messages = [
+                        { id: 1, text: 'Mensagem anterior de ' + chat.name, time: '10:00', sent: false },
+                        { id: 2, text: 'Minha resposta...', time: '10:05', sent: true }
+                    ];
+                    
+                    // Scroll para baixo
+                    this.$nextTick(() => {
+                        const container = document.getElementById('messagesContainer');
+                        if(container) container.scrollTop = container.scrollHeight;
+                    });
+                },
+
+                sendMessage() {
+                    if (!this.newMessage.trim()) return;
+                    
+                    this.messages.push({
+                        id: Date.now(),
+                        text: this.newMessage,
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                        sent: true
+                    });
+                    
+                    this.newMessage = '';
+                    
+                    // Scroll para baixo
+                    this.$nextTick(() => {
+                        const container = document.getElementById('messagesContainer');
+                        if(container) container.scrollTop = container.scrollHeight;
+                    });
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

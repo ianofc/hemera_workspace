@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  db:
+    image: ankane/pgvector:latest
+    container_name: tas_db
+    environment:
+      POSTGRES_USER: tas_admin
+      POSTGRES_PASSWORD: tas_pass
+      POSTGRES_DB: tas_engine
+    ports: ["5432:5432"]
+  redis:
+    image: redis:7-alpine
+    container_name: tas_cache
+  api:
+    build: .
+    container_name: tas_api
+    ports: ["8000:8000"]
+    env_file: [.env]
+    depends_on: [db, redis]

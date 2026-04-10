@@ -1,0 +1,344 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Experience | NioCortex Lumina</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        nio: { 
+                            50: '#f2f0ff', 100: '#e6e1ff', 500: '#7c3aed', 600: '#6d28d9', 900: '#3e1a75' 
+                        },
+                        lumina: { cyan: '#00E5FF', pink: '#FF2E93' }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scan': 'scan 3s linear infinite',
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .text-aurora {
+            background: linear-gradient(135deg, #6200EA 0%, #D946EF 50%, #00E5FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .neural-bg {
+            background-image: radial-gradient(#6366f1 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        /* Efeito de Tela do Computador */
+        .monitor-screen {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="relative flex flex-col h-screen overflow-hidden font-sans antialiased bg-slate-50 text-slate-800" 
+      x-data="demoPlayer()">
+
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-nio-100/50 rounded-full mix-blend-multiply filter blur-[120px] animate-blob"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-lumina-cyan/10 rounded-full mix-blend-multiply filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute inset-0 neural-bg opacity-30"></div>
+    </div>
+
+    <nav class="fixed z-50 w-full py-3 shadow-sm glass-panel border-white/40">
+        <div class="flex items-center justify-between px-6 mx-auto max-w-7xl">
+            <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-3 group">
+                <div class="relative flex items-center justify-center w-10 h-10">
+                    <div class="absolute inset-0 transition-transform duration-300 bg-nio-600 rounded-xl rotate-6 opacity-20 group-hover:rotate-12"></div>
+                    <div class="absolute inset-0 border shadow-sm bg-white/60 backdrop-blur rounded-xl border-white/50"></div>
+                    <svg class="relative z-10 w-6 h-6 text-nio-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 4L5 20" class="opacity-30"/>
+                        <path d="M5 4v16l14-16v16" />
+                        <circle cx="12" cy="12" r="2" fill="#00E5FF" stroke="none" class="animate-pulse"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold leading-none font-display text-slate-900">Nio<span class="text-nio-600">Cortex</span></span>
+                    <span class="text-[10px] font-bold text-nio-400 uppercase tracking-[0.2em] leading-none mt-1">Lumina Demo</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div class="items-center hidden gap-2 px-3 py-1 bg-red-100 border border-red-200 rounded-full md:flex">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-bold tracking-widest text-red-500 uppercase">Simulação Ativa</span>
+                </div>
+                <a href="{% url 'stage_publico:index' %}" class="flex items-center gap-2 text-sm font-bold transition text-slate-500 hover:text-red-500">
+                    <i class="fas fa-times"></i> <span class="hidden md:inline">Sair</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 flex flex-col items-center flex-grow h-full gap-8 px-6 pt-20 mx-auto md:flex-row max-w-7xl">
+        
+        <div class="flex flex-col justify-center w-full space-y-8 md:w-1/3 animate-float">
+            <div>
+                <h1 class="mb-4 text-4xl font-black leading-tight md:text-5xl font-display text-slate-900">
+                    Veja o Futuro <br>
+                    <span class="text-aurora">Acontecer.</span>
+                </h1>
+                <p class="text-lg leading-relaxed text-slate-600">
+                    Sem vídeos gravados. Isto é uma simulação em tempo real da interface do <strong>NioCortex</strong> a processar dados.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex gap-3">
+                    <button @click="togglePlay()" class="flex items-center gap-3 px-6 py-3 font-bold text-white transition-colors shadow-lg bg-nio-600 rounded-xl hover:bg-nio-500 shadow-nio-500/30 group">
+                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
+                            <i class="text-sm fas" :class="playing ? 'fa-pause' : 'fa-play pl-0.5'"></i>
+                        </div>
+                        <span x-text="playing ? 'Pausar Demo' : 'Iniciar Demo'"></span>
+                    </button>
+                    <a href="{% url 'yourlife_social:register' %}" class="flex items-center gap-2 px-6 py-3 font-bold transition-colors bg-white border border-slate-200 text-slate-700 rounded-xl hover:border-nio-500 hover:text-nio-600">
+                        Criar Conta
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-6 space-y-6 border-t border-slate-200/50">
+                <template x-for="(step, index) in steps" :key="index">
+                    <div class="flex items-center gap-4 transition-all duration-500" 
+                         :class="currentStep === index ? 'opacity-100 translate-x-2' : 'opacity-40 grayscale'">
+                        <div class="flex items-center justify-center w-10 h-10 text-sm font-bold transition-colors duration-300 shadow-sm rounded-xl"
+                             :class="currentStep >= index ? 'bg-nio-100 text-nio-600 border border-nio-200' : 'bg-slate-100 text-slate-400 border border-slate-200'">
+                            <i class="fas" :class="step.icon"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800" x-text="step.title"></p>
+                            <p class="text-xs text-slate-500" x-text="step.desc"></p>
+                        </div>
+                        <div x-show="currentStep === index" class="ml-auto">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="w-full md:w-2/3 h-[500px] md:h-[600px] flex items-center justify-center relative perspective-1000">
+            
+            <div class="monitor-screen w-full h-full bg-slate-900 rounded-2xl overflow-hidden relative border border-slate-700 transform transition-transform duration-700 hover:rotate-y-1 hover:scale-[1.01] flex flex-col">
+                
+                <div class="flex items-center justify-between h-10 gap-2 px-4 border-b bg-slate-800 border-slate-700">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 border rounded-md bg-slate-900 border-slate-700/50">
+                        <i class="fas fa-lock text-[10px] text-green-500"></i>
+                        <span class="text-[10px] text-slate-400 font-mono">niocortex.app/dashboard</span>
+                    </div>
+                    <div class="w-10"></div> </div>
+
+                <div class="relative flex-grow overflow-hidden bg-slate-900">
+                    
+                    <div x-show="currentStep === 0" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="flex h-full gap-6 p-6">
+                        <div class="flex flex-col items-center w-16 h-full gap-4 py-4 border bg-slate-800/50 rounded-xl border-slate-700/50">
+                            <div class="w-8 h-8 rounded-lg bg-nio-600"></div>
+                            <div class="w-8 h-8 rounded-lg opacity-50 bg-slate-700"></div>
+                            <div class="w-8 h-8 rounded-lg opacity-50 bg-slate-700"></div>
+                        </div>
+                        <div class="flex-1 space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold text-white">Visão Geral</h3>
+                                    <p class="text-xs text-slate-500">Atualizado agora</p>
+                                </div>
+                                <div class="px-3 py-1 text-xs font-bold text-green-400 border rounded-full bg-green-500/10 border-green-500/20">+24% Este Mês</div>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="relative p-4 overflow-hidden border bg-slate-800/50 rounded-xl border-slate-700/50">
+                                    <p class="text-xs uppercase text-slate-400">Receita</p>
+                                    <p class="mt-1 text-2xl font-bold text-white">R$ 145k</p>
+                                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-nio-500 to-lumina-cyan"></div>
+                                </div>
+                                <div class="p-4 border bg-slate-800/50 rounded-xl border-slate-700/50">
+                                    <p class="text-xs uppercase text-slate-400">Alunos</p>
+                                    <p class="mt-1 text-2xl font-bold text-white">1.204</p>
+                                </div>
+                                <div class="p-4 border bg-slate-800/50 rounded-xl border-slate-700/50">
+                                    <p class="text-xs uppercase text-slate-400">Inadimplência</p>
+                                    <p class="mt-1 text-2xl font-bold text-red-400">0.8%</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-end justify-between h-40 gap-2 p-4 border bg-slate-800/30 rounded-xl border-slate-700/30">
+                                <template x-for="i in 15">
+                                    <div class="w-full transition-all duration-300 rounded-t-sm bg-nio-600" 
+                                         :style="`height: ${Math.random() * 80 + 20}%`"
+                                         :class="Math.random() > 0.8 ? 'bg-lumina-pink' : 'bg-nio-600'"></div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0" class="relative flex flex-col items-center justify-center h-full p-8" style="display: none;">
+                        <div class="absolute inset-0 bg-nio-900/20"></div>
+                        
+                        <div class="relative z-10 flex items-center justify-center w-20 h-20 mb-8 shadow-2xl bg-gradient-to-br from-nio-600 to-lumina-cyan rounded-2xl shadow-nio-500/20 animate-pulse-fast">
+                            <i class="text-3xl text-white fas fa-brain"></i>
+                        </div>
+                        
+                        <div class="relative z-10 w-full max-w-md space-y-4">
+                            <div class="flex justify-end animate-fade-in-up">
+                                <div class="px-5 py-3 text-sm text-white rounded-tr-sm shadow-md bg-slate-700 rounded-2xl">
+                                    Crie uma prova sobre Revolução Francesa.
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 ml-2 font-mono text-xs text-lumina-cyan">
+                                <i class="fas fa-circle-notch fa-spin"></i> Acessando BNCC e Base Pedagógica...
+                            </div>
+                            <div class="flex justify-start animate-fade-in-up" style="animation-delay: 0.8s; animation-fill-mode: both;">
+                                <div class="w-full p-0 overflow-hidden text-sm text-white border rounded-tl-sm shadow-lg bg-slate-800 border-slate-700 rounded-2xl">
+                                    <div class="flex items-center justify-between px-4 py-2 border-b bg-slate-900/50 border-slate-700">
+                                        <span class="text-xs font-bold text-lumina-cyan">Prova Gerada (História 8º Ano)</span>
+                                        <i class="cursor-pointer fas fa-download text-slate-500 hover:text-white"></i>
+                                    </div>
+                                    <div class="p-4 space-y-2 text-slate-300">
+                                        <p><strong>1. (Objetiva)</strong> Qual foi o estopim da Revolução?</p>
+                                        <p><strong>2. (Discursiva)</strong> Explique o lema "Liberdade, Igualdade, Fraternidade".</p>
+                                        <div class="w-2/3 h-2 mt-2 rounded bg-slate-700"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-110" x-transition:enter-end="opacity-100 scale-100" class="relative flex items-center justify-center h-full bg-slate-950" style="display: none;">
+                        <div class="absolute inset-0 cyber-grid opacity-10"></div>
+                        
+                        <div class="w-60 h-[85%] border-[6px] border-slate-800 rounded-[2.5rem] bg-white overflow-hidden relative shadow-2xl">
+                            <div class="bg-nio-600 h-32 pt-8 px-4 rounded-b-[2rem] shadow-md relative z-10">
+                                <div class="flex items-center justify-between text-white">
+                                    <i class="fas fa-bars"></i>
+                                    <span class="font-bold">NioApp</span>
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <p class="mt-4 text-xs text-white/80">Olá, Professor</p>
+                                <h3 class="text-lg font-bold text-white">Sua Agenda</h3>
+                            </div>
+                            
+                            <div class="relative z-20 p-4 -mt-6 space-y-3">
+                                <div class="flex items-center gap-3 p-3 bg-white border shadow-lg rounded-xl border-slate-100">
+                                    <div class="flex items-center justify-center w-10 h-10 font-bold text-green-600 bg-green-100 rounded-full">5B</div>
+                                    <div>
+                                        <p class="text-xs text-slate-400">08:00 - 09:00</p>
+                                        <p class="text-sm font-bold text-slate-800">Matemática</p>
+                                    </div>
+                                    <i class="ml-auto text-xs fas fa-chevron-right text-slate-300"></i>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-white border shadow-sm rounded-xl border-slate-100 opacity-60">
+                                    <div class="flex items-center justify-center w-10 h-10 font-bold text-blue-600 bg-blue-100 rounded-full">6A</div>
+                                    <div>
+                                        <p class="text-xs text-slate-400">09:10 - 10:00</p>
+                                        <p class="text-sm font-bold text-slate-800">Geometria</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="absolute flex items-center justify-center w-12 h-12 text-white rounded-full shadow-lg bottom-4 right-4 bg-lumina-pink animate-bounce">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute inset-0 w-full pointer-events-none bg-gradient-to-b from-transparent via-lumina-cyan/5 to-transparent h-1/4 animate-scan" x-show="playing"></div>
+
+                </div>
+
+                <div class="h-1.5 w-full bg-slate-800">
+                    <div class="h-full bg-lumina-cyan transition-all duration-[50ms] ease-linear shadow-[0_0_10px_#00E5FF]" :style="`width: ${progress}%`"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function demoPlayer() {
+            return {
+                playing: false,
+                progress: 0,
+                currentStep: 0,
+                interval: null,
+                steps: [
+                    { title: "Gestão Estratégica", desc: "Dashboards financeiros e pedagógicos em tempo real.", icon: "fa-chart-pie" },
+                    { title: "IO Zios AI (IA)", desc: "Seu assistente criando provas e conteúdo.", icon: "fa-robot" },
+                    { title: "App Mobile", desc: "Professores e alunos conectados onde estiverem.", icon: "fa-mobile-alt" }
+                ],
+                init() {
+                    // Autoplay com delay
+                    setTimeout(() => { this.togglePlay() }, 800);
+                },
+                togglePlay() {
+                    this.playing = !this.playing;
+                    if (this.playing) {
+                        this.interval = setInterval(() => {
+                            this.progress += 0.4; // Velocidade da barra
+                            
+                            // Lógica de troca de cena (33% para cada cena)
+                            if (this.progress < 33) this.currentStep = 0;
+                            else if (this.progress < 66) this.currentStep = 1;
+                            else if (this.progress < 100) this.currentStep = 2;
+                            else {
+                                // Loop
+                                this.progress = 0;
+                                this.currentStep = 0;
+                            }
+                        }, 50);
+                    } else {
+                        clearInterval(this.interval);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

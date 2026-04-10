@@ -1,0 +1,49 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NioCortex | {{ layout_type|title }} Mode</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/contexts.css' %}">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-display { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="{{ current_theme }} min-h-screen flex flex-col">
+
+    {% include 'components/global_switcher.html' %}
+
+    <div class="flex flex-1 overflow-hidden">
+        
+        {% if layout_type == 'dense' %}
+            {% include 'components/sidebar_admin.html' %}
+        {% endif %}
+
+        <main class="relative flex flex-col flex-1 h-screen overflow-y-auto">
+            {% if layout_type != 'dense' %}
+                {% include 'components/navbar_adaptive.html' %}
+            {% endif %}
+
+            <div class="{% if layout_type == 'dense' %}p-6{% else %}container mx-auto px-4 py-6{% endif %} flex-1">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+        
+        {% include 'components/talkio_drawer.html' %}
+        
+    </div>
+
+</body>
+</html>

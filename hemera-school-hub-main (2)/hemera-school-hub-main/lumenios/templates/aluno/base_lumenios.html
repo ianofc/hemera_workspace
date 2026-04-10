@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lumenios | Aurora{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
+                        display: ['Outfit', 'sans-serif'] 
+                    },
+                    colors: {
+                        aurora: {
+                            primary: '#6366f1',   // Indigo vibrante
+                            secondary: '#a855f7', // Roxo
+                            accent: '#ec4899',    // Rosa
+                            dark: '#0f172a',
+                            success: '#10b981',   // Emerald
+                            warning: '#f59e0b',   // Amber
+                            danger: '#ef4444',    // Red
+                        }
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(99, 102, 241, 0.4)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
+                        'float': '0 20px 40px -5px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.04)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f0f4f8; 
+            color: #334155; 
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Fundo Aurora Animado (Background Dinâmico) */
+        .aurora-gradient {
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-size: 200% 200%;
+            opacity: 0.05; 
+            pointer-events: none;
+        }
+        
+        /* Glassnav Premium (Barra de Navegação) */
+        .glass-island {
+            background: rgba(255, 255, 255, 0.85); /* Vidro Fosco */
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tooltip de Navegação (Flutuante) */
+        .nav-tooltip {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            background: #1e293b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 60;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Triângulo do Tooltip */
+        .nav-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 4px 4px 4px;
+            border-color: transparent transparent #1e293b transparent;
+        }
+        
+        .group:hover .nav-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Scrollbar Estilizada */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Utilitários Extras */
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+
+    <style>
+        /* Glassbar Lumenios - Aurora Theme */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        /* Ajuste de z-index para garantir que fique sobre o conteúdo */
+        nav.sticky { z-index: 50; }
+    </style>
+
+</head>
+<body class="relative flex flex-col min-h-screen overflow-x-hidden selection:bg-aurora-primary selection:text-white" x-data="{ userMenu: false, mobileMenu: false }, switcherOpen: false" @toggle-switcher.window="switcherOpen = !switcherOpen">
+    {% include "components/global_loader.html" %}
+    
+    <nav class="sticky top-0 z-50 w-full px-4 py-2 mb-6 transition-all duration-300 shadow-sm glass-nav">
+        <div class="flex items-center justify-between h-16 mx-auto max-w-7xl">
+            {% include 'components/navbar/left.html' %}
+            {% include 'components/navbar/center.html' %}
+            {% include 'core/components/navbar/right.html' %}
+        </div>
+    </nav>
+    
+    
+
+
+    <div class="fixed top-0 left-0 z-0 w-full h-full overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-float"></div>
+        <div class="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-indigo-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-float" style="animation-delay: 2s"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-pink-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-float" style="animation-delay: 4s"></div>
+    </div>
+
+    <div class="relative z-10 flex-grow pt-6 pb-10">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="relative z-10 py-10 mt-auto border-t border-white/50 bg-white/40 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 opacity-80">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-8 h-8 text-white rounded-lg bg-slate-800">
+                    <i class="text-xs fas fa-bolt"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-700">© 2025 NioCortex Lumenios.</p>
+                    <p class="text-[10px] text-slate-500">Plataforma de Educação Inteligente.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-xs font-medium transition text-slate-500 hover:text-indigo-600">Ajuda</a>
+                <a href="#" class="text-xs font-medium transition text-slate-500 hover:text-indigo-600">Privacidade</a>
+                <div class="flex gap-3 pl-4 border-l border-slate-300">
+                    <a href="#" class="transition text-slate-400 hover:text-pink-500 hover:scale-110"><i class="text-lg fab fa-instagram"></i></a>
+                    <a href="#" class="transition text-slate-400 hover:text-blue-400 hover:scale-110"><i class="text-lg fab fa-twitter"></i></a>
+                    <a href="#" class="transition text-slate-400 hover:text-indigo-600 hover:scale-110"><i class="text-lg fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% include 'core/components/module_switcher.html' %}
+</body>
+</html>

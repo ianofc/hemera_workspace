@@ -1,0 +1,49 @@
+
+<div id="talkio-drawer" class="fixed inset-y-0 right-0 z-50 transition-transform duration-300 ease-in-out transform translate-x-full border-l shadow-2xl w-96 bg-base-100 border-base-300">
+    <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between p-4 border-b bg-base-200">
+            <h3 class="flex items-center gap-2 text-lg font-bold">
+                <span class="text-blue-600">●</span> Talkio Chat
+            </h3>
+            <button onclick="toggleTalkioDrawer()" class="btn btn-sm btn-ghost">✕</button>
+        </div>
+        <div class="flex-1 p-4 overflow-y-auto">
+            <p class="mt-10 text-center text-gray-500">Selecione uma conversa para iniciar.</p>
+            </div>
+    </div>
+</div>
+
+<div id="zios-drawer" class="fixed inset-y-0 right-0 z-50 transition-transform duration-300 ease-in-out transform translate-x-full border-l shadow-2xl w-96 bg-base-100 border-base-300">
+    <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between p-4 text-white border-b bg-gradient-to-r from-purple-600 to-indigo-600">
+            <h3 class="flex items-center gap-2 text-lg font-bold">
+                ✦ ZIOS (Zios AI)
+            </h3>
+            <button onclick="toggleZios AIDrawer()" class="text-white btn btn-sm btn-ghost">✕</button>
+        </div>
+        <div class="flex-1 p-4 overflow-y-auto bg-gray-50">
+            <div class="chat chat-start">
+                <div class="chat-bubble chat-bubble-primary">Olá, {{ user.first_name }}! Como posso ajudar na sua gestão hoje?</div>
+            </div>
+        </div>
+        <div class="p-4 border-t">
+            <div class="input-group">
+                <input type="text" placeholder="Pergunte ao Zios..." class="w-full input input-bordered" />
+                <button class="btn btn-square btn-primary">
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleTalkioDrawer() {
+        const d = document.getElementById('talkio-drawer');
+        d.classList.toggle('translate-x-full');
+    }
+    function toggleZios AIDrawer() {
+        const d = document.getElementById('zios-drawer');
+        d.classList.toggle('translate-x-full');
+    }
+</script>

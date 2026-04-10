@@ -1,0 +1,48 @@
+
+{% load static %}
+<div class="flex items-center justify-end flex-1 gap-4" x-data="{ profileOpen: false }">
+    <button class="flex items-center justify-center w-10 h-10 transition border border-indigo-200 rounded-full bg-white/20 hover:bg-white/40">
+        <img src="{% static 'imgs/talkio/Talkio_logo.png' %}" class="w-6 h-6">
+    </button>
+    
+    <button class="flex items-center justify-center w-10 h-10 transition border border-indigo-200 rounded-full bg-white/20 hover:bg-white/40">
+        <i class="text-indigo-600 far fa-bell"></i>
+    </button>
+    
+    <div class="relative">
+        <button @click="profileOpen = !profileOpen" class="flex items-center gap-2 py-1 pl-1 pr-3 transition border border-indigo-200 rounded-full bg-white/20 hover:bg-white/40">
+            <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ user.first_name }}&background=6366f1&color=fff{% endif %}" class="object-cover w-8 h-8 border border-white rounded-full">
+            <i class="fas fa-chevron-down text-[10px] text-slate-600" :class="profileOpen ? 'rotate-180' : ''"></i>
+        </button>
+        
+        <div x-show="profileOpen" @click.away="profileOpen = false" x-cloak
+             class="absolute top-14 right-0 w-72 bg-white rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.15)] z-[120] border border-slate-100"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 translate-y-2">
+             
+            <div class="p-4 border-b bg-indigo-50/30">
+                <p class="font-bold leading-tight text-slate-800">{{ user.get_full_name }}</p>
+                <p class="text-xs font-medium text-indigo-500">Aluno Matriculado</p>
+            </div>
+            
+            <div class="p-2 space-y-1">
+                <a href="#" class="block px-3 py-2 text-sm font-medium hover:bg-slate-50 rounded-xl text-slate-700">
+                    <i class="mr-2 fas fa-id-card text-slate-400"></i> Minha Carteirinha
+                </a>
+                <a href="#" class="block px-3 py-2 text-sm font-medium hover:bg-slate-50 rounded-xl text-slate-700">
+                    <i class="mr-2 fas fa-cog text-slate-400"></i> Configurações
+                </a>
+            </div>
+            
+            <div class="p-2 border-t">
+                <a href="{% url 'yourlife_social:logout' %}" class="block px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl">
+                    <i class="mr-2 fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

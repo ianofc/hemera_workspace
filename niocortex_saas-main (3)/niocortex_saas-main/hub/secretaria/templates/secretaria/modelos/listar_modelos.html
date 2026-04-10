@@ -1,0 +1,120 @@
+{% extends "social/base.html" %}
+{% load static %}
+
+{% block title %}Biblioteca de Modelos{% endblock %}
+
+{% block content %}
+<div class="space-y-8 animate-fade-in-up">
+    
+    <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight font-display text-slate-900">
+                Modelos de Documentos
+            </h1>
+            <p class="mt-1 text-lg text-slate-500">
+                Gerencie os templates oficiais (Declarações, Contratos e Históricos).
+            </p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <a href="{% url 'secretariat:selecionar_aluno' %}" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 hover:border-nio-300 transition-all shadow-sm">
+                <i class="fas fa-print text-nio-500"></i>
+                <span>Emitir Documento</span>
+            </a>
+
+            <a href="{% url 'secretariat:criar_modelo' %}" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-nio-600 text-white font-semibold rounded-xl hover:bg-nio-700 transition-all shadow-lg shadow-nio-600/20 hover:-translate-y-0.5">
+                <i class="fas fa-plus"></i>
+                <span>Novo Modelo</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="overflow-hidden bg-white border shadow-sm border-slate-200 rounded-2xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-xs font-bold tracking-wider uppercase border-b bg-slate-50/80 border-slate-100 text-slate-500">
+                        <th class="px-6 py-4">Documento</th>
+                        <th class="px-6 py-4">Categoria</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for modelo in modelos %}
+                    <tr class="transition-colors hover:bg-slate-50/80 group">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center w-10 h-10 text-lg transition-transform rounded-lg shadow-sm bg-nio-50 text-nio-600 group-hover:scale-110">
+                                    <i class="far fa-file-alt"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-sm font-bold text-slate-800">{{ modelo.titulo }}</span>
+                                    <span class="text-xs text-slate-400">Criado em {{ modelo.criado_em|date:"d/m/Y" }}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                {{ modelo.get_tipo_display }}
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            {% if modelo.ativo %}
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Ativo
+                                </div>
+                            {% else %}
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200 text-xs font-bold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                    Inativo
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-6 py-4 text-right">
+                            <div class="flex items-center justify-end gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                <a href="#" class="p-2 transition-colors rounded-lg text-slate-400 hover:text-nio-600 hover:bg-nio-50" title="Editar Template">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                <button class="p-2 transition-colors rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50" title="Arquivar">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-16 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex items-center justify-center w-16 h-16 mb-4 text-2xl rounded-full bg-slate-50 text-slate-300">
+                                    <i class="far fa-folder-open"></i>
+                                </div>
+                                <h3 class="mb-1 font-bold text-slate-900">Nenhum modelo encontrado</h3>
+                                <p class="max-w-xs mx-auto text-sm text-slate-500">
+                                    Comece criando um modelo padrão para agilizar a secretaria.
+                                </p>
+                                <a href="{% url 'secretariat:criar_modelo' %}" class="mt-4 text-sm font-bold text-nio-600 hover:text-nio-700 hover:underline">
+                                    Criar primeiro modelo &rarr;
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if is_paginated %}
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+            <span class="text-xs text-slate-500">Mostrando {{ page_obj.start_index }} a {{ page_obj.end_index }} de {{ page_obj.paginator.count }} modelos</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

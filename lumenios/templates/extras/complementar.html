@@ -1,0 +1,203 @@
+{% extends 'aluno/base_lumenios.html' %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto px-6 space-y-12" x-data="{ categoriaAtiva: 'todos' }">
+
+    <div class="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 p-10 md:p-16 shadow-2xl min-h-[350px] flex flex-col justify-center group">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-pink-500/20 via-purple-500/20 to-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 animate-pulse-slow"></div>
+        
+        <div class="relative z-10 flex flex-col items-end justify-between gap-10 lg:flex-row">
+            <div class="max-w-2xl space-y-6">
+                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold tracking-wider text-yellow-300 uppercase border rounded-full shadow-sm bg-yellow-500/10 backdrop-blur-md border-yellow-500/30">
+                    <i class="fas fa-star"></i> Expanda seus Horizontes
+                </span>
+                <h1 class="text-4xl font-bold leading-tight text-white md:text-6xl font-display drop-shadow-xl">
+                    Ensino <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-pink-200 to-white">Complementar</span>
+                </h1>
+                <p class="text-lg font-light leading-relaxed text-indigo-100">
+                    Desenvolva novas habilidades além da sala de aula. Descubra cursos de idiomas, tecnologia, artes e esportes.
+                </p>
+                
+                <button class="flex items-center gap-2 px-8 py-3 font-bold text-indigo-900 transition-all transform bg-white shadow-lg rounded-xl hover:bg-indigo-50 hover:-translate-y-1">
+                    Explorar Catálogo <i class="fas fa-arrow-down animate-bounce"></i>
+                </button>
+            </div>
+
+            <div class="hidden p-4 transition-all duration-500 transform border shadow-2xl cursor-pointer lg:block w-80 bg-white/10 backdrop-blur-md border-white/20 rounded-3xl rotate-3 hover:rotate-0">
+                <div class="relative mb-4 overflow-hidden aspect-video bg-slate-800 rounded-xl">
+                    <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&w=600&q=80" class="object-cover w-full h-full opacity-80">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="text-5xl text-white fas fa-play-circle opacity-80"></i>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-white">Oficina de Robótica</h3>
+                <p class="mt-1 text-xs text-indigo-200">Inscrições abertas até dia 30</p>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1.5 h-8 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-full"></div>
+            <h3 class="text-2xl font-bold text-slate-800 font-display">Minhas Atividades Extras</h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div class="flex p-4 transition-all bg-white border shadow-sm border-slate-100 rounded-3xl hover:shadow-md group">
+                <div class="w-24 h-24 overflow-hidden rounded-2xl shrink-0 bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=300&q=80" class="object-cover w-full h-full">
+                </div>
+                <div class="flex flex-col justify-between w-full ml-4">
+                    <div>
+                        <span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-lg">Em andamento</span>
+                        <h4 class="mt-1 font-bold transition text-slate-800 group-hover:text-indigo-600">Inglês Conversação</h4>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mt-2">
+                        <div class="h-full bg-green-500 w-[60%]"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-slate-400">Turma B2</span>
+                        <a href="#" class="text-xs font-bold text-indigo-600 hover:underline">Acessar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex p-4 transition-all bg-white border shadow-sm border-slate-100 rounded-3xl hover:shadow-md group">
+                <div class="w-24 h-24 overflow-hidden rounded-2xl shrink-0 bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=300&q=80" class="object-cover w-full h-full">
+                </div>
+                <div class="flex flex-col justify-between w-full ml-4">
+                    <div>
+                        <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-lg">Workshop</span>
+                        <h4 class="mt-1 font-bold transition text-slate-800 group-hover:text-indigo-600">Inteligência Emocional</h4>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mt-2">
+                        <div class="h-full bg-purple-500 w-[20%]"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-1">
+                        <span class="text-xs text-slate-400">Online</span>
+                        <a href="#" class="text-xs font-bold text-indigo-600 hover:underline">Acessar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="flex flex-col justify-between gap-4 mb-8 md:flex-row md:items-end">
+            <div>
+                <h3 class="text-3xl font-bold font-display text-slate-800">Catálogo de Cursos</h3>
+                <p class="mt-1 text-slate-500">Filtre por área de interesse e inscreva-se.</p>
+            </div>
+            
+            <div class="flex gap-2 pb-2 overflow-x-auto scrollbar-hide">
+                <button @click="categoriaAtiva = 'todos'" 
+                        :class="categoriaAtiva === 'todos' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'"
+                        class="px-5 py-2 text-sm font-bold transition-all rounded-full whitespace-nowrap">
+                    Todos
+                </button>
+                <button @click="categoriaAtiva = 'tecnologia'" 
+                        :class="categoriaAtiva === 'tecnologia' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'"
+                        class="px-5 py-2 text-sm font-bold transition-all rounded-full whitespace-nowrap">
+                    Tecnologia
+                </button>
+                <button @click="categoriaAtiva = 'artes'" 
+                        :class="categoriaAtiva === 'artes' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'"
+                        class="px-5 py-2 text-sm font-bold transition-all rounded-full whitespace-nowrap">
+                    Artes & Música
+                </button>
+                <button @click="categoriaAtiva = 'idiomas'" 
+                        :class="categoriaAtiva === 'idiomas' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'"
+                        class="px-5 py-2 text-sm font-bold transition-all rounded-full whitespace-nowrap">
+                    Idiomas
+                </button>
+                <button @click="categoriaAtiva = 'esportes'" 
+                        :class="categoriaAtiva === 'esportes' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'"
+                        class="px-5 py-2 text-sm font-bold transition-all rounded-full whitespace-nowrap">
+                    Esportes
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            
+            <div x-show="categoriaAtiva === 'todos' || categoriaAtiva === 'tecnologia'" class="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=600&q=80" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Tecnologia</div>
+                </div>
+                <div class="p-5">
+                    <h4 class="mb-2 text-lg font-bold leading-tight text-slate-800">Programação de Games com Unity</h4>
+                    <p class="mb-4 text-sm text-slate-500 line-clamp-2">Aprenda a criar seus próprios jogos do zero, desde a lógica até o design.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-400"><i class="far fa-clock"></i> 40h</span>
+                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="categoriaAtiva === 'todos' || categoriaAtiva === 'artes'" class="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute top-3 left-3 bg-pink-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Artes</div>
+                </div>
+                <div class="p-5">
+                    <h4 class="mb-2 text-lg font-bold leading-tight text-slate-800">Pintura em Aquarela: Iniciante</h4>
+                    <p class="mb-4 text-sm text-slate-500 line-clamp-2">Explore sua criatividade e aprenda técnicas relaxantes de pintura.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-400"><i class="far fa-clock"></i> 12h</span>
+                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="categoriaAtiva === 'todos' || categoriaAtiva === 'esportes'" class="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=600&q=80" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute top-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Esportes</div>
+                </div>
+                <div class="p-5">
+                    <h4 class="mb-2 text-lg font-bold leading-tight text-slate-800">Clube de Xadrez</h4>
+                    <p class="mb-4 text-sm text-slate-500 line-clamp-2">Desenvolva o raciocínio lógico e participe de torneios internos.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-400"><i class="fas fa-users"></i> Presencial</span>
+                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800">Inscrever-se</button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="categoriaAtiva === 'todos' || categoriaAtiva === 'idiomas'" class="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1527866959252-deab85ef7d1b?auto=format&fit=crop&w=600&q=80" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute top-3 left-3 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">Idiomas</div>
+                </div>
+                <div class="p-5">
+                    <h4 class="mb-2 text-lg font-bold leading-tight text-slate-800">Espanhol para Viagens</h4>
+                    <p class="mb-4 text-sm text-slate-500 line-clamp-2">Vocabulário essencial e cultura latina para quem quer viajar.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-400"><i class="far fa-clock"></i> 20h</span>
+                        <button class="text-sm font-bold text-indigo-600 hover:text-indigo-800">Ver Detalhes</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="relative flex flex-col items-center justify-between gap-6 px-8 py-10 overflow-hidden shadow-2xl rounded-3xl bg-slate-900 md:flex-row">
+        <div class="relative z-10">
+            <h3 class="mb-2 text-2xl font-bold text-white">Tem uma sugestão de curso?</h3>
+            <p class="text-indigo-200">Gostaríamos de saber o que você quer aprender no próximo semestre.</p>
+        </div>
+        <div class="relative z-10">
+            <button class="px-6 py-3 font-bold transition bg-white shadow-lg text-slate-900 rounded-xl hover:bg-indigo-50">
+                Sugerir Atividade
+            </button>
+        </div>
+        
+        <div class="absolute right-0 bottom-0 w-64 h-64 bg-indigo-600 rounded-full blur-[80px] opacity-40 translate-x-1/3 translate-y-1/3"></div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "social/base.html" %}
+
+{% block title %}Departamentos{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6 animate-fade-in-down">
+    
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Departamentos</h1>
+            <p class="text-sm text-gray-500">Organograma institucional.</p>
+        </div>
+        <a href="{% url 'hr:criar_departamento' %}" class="btn-secondary text-sm">
+            <i class="fas fa-plus"></i> Novo Departamento
+        </a>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 font-semibold">
+                <tr>
+                    <th class="px-6 py-4">Nome</th>
+                    <th class="px-6 py-4">Centro de Custo</th>
+                    <th class="px-6 py-4">Responsável</th>
+                    <th class="px-6 py-4 text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for dep in departamentos %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ dep.nome }}</td>
+                    <td class="px-6 py-4 font-mono text-sm text-gray-500">{{ dep.codigo_centro_custo|default:"-" }}</td>
+                    <td class="px-6 py-4 text-sm">
+                        {% if dep.responsavel %}
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-user-circle text-gray-400"></i>
+                                {{ dep.responsavel.nome_completo }}
+                            </div>
+                        {% else %}
+                            <span class="text-gray-400 italic">Não definido</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="btn-ghost"><i class="fas fa-pen"></i></button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="p-6 text-center text-gray-500">Nenhum departamento.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   BookOpen, Library, FileText, GraduationCap, 
-  MessageCircle, LayoutDashboard, Upload, LogOut, Calculator
+  MessageCircle, LayoutDashboard, Upload, LogOut, Calculator, Database
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
@@ -25,6 +25,7 @@ export const Sidebar = ({ userType }: SidebarProps) => {
   const teacherLinks = [
     { to: '/teacher', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/teacher/gradebook', icon: Calculator, label: 'Gradebook (Notas)' },
+    { to: '/teacher/questions', icon: Database, label: 'Banco de Questões' },
     { to: '/teacher/courses', icon: BookOpen, label: 'Gerenciar Cursos' },
     { to: '/teacher/upload', icon: Upload, label: 'Enviar Aulas' },
     { to: '/teacher/library', icon: Library, label: 'Biblioteca' },

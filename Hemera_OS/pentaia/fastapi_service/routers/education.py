@@ -40,42 +40,62 @@ class StudentAnalysisRequest(BaseModel):
 # --- Lógica Simulada (Mock Inteligente) ---
 # No ambiente real, aqui entraria o 'await Thinker.process(...)'
 
+from ..services.ai import gerar_prova_ia
+from ..schemas import GerarProvaInput, QuestaoItem
+import traceback
+
 @router.post("/exam")
 async def generate_exam(req: ExamRequest):
-    """ Gera uma prova formatada em HTML """
-    # Mock sofisticado para validação imediata
-    html_content = f"""
-    <div class="prova-header">
-        <h3>Avaliação de {req.tema}</h3>
-        <p><strong>Nível:</strong> {req.nivel} | <strong>Dificuldade:</strong> {req.dificuldade.title()}</p>
-    </div>
-    <hr class="my-4">
-    <div class="questoes space-y-6">
-    """
-    
-    for i in range(1, req.qtd_questoes + 1):
-        if "multipla_escolha" in req.tipo_questoes:
-            html_content += f"""
-            <div class="questao mb-4">
-                <p class="font-bold text-gray-800">{i}. (BNCC-mock) Questão sobre {req.tema} focada em análise crítica:</p>
-                <p class="text-sm text-gray-600 mb-2">Enunciado contextualizado gerado pela IA...</p>
-                <ul class="list-none space-y-1 ml-4 text-sm">
-                    <li>(A) Alternativa plausível 1</li>
-                    <li>(B) Alternativa correta</li>
-                    <li>(C) Distrator comum</li>
-                    <li>(D) Outra possibilidade</li>
-                </ul>
-            </div>
-            """
-    
-    html_content += "</div>"
-    
-    return {
-        "status": "success",
-        "conteudo": html_content,
-        "gabarito": "1-B, 2-C, 3-A... (Gerado pelo IO Zios AI)",
-        "metadata": {"source": "IO Zios AI Guardian Module"}
-    }
+    """ Gera uma prova utilizando a API nativa do Gemini 2.5-Flash """
+    try:
+        dados = {
+            'tema': req.tema,
+            'nivel_ensino': req.nivel,
+            'dificuldade': req.dificuldade,
+            'quantidade_questoes': req.qtd_questoes,
+            'tipo_questoes': ', '.join(req.tipo_questoes)
+        }
+        
+        # Chama o Cérebro Real (PentaIA / Gemini)
+        prova_output = await gerar_prova_ia(dados)
+        
+        # Converte o Output JSON do Gemini num HTML formatado de visualização (opcional)
+        html_content = f'''
+        <div class="prova-header">
+            <h3>{prova_output.titulo_sugerido}</h3>
+            <p><strong>Nível:</strong> {req.nivel} | <strong>Dificuldade:</strong> {req.dificuldade.title()}</p>
+        </div>
+        <hr class="my-4">
+        <div class="questoes space-y-6">
+        '''
+        
+        gabaritos = []
+        for i, q in enumerate(prova_output.questoes, 1):
+            html_content += f'<div class="questao mb-4"><p class="font-bold text-gray-800">{i}. {q.enunciado}</p>'
+            if q.alternativas:
+                html_content += '<ul class="list-none space-y-1 ml-4 text-sm">'
+                for alt in q.alternativas:
+                    html_content += f'<li>{alt}</li>'
+                html_content += '</ul>'
+            html_content += '</div>'
+            gabaritos.append(f"{i}-{q.resposta_correta} ({q.explicacao})")
+            
+        html_content += "</div>"
+        
+        return {
+            "status": "success",
+            "conteudo": html_content,
+            "gabarito": " | ".join(gabaritos),
+            "metadata": {"source": "IO Zios AI Guardian Module"}
+        }
+        
+    except Exception as e:
+        traceback.print_exc()
+        return {
+            "status": "error",
+            "conteudo": f"Erro na Gênese Cognitiva: {str(e)}",
+            "metadata": {"source": "PentaIA Engine"}
+        }
 
 @router.post("/lesson_plan")
 async def generate_lesson_plan(req: LessonPlanRequest):

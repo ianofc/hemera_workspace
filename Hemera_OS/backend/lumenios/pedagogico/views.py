@@ -230,6 +230,57 @@ def gradebook(request):
     }
     return JsonResponse(context, safe=False)
 
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def update_nota(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            aluno_id = data.get('aluno_id')
+            atividade_id = data.get('atividade_id')
+            valor = data.get('valor')
+            
+            if valor == '' or valor is None:
+                Nota.objects.filter(aluno_id=aluno_id, atividade_id=atividade_id).delete()
+            else:
+                nota, _ = Nota.objects.update_or_create(
+                    aluno_id=aluno_id,
+                    atividade_id=atividade_id,
+                    defaults={'valor': float(valor)}
+                )
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@csrf_exempt
+def add_atividade(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            turma_id = data.get('turma_id')
+            titulo = data.get('titulo')
+            
+            turma = Turma.objects.get(id=turma_id)
+            disciplina = turma.disciplina_set.first()
+            if not disciplina:
+                disciplina, _ = Disciplina.objects.get_or_create(nome="Geral", turma=turma)
+                
+            from django.utils import timezone
+            nova_ativ = Atividade.objects.create(
+                turma=turma,
+                disciplina=disciplina,
+                titulo=titulo,
+                descricao=f"Criada pelo professor via Painel",
+                data_entrega=timezone.now()
+            )
+            return JsonResponse({'status': 'success', 'atividade_id': nova_ativ.id})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error'}, status=405)
+
 # ==============================================================================
 # 4. FERRAMENTAS & OUTROS
 # ==============================================================================

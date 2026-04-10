@@ -14,6 +14,7 @@ import { Materials } from './pages/shared/Materials';
 import { Courses } from './pages/shared/Courses';
 import { ZeusAI } from './pages/shared/ZeusAI';
 import { Gradebook } from './pages/teacher/Gradebook';
+import { QuestionBank } from './pages/teacher/QuestionBank';
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function App() {
               <Route path="/teacher/library" element={<Library view="teacher" />} />
               <Route path="/teacher/materials" element={<Materials view="teacher" />} />
               <Route path="/teacher/gradebook" element={<Gradebook />} />
+              <Route path="/teacher/questions" element={<QuestionBank />} />
               <Route path="/teacher/upload" element={<VideoPlayer mode="upload" />} />
             </Route>
 

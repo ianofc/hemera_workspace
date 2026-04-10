@@ -16,6 +16,8 @@ urlpatterns = [
     
     # Ferramentas
     path('gradebook/', views.gradebook, name='gradebook'),
+    path('gradebook/update/', views.update_nota, name='update_nota'),
+    path('gradebook/add-activity/', views.add_atividade, name='add_atividade'),
     path('ferramentas/atividades/', views.gerador_atividades, name='gerador_atividades'),
     path('ferramentas/provas/', views.gerador_provas, name='gerador_provas'),
     path('ferramentas/planejamento/', views.gerador_planejamentos, name='gerador_planejamentos'), # ADICIONADO

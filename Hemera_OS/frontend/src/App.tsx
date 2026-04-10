@@ -13,6 +13,7 @@ import { VideoPlayer } from './pages/shared/VideoPlayer';
 import { Materials } from './pages/shared/Materials';
 import { Courses } from './pages/shared/Courses';
 import { ZeusAI } from './pages/shared/ZeusAI';
+import { Gradebook } from './pages/teacher/Gradebook';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ function App() {
               <Route path="/teacher/courses" element={<Courses view="teacher" />} />
               <Route path="/teacher/library" element={<Library view="teacher" />} />
               <Route path="/teacher/materials" element={<Materials view="teacher" />} />
+              <Route path="/teacher/gradebook" element={<Gradebook />} />
               <Route path="/teacher/upload" element={<VideoPlayer mode="upload" />} />
             </Route>
 

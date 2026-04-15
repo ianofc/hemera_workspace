@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # O Coração: Base de Dados Relacional
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+
+  # O Motor: Backend Django (API)
+  backend:
+    build: ./Hemera_OS/backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./Hemera_OS/backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file: .env
+
+  # A Mente: PentaIA (FastAPI)
+  pentaia:
+    build: ./Hemera_OS/pentaia
+    command: uvicorn fastapi_service.main:app --host 0.0.0.0 --port 8001
+    volumes:
+      - ./Hemera_OS/pentaia:/app
+    ports:
+      - "8001:8001"
+    env_file: .env
+
+  # A Vitrine: Frontend React (Vite)
+  frontend:
+    build: ./Hemera_OS/frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Hemera_OS/frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_AI_URL=http://localhost:8001
+
+volumes:
+  postgres_data:

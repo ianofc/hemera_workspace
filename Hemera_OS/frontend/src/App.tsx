@@ -1,56 +1,45 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { AnimatePresence } from 'framer-motion';
-
-import { MainLayout } from './components/layout/MainLayout';
-import { AuthLayout } from './components/layout/AuthLayout';
-
-import { Login } from './pages/auth/Login';
-import { StudentDashboard } from './pages/student/Dashboard';
-import { TeacherDashboard } from './pages/teacher/Dashboard';
-import { Library } from './pages/shared/Library';
-import { VideoPlayer } from './pages/shared/VideoPlayer';
-import { Materials } from './pages/shared/Materials';
-import { Courses } from './pages/shared/Courses';
-import { ZeusAI } from './pages/shared/ZeusAI';
-import { Gradebook } from './pages/teacher/Gradebook';
-import { QuestionBank } from './pages/teacher/QuestionBank';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import Index from "./pages/Index";
+import AlunoDashboard from "./pages/AlunoDashboard";
+import ProfessorDashboard from "./pages/ProfessorDashboard";
+import SalaDeAula from "./pages/SalaDeAula";
+import Biblioteca from "./pages/Biblioteca";
+import CrecheDashboard from "./pages/CrecheDashboard";
+import FundamentalDashboard from "./pages/FundamentalDashboard";
+import MedioDashboard from "./pages/MedioDashboard";
+import GraduacaoDashboard from "./pages/GraduacaoDashboard";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route element={<AuthLayout />}>
-              <Route path="/login" element={<Login />} />
-            </Route>
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/creche" element={<CrecheDashboard />} />
+          <Route path="/fundamental" element={<FundamentalDashboard />} />
+          <Route path="/medio" element={<MedioDashboard />} />
+          <Route path="/graduacao" element={<GraduacaoDashboard />} />
+          <Route path="/aluno" element={<AlunoDashboard />} />
+          <Route path="/disciplinas" element={<AlunoDashboard />} />
+          <Route path="/desempenho" element={<AlunoDashboard />} />
+          <Route path="/biblioteca" element={<Biblioteca />} />
+          <Route path="/sala-de-aula/:id" element={<SalaDeAula />} />
+          <Route path="/professor" element={<ProfessorDashboard />} />
+          <Route path="/professor/*" element={<ProfessorDashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
-            <Route element={<MainLayout />}>
-              <Route path="/student" element={<StudentDashboard />} />
-              <Route path="/student/courses" element={<Courses view="student" />} />
-              <Route path="/student/library" element={<Library view="student" />} />
-              <Route path="/student/materials" element={<Materials view="student" />} />
-              <Route path="/student/watch/:lessonId" element={<VideoPlayer />} />
-              <Route path="/student/zeus" element={<ZeusAI />} />
-
-              <Route path="/teacher" element={<TeacherDashboard />} />
-              <Route path="/teacher/courses" element={<Courses view="teacher" />} />
-              <Route path="/teacher/library" element={<Library view="teacher" />} />
-              <Route path="/teacher/materials" element={<Materials view="teacher" />} />
-              <Route path="/teacher/gradebook" element={<Gradebook />} />
-              <Route path="/teacher/questions" element={<QuestionBank />} />
-              <Route path="/teacher/upload" element={<VideoPlayer mode="upload" />} />
-            </Route>
-
-            <Route path="/" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </AnimatePresence>
-      </Router>
-    </QueryClientProvider>
-  );
-}
-
-export default App
+export default App;

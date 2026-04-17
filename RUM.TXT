@@ -4,3 +4,30 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/ianofc/hemera_workspace.git
 git push -u origin main
+
+uvicorn fastapi_service.main:app --reload --port 8003
+
+python scp.py
+
+python manage.py runserver 8002
+
+docker run -d -p 6380:6380 --name redis-bird redis
+
+docker start redis-bird
+
+pip install -r requirements.txt
+
+docker-compose restart django
+
+python run_tas.py
+
+docker compose up --build
+
+docker rm -f redis-bird
+
+docker-compose exec bird-app python manage.py makemigrations
+
+docker-compose exec bird-app python manage.py migrate
+
+docker-compose up -d --build frontend
+

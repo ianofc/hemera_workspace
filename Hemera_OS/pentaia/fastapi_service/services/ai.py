@@ -1,65 +1,27 @@
-# fastapi_service/services/ai.py
 import os
-import google.generativeai as genai
-from ..schemas import AnalisePedagogicaOutput, ProvaGeradaOutput
+from google import genai
 
-# Configuração
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY não encontrada nas variáveis de ambiente.")
+# Inicializa o cliente com a nova arquitetura do Google GenAI
+# Certifique-se de que a variável de ambiente GEMINI_API_KEY está configurada no seu docker-compose.yml ou .env
+api_key = os.environ.get("GEMINI_API_KEY")
+client = genai.Client(api_key=api_key)
 
-genai.configure(api_key=GOOGLE_API_KEY)
+def generate_text(prompt: str) -> str:
+    """Função base para gerar textos genéricos (Corrigindo o ImportError)"""
+    if not api_key:
+        return "Erro: Chave da API do Gemini não configurada."
+        
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash', # Modelo atualizado e rápido
+            contents=prompt,
+        )
+        return response.text
+    except Exception as e:
+        print(f"Falha de Conexão PentaIA: {e}")
+        return "Erro interno ao processar a inteligência da PentaIA."
 
-# Modelo Otimizado para JSON (Usando 2.5-flash conforme seu log)
-model = genai.GenerativeModel(
-    'gemini-2.5-flash', 
-    generation_config={"response_mime_type": "application/json"}
-)
-
-async def gerar_analise_aluno(dados: dict) -> AnalisePedagogicaOutput:
-    prompt = f"""
-    Atue como um Coordenador Pedagógico sênior. Analise os dados deste aluno:
-    Aluno: {dados['nome_aluno']} ({dados['turma']})
-    Média: {dados['media_atual']}
-    Frequência: {dados['frequencia_percentual']}%
-    Histórico Notas: {dados['historico_notas']}
-    Obs: {dados['observacoes_recentes']}
-
-    Gere um relatório JSON estrito seguindo este schema:
-    {{
-        "resumo_desempenho": "texto",
-        "pontos_fortes": ["item1", "item2"],
-        "pontos_atencao": ["item1", "item2"],
-        "sugestoes_acao": ["acao1", "acao2", "acao3"],
-        "risco_evasao": "Baixo/Médio/Alto"
-    }}
-    """
-    
-    response = await model.generate_content_async(prompt)
-    # O Pydantic fará a validação final se o JSON está correto
-    return AnalisePedagogicaOutput.model_validate_json(response.text)
-
-async def gerar_prova_ia(dados: dict) -> ProvaGeradaOutput:
-    prompt = f"""
-    Crie uma prova escolar sobre: {dados['tema']}
-    Nível: {dados['nivel_ensino']}
-    Dificuldade: {dados['dificuldade']}
-    Qtd: {dados['quantidade_questoes']}
-    Tipo: {dados['tipo_questoes']}
-
-    Retorne APENAS JSON válido neste formato:
-    {{
-        "titulo_sugerido": "Título da Prova",
-        "questoes": [
-            {{
-                "enunciado": "Pergunta...",
-                "alternativas": ["A) ...", "B) ..."] (ou null se discursiva),
-                "resposta_correta": "A",
-                "explicacao": "Breve explicação"
-            }}
-        ]
-    }}
-    """
-    
-    response = await model.generate_content_async(prompt)
-    return ProvaGeradaOutput.model_validate_json(response.text)
+def gerar_prova_ia(tema: str, dificuldade: str, contexto: str = "") -> str:
+    """Gera uma avaliação baseada no currículo escolar"""
+    prompt = f"Atue como um educador focado em validação de conhecimento. Crie uma avaliação sobre {tema} com nível de dificuldade '{dificuldade}'. Contexto adicional: {contexto}"
+    return generate_text(prompt)

@@ -1,0 +1,63 @@
+# Node and package distributions
+node_modules/
+dist/
+dist-ssr/
+build/
+.npm/
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Databases and Volumes
+postgres_data/
+*.sqlite3
+db.sqlite3
+*.db
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Huge Backup / Unzipped folders (To prevent >100MB pushes)
+athenes/
+athenes-main/
+cortex/
+cortex_gestaoeduc-main/
+gestao_alunos-main (1)/
+heimdall/
+hemera-school-hub-main (2)/
+iris/
+lumen/
+lumen-main/
+lumenios/
+niocortex_saas-main (3)/
+saasgestao_escolar-main/
+
+# IDE and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-google-genai
-python-dotenv
-sqlalchemy
-psycopg2-binary
-vecs
-python-multipart

@@ -1,9 +1,0 @@
-__pycache__
-*.pyc
-chromedriver.exe
-./chromedriver
-venv
-test.py
-test.html
-.env
-feat.txt

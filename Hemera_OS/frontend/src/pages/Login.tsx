@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useLyv } from "@/contexts/LyvContext";
+import { useHemera } from "@/contexts/HemeraContext";
 import { authService } from "@/services/api";
 import { 
   Lock, User, ArrowRight, Loader2, AlertCircle, Eye, EyeOff, 
   ShieldCheck, Sparkles, Heart, MessageCircle, Repeat, Share2, 
-  Bookmark, MoreHorizontal
+  Bookmark, MoreHorizontal, Sun
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -22,12 +22,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const LyvIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M22 6c0-2.2-2-4-4-4-.8 0-2 .4-3 1-2-1-5-1-7 0a4 4 0 0 0-3-1 4 4 0 0 0-3 3 8 8 0 0 0 0 10c0 2.2 2 4 4 4 .8 0 2-.4 3-1 2 1 5 1 7 0a4 4 0 0 0 3-1 4 4 0 0 0 3-3V6z" />
-    <path d="M14 9h.01" /><path d="M10 9h.01" /><path d="M12 14c1.5 0 2.5-.5 2.5-1.5" />
-  </svg>
-);
+
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -36,7 +31,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  const { login } = useLyv();
+  const { login } = useHemera();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,9 +60,9 @@ export default function Login() {
       
       {/* Background Aurora */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-cyan-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" />
-        <div className="absolute top-1/4 -right-40 w-[500px] h-[500px] bg-blue-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse delay-1000" />
-        <div className="absolute -bottom-40 left-1/4 w-[600px] h-[600px] bg-purple-200/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse delay-2000" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-amber-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" />
+        <div className="absolute top-1/4 -right-40 w-[500px] h-[500px] bg-orange-200/40 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse delay-1000" />
+        <div className="absolute -bottom-40 left-1/4 w-[600px] h-[600px] bg-sky-200/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse delay-2000" />
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
       </div>
 
@@ -91,7 +86,7 @@ export default function Login() {
              {/* Header do App */}
              <div className="relative z-10 pt-10 px-5 pb-3 flex items-center justify-between">
                 <h2 className="font-black text-slate-800 text-xl tracking-tight flex items-center gap-1">
-                  Lyv
+                  Hemera
                 </h2>
                 <div className="flex gap-3 text-slate-600">
                   <Heart className="w-5 h-5" />
@@ -126,9 +121,9 @@ export default function Login() {
                         </Avatar>
                         <div className="flex flex-col">
                           <span className="font-bold text-[13px] text-slate-900 flex items-center gap-1">
-                            Sistema LYV <Sparkles className="w-3 h-3 text-amber-500 fill-amber-500" />
+                            Hemera OS <Sparkles className="w-3 h-3 text-amber-500 fill-amber-500" />
                           </span>
-                          <span className="text-[10px] text-slate-500">@lyv_admin • Agora</span>
+                          <span className="text-[10px] text-slate-500">@hemera_admin • Agora</span>
                         </div>
                       </div>
                       <MoreHorizontal className="w-4 h-4 text-slate-400" />
@@ -136,7 +131,7 @@ export default function Login() {
                     
                     {/* Texto */}
                     <p className="text-[13px] text-slate-700 leading-tight mb-3">
-                      O sistema LYV está oficialmente operacional. Explorando as novas capacidades do layout em mosaico! 🦅 <span className="text-cyan-600 font-medium">#Soberania</span>
+                      O ecossistema educacional Hemera está oficialmente operacional. Explorando as novas capacidades do layout em mosaico! 🦅 <span className="text-amber-600 font-medium">#Educação</span>
                     </p>
 
                     {/* Mosaico de Imagens */}
@@ -180,15 +175,15 @@ export default function Login() {
             transition={{ duration: 0.5 }}
             className="relative w-full bg-white/70 backdrop-blur-2xl border border-white shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-[2.5rem] overflow-hidden"
           >
-            <div className="absolute opacity-40 -inset-1 bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-blue-400/20 rounded-[2rem] blur-xl -z-10" />
+            <div className="absolute opacity-40 -inset-1 bg-gradient-to-r from-amber-400/20 via-orange-400/20 to-sky-400/20 rounded-[2rem] blur-xl -z-10" />
 
             <div className="px-8 pt-10 pb-6 text-center relative z-10">
-              <div className="relative inline-flex items-center justify-center w-16 h-16 mb-6 shadow-xl rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 shadow-cyan-500/30">
-                <LyvIcon className="relative z-10 w-8 h-8 text-white" />
+              <div className="relative inline-flex items-center justify-center w-16 h-16 mb-6 shadow-xl rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-500/30">
+                <Sun className="relative z-10 w-8 h-8 text-white" />
                 <Sparkles className="absolute w-4 h-4 text-yellow-300 -top-1 -right-1 animate-pulse" />
               </div>
-              <h1 className="mb-2 text-2xl font-black text-slate-800 tracking-tight">Bem-vindo ao Lyv</h1>
-              <p className="text-sm font-medium text-slate-500">SISTEMA OPERATIVO DE VIDA</p>
+              <h1 className="mb-2 text-2xl font-black text-slate-800 tracking-tight">Bem-vindo ao Hemera</h1>
+              <p className="text-sm font-medium text-slate-500">SISTEMA OPERATIVO EDUCACIONAL</p>
             </div>
 
             <div className="px-8 pb-8 relative z-10">
@@ -208,7 +203,7 @@ export default function Login() {
                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
                       type="text" placeholder="Utilizador ou e-mail" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading} required
-                      className="w-full h-12 pl-12 pr-4 transition-all shadow-sm bg-white/80 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-500/10 disabled:opacity-50 text-sm font-medium"
+                      className="w-full h-12 pl-12 pr-4 transition-all shadow-sm bg-white/80 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 disabled:opacity-50 text-sm font-medium"
                     />
                   </div>
                 </div>
@@ -221,7 +216,7 @@ export default function Login() {
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
                       type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} required
-                      className="w-full h-12 pl-12 pr-12 transition-all shadow-sm bg-white/80 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-500/10 disabled:opacity-50 text-sm font-medium"
+                      className="w-full h-12 pl-12 pr-12 transition-all shadow-sm bg-white/80 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 disabled:opacity-50 text-sm font-medium"
                     />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute p-2 transition-colors -translate-y-1/2 rounded-lg right-2 top-1/2 text-slate-400 hover:text-slate-600">
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -229,7 +224,7 @@ export default function Login() {
                   </div>
                 </div>
 
-                <Button type="submit" disabled={isLoading || !username || !password} className="w-full h-12 mt-2 font-bold text-white transition-all duration-300 shadow-lg bg-purple-600 hover:bg-purple-700 rounded-xl shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed group border-0">
+                <Button type="submit" disabled={isLoading || !username || !password} className="w-full h-12 mt-2 font-bold text-white transition-all duration-300 shadow-lg bg-amber-500 hover:bg-amber-600 rounded-xl shadow-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed group border-0">
                   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Iniciar Sessão"}
                 </Button>
               </form>
@@ -244,7 +239,7 @@ export default function Login() {
               </button>
 
               <div className="mt-5 text-center">
-                <Link to="/forgot-password" className="text-xs font-bold transition-colors text-purple-600 hover:text-purple-700">
+                <Link to="/forgot-password" className="text-xs font-bold transition-colors text-amber-600 hover:text-amber-700">
                   Esqueceu-se da palavra-chave?
                 </Link>
               </div>
@@ -259,7 +254,7 @@ export default function Login() {
           <div className="mt-6 text-center bg-white/50 backdrop-blur-sm py-3 px-6 rounded-xl border border-white/50 shadow-sm inline-block mx-auto w-full">
             <p className="text-sm font-medium text-slate-600">
               Não tem uma conta?{' '}
-              <Link to="/signup" className="font-bold text-purple-600 hover:text-purple-700 transition-colors underline decoration-purple-300 underline-offset-4">
+              <Link to="/signup" className="font-bold text-amber-600 hover:text-amber-700 transition-colors underline decoration-amber-300 underline-offset-4">
                 Registe-se
               </Link>
             </p>

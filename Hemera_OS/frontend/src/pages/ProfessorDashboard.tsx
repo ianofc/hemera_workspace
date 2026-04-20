@@ -77,6 +77,47 @@ const ProfessorDashboard = () => {
           </div>
         </section>
 
+        {/* ZIOS Proactive Alert Card */}
+        <div className="relative overflow-hidden glass-card rounded-[2rem] shadow-glass p-8 border border-primary/30 bg-background/40 transform transition-all hover:scale-[1.01] animate-fade-in-up">
+          <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-primary/15 blur-3xl -translate-y-1/2 translate-x-1/4 animate-pulse-slow" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-accent/10 blur-2xl translate-y-1/2 -translate-x-1/4" />
+          
+          <div className="relative z-10 flex flex-col items-start gap-6 md:flex-row md:items-center">
+            <div className="flex items-center justify-center shadow-inner w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 text-primary border border-primary/20">
+              <i className="text-2xl fas fa-brain animate-pulse-slow" />
+            </div>
+            
+            <div className="flex-1">
+              <h3 className="flex items-center gap-3 text-xl font-bold text-foreground font-display">
+                PentaIA
+                <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] uppercase tracking-wider font-bold border border-primary/20">
+                  <i className="mr-1 fas fa-bolt" /> ZIOS Ativo
+                </span>
+              </h3>
+              <p className="mt-2 leading-relaxed text-muted-foreground">
+                Bom dia, Professor. Identifiquei que você tem <strong className="text-foreground">3 aulas hoje</strong>. 
+                O material de revisão de <span className="text-primary font-bold">Matemática (9º Ano)</span> e <span className="text-secondary font-bold">Física (8º Ano)</span> já foi gerado na sua Oficina com base nas dificuldades do último teste.
+              </p>
+              
+              <div className="flex flex-wrap gap-3 mt-5">
+                <button className="px-5 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-xl shadow-neon hover:bg-primary/90 transition-all hover:-translate-y-0.5">
+                  <i className="mr-2 fas fa-print" /> Imprimir Guiões
+                </button>
+                <button className="px-5 py-2.5 bg-card/60 backdrop-blur-md text-foreground border border-border text-sm font-bold rounded-xl hover:bg-muted transition-all hover:-translate-y-0.5">
+                  <i className="mr-2 fas fa-desktop" /> Enviar para Lousa Digital
+                </button>
+              </div>
+            </div>
+            
+            <div className="hidden pl-6 border-l md:block border-border/50">
+               <div className="text-center">
+                 <p className="text-3xl font-bold font-display text-primary">100%</p>
+                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mt-1">Sincronizado</p>
+               </div>
+            </div>
+          </div>
+        </div>
+
         {/* Grade Horária */}
         <div className="glass-card rounded-[2.5rem] shadow-glass overflow-hidden">
           <div className="flex flex-col items-center justify-between gap-4 p-6 border-b border-primary/10 sm:flex-row">

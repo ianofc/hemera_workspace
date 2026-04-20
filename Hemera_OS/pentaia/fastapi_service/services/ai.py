@@ -1,20 +1,18 @@
 import os
 from google import genai
 
-# Inicializa o cliente com a nova arquitetura do Google GenAI
-# Certifique-se de que a variável de ambiente GEMINI_API_KEY está configurada no seu docker-compose.yml ou .env
 api_key = os.environ.get("GEMINI_API_KEY")
-client = genai.Client(api_key=api_key)
 
 def generate_text(prompt: str) -> str:
-    """Função base para gerar textos genéricos (Corrigindo o ImportError)"""
+    """Função base para gerar textos genéricos"""
     if not api_key:
-        return "Erro: Chave da API do Gemini não configurada."
+        return "Erro: Chave da API do Gemini não configurada na PentaIA."
         
     try:
+        client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model='gemini-2.5-flash', # Modelo atualizado e rápido
-            contents=prompt,
+            model='gemini-2.5-flash',
+            contents=prompt
         )
         return response.text
     except Exception as e:

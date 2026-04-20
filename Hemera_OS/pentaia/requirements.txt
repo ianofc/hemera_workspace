@@ -5,5 +5,5 @@ python-multipart
 Requests
 python-dotenv
 openai
-google-generativeai
+google-genai
 sqlalchemy

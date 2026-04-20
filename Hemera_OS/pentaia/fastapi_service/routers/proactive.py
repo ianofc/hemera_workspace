@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, Any
 import random
 import logging
 
@@ -23,6 +23,12 @@ class ObservationResponse(BaseModel):
     message: str
     emotion: str
     source: str           # ZIOS, IRIS, HEIMDALL, TAS
+
+class PerformanceEvent(BaseModel):
+    aluno_id: int
+    turma_id: int
+    evento: Dict[str, Any]
+
 
 # --- HEIMDALL SECURITY CORE (Integrado) ---
 
@@ -136,3 +142,29 @@ async def observe_user(ctx: ContextInput):
         "emotion": "idle",
         "source": "SYSTEM"
     }
+
+# --- TAS PREDITIVO (INTEGRAÇÃO DJANGO) ---
+
+@router.post("/analyze-performance")
+async def analyze_performance_trigger(payload: PerformanceEvent):
+    """
+    Acionado via webhook invisível do Django sempre que uma Nota ou Frequência é postada.
+    Aqui é onde o TAS analisa os dados frios e emite um alerta se necessário.
+    """
+    logger.info(f"TAS Analysis Triggered for Aluno {payload.aluno_id} in Turma {payload.turma_id}")
+    evento = payload.evento
+    tipo = evento.get("tipo")
+    
+    # Simulação básica da regra de negócio do TAS
+    if tipo == "nota":
+        valor = evento.get("valor", 10.0)
+        if valor < 5.0:
+            logger.warning(f"🚨 [TAS Alert] Nota vermelha detectada ({valor}). Gerando trilha de reforço para Aluno {payload.aluno_id}.")
+            return {"status": "analyzed", "risk": "HIGH", "action": "trigger_intervention"}
+            
+    elif tipo == "falta":
+        logger.warning(f"🚨 [TAS Alert] Falta registrada para Aluno {payload.aluno_id}. Analisando taxa de evasão.")
+        return {"status": "analyzed", "risk": "MEDIUM", "action": "notify_guardian"}
+
+    logger.info(f"TAS Analysis Complete. Normal behavior for Aluno {payload.aluno_id}.")
+    return {"status": "analyzed", "risk": "LOW"}

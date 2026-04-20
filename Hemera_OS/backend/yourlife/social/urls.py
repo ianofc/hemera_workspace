@@ -36,7 +36,7 @@ urlpatterns = [
     path('talkio/', chat.chat_view, name='talkio_app'),
 
     # --- PERFIL & CONFIGURAÇÕES ---
-    path('profile/me/', profile.profile_detail, {'username': 'me'}, name='meu_perfil'),
+    path('profile/me/', profile.meu_perfil, name='meu_perfil'),
     path('profile/<str:username>/', profile.profile_detail, name='profile_detail'),
     path('settings/', general.settings_view, name='settings_page'),
     path('support/', general.support_view, name='support_page'),

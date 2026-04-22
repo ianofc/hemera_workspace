@@ -15,7 +15,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import { HemeraProvider } from "./contexts/HemeraContext";
+import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -23,10 +23,14 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <HemeraProvider>
+      <AuthProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
+        future={{ 
+            v7_startTransition: true, 
+            v7_relativeSplatPath: true 
+          }}
           <Routes>
             {/* Rotas Públicas */}
             <Route path="/login" element={<Login />} />
@@ -39,21 +43,21 @@ const App = () => (
             <Route path="/medio" element={<ProtectedRoute><MedioDashboard /></ProtectedRoute>} />
             <Route path="/graduacao" element={<ProtectedRoute><GraduacaoDashboard /></ProtectedRoute>} />
             
-            <Route path="/aluno" element={<ProtectedRoute><AlunoDashboard /></ProtectedRoute>} />
-            <Route path="/disciplinas" element={<ProtectedRoute><AlunoDashboard /></ProtectedRoute>} />
-            <Route path="/desempenho" element={<ProtectedRoute><AlunoDashboard /></ProtectedRoute>} />
+            <Route path="/aluno" element={<ProtectedRoute requireRole="aluno"><AlunoDashboard /></ProtectedRoute>} />
+            <Route path="/disciplinas" element={<ProtectedRoute requireRole="aluno"><AlunoDashboard /></ProtectedRoute>} />
+            <Route path="/desempenho" element={<ProtectedRoute requireRole="aluno"><AlunoDashboard /></ProtectedRoute>} />
             <Route path="/biblioteca" element={<ProtectedRoute><Biblioteca /></ProtectedRoute>} />
             <Route path="/sala-de-aula/:id" element={<ProtectedRoute><SalaDeAula /></ProtectedRoute>} />
             
-            <Route path="/professor" element={<ProtectedRoute><ProfessorDashboard /></ProtectedRoute>} />
-            <Route path="/professor/*" element={<ProtectedRoute><ProfessorDashboard /></ProtectedRoute>} />
+            <Route path="/professor" element={<ProtectedRoute requireRole="professor"><ProfessorDashboard /></ProtectedRoute>} />
+            <Route path="/professor/*" element={<ProtectedRoute requireRole="professor"><ProfessorDashboard /></ProtectedRoute>} />
             
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </HemeraProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

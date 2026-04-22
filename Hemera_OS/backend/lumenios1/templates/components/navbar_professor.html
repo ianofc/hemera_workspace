@@ -1,0 +1,61 @@
+
+<nav class="sticky top-0 z-50 w-full transition-all duration-300 border-b shadow-sm border-white/40 glass-nav">
+    <div class="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
+        
+        <a href="{% url 'lumenios:dashboard_professor' %}" class="flex items-center gap-3 group">
+            <div class="relative flex items-center justify-center w-10 h-10 text-white transition-transform rounded-xl bg-gradient-to-br from-aurora-secondary to-aurora-accent shadow-neon group-hover:scale-105">
+                <i class="text-lg fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-lg font-bold tracking-tight transition-colors text-slate-700 font-display group-hover:text-aurora-secondary">Lumenios</span>
+                <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-slate-400">Portal do Docente</span>
+            </div>
+        </a>
+
+        <div class="hidden md:flex items-center bg-white/50 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/50 shadow-inner gap-1">
+            <a href="{% url 'lumenios:dashboard_professor' %}" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-secondary hover:bg-white">
+                <i class="fas fa-layer-group"></i> Painel
+            </a>
+            {% if 'pedagogico:listar_turmas' %}
+            <a href="{% url 'pedagogico:listar_turmas' %}" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-secondary hover:bg-white">
+                <i class="fas fa-users"></i> Turmas
+            </a>
+            {% endif %}
+            <a href="#" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-secondary hover:bg-white">
+                <i class="fas fa-calendar-alt"></i> Planejamento
+            </a>
+            <a href="#" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-secondary hover:bg-white">
+                <i class="fas fa-clipboard-check"></i> Avaliações
+            </a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button class="flex items-center justify-center w-10 h-10 transition border border-white rounded-full shadow-sm bg-white/60 hover:bg-white text-slate-500 hover:text-aurora-secondary">
+                <i class="fas fa-inbox"></i>
+            </button>
+            
+            <div class="relative pl-4 border-l border-slate-200" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center gap-3 group">
+                    <div class="hidden text-right lg:block">
+                        <p class="text-xs font-bold text-slate-700">{{ user.first_name }}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Professor</p>
+                    </div>
+                    <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ user.first_name }}&background=a855f7&color=fff{% endif %}" 
+                         class="object-cover w-10 h-10 transition-colors border-2 border-white shadow-sm rounded-xl group-hover:border-aurora-secondary">
+                </button>
+
+                <div x-show="open" @click.away="open = false" 
+                     class="absolute right-0 w-56 p-2 space-y-1 transition-all origin-top-right transform border shadow-xl top-12 bg-white/90 backdrop-blur-xl rounded-2xl border-white/50"
+                     style="display: none;">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-slate-600 hover:bg-slate-100 hover:text-aurora-secondary">
+                        <i class="w-4 fas fa-user-tie"></i> Meu Perfil
+                    </a>
+                    <div class="h-px my-1 bg-slate-100"></div>
+                    <a href="{% url 'yourlife_social:logout' %}" class="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-aurora-danger hover:bg-red-50">
+                        <i class="w-4 fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

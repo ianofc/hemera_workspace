@@ -1,15 +1,17 @@
-const AuroraBackground = () => (
-  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-    <div className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] rounded-full mix-blend-multiply blur-[120px] opacity-30 animate-float bg-secondary" />
-    <div
-      className="absolute top-[10%] -right-[10%] w-[500px] h-[500px] rounded-full mix-blend-multiply blur-[120px] opacity-30 animate-float bg-primary"
-      style={{ animationDelay: "2s" }}
-    />
-    <div
-      className="absolute -bottom-[10%] left-[20%] w-[600px] h-[600px] rounded-full mix-blend-multiply blur-[120px] opacity-30 animate-float bg-accent"
-      style={{ animationDelay: "4s" }}
-    />
-  </div>
-);
+import React from 'react';
 
-export default AuroraBackground;
+// O segredo está aqui: "export const" (Exportação nomeada)
+export const AuroraBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="min-h-screen w-full bg-[#FAFAFA] relative overflow-hidden">
+      {/* Efeito Blur Flutuante */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+      
+      {/* Conteúdo Glassmorphism */}
+      <div className="relative z-10 w-full h-full">
+        {children}
+      </div>
+    </div>
+  );
+};

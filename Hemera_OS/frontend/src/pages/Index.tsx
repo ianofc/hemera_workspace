@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import AuroraBackground from "@/components/layout/AuroraBackground";
+import { AuroraBackground } from "@/components/layout/AuroraBackground";
 
 const niveis = [
   {

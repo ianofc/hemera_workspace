@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import AppLayout from "@/components/layout/AppLayout";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const crianças = [
   { id: 1, nome: "Helena S.", avatar: "Helena", idade: "2 anos", turma: "Turma Girassol" },

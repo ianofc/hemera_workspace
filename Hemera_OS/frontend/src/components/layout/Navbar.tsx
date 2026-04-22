@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavItem {
   label: string;
@@ -27,13 +28,20 @@ const professorNav: NavItem[] = [
 
 const Navbar = ({ role }: NavbarProps) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { profile, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const navItems = role === "aluno" ? alunoNav : professorNav;
   const isAluno = role === "aluno";
 
   const logoIcon = isAluno ? "fas fa-atom" : "fas fa-chalkboard-teacher";
   const subtitle = isAluno ? "Ambiente do Aluno" : "Portal do Docente";
   const homePath = isAluno ? "/" : "/professor";
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full transition-all duration-300 shadow-sm glass-nav">
@@ -86,14 +94,14 @@ const Navbar = ({ role }: NavbarProps) => {
             >
               <div className="hidden text-right lg:block">
                 <p className="text-xs font-bold text-foreground">
-                  {isAluno ? "Estudante" : "Professor"}
+                  {profile?.full_name || (isAluno ? "Estudante" : "Professor")}
                 </p>
                 <p className="text-[10px] text-muted-foreground font-bold uppercase">
-                  {isAluno ? "Matriculado" : "Docente"}
+                  {profile?.school_name || (isAluno ? "Matriculado" : "Docente")}
                 </p>
               </div>
               <img
-                src={`https://ui-avatars.com/api/?name=${isAluno ? "Aluno" : "Prof"}&background=${isAluno ? "6366f1" : "a855f7"}&color=fff`}
+                src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || (isAluno ? "Aluno" : "Prof")}&background=${isAluno ? "6366f1" : "a855f7"}&color=fff`}
                 alt="Avatar"
                 className="object-cover w-10 h-10 transition-colors border-2 border-card shadow-sm rounded-xl group-hover:border-primary"
               />
@@ -102,7 +110,7 @@ const Navbar = ({ role }: NavbarProps) => {
             {userMenuOpen && (
               <div className="absolute right-0 w-56 p-2 space-y-1 border shadow-xl top-12 bg-card/90 backdrop-blur-xl rounded-2xl border-border/50 z-50">
                 <Link
-                  to="#"
+                  to="/profile"
                   className="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-foreground hover:bg-muted hover:text-primary"
                   onClick={() => setUserMenuOpen(false)}
                 >
@@ -110,14 +118,17 @@ const Navbar = ({ role }: NavbarProps) => {
                   {isAluno ? "Carteirinha" : "Meu Perfil"}
                 </Link>
                 <Link
-                  to="#"
+                  to="/settings"
                   className="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-foreground hover:bg-muted hover:text-primary"
                   onClick={() => setUserMenuOpen(false)}
                 >
                   <i className="w-4 fas fa-cog" /> Configurações
                 </Link>
                 <div className="h-px my-1 bg-muted" />
-                <button className="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-destructive hover:bg-destructive/10 w-full">
+                <button 
+                  onClick={handleSignOut}
+                  className="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-destructive hover:bg-destructive/10 w-full text-left"
+                >
                   <i className="w-4 fas fa-sign-out-alt" /> Sair
                 </button>
               </div>
@@ -130,3 +141,4 @@ const Navbar = ({ role }: NavbarProps) => {
 };
 
 export default Navbar;
+

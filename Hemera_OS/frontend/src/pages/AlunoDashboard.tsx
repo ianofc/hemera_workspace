@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import AppLayout from "@/components/layout/AppLayout";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const disciplinasMock = [
   { id: 1, titulo: "Matemática Avançada", professor: "Prof. Silva", progresso: 68, imagem: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=400&q=80" },

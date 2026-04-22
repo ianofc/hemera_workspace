@@ -1,0 +1,43 @@
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    # --- Pessoal ---
+    cpf = models.CharField(max_length=14, blank=True, null=True, unique=True)
+    data_nascimento = models.DateField(null=True, blank=True)
+    genero = models.CharField(max_length=20, blank=True)
+    
+    # NOVOS CAMPOS (Correção do Erro de Coluna Inexistente)
+    cidade_natal = models.CharField(max_length=100, blank=True, null=True)
+    cidade_atual = models.CharField(max_length=100, blank=True, null=True)
+    
+    # --- Institucional ---
+    role = models.CharField("Cargo", max_length=20, null=True, blank=True) 
+    matricula = models.CharField(max_length=50, blank=True)
+    
+    # Chaves Estrangeiras (Lazy Reference para evitar import circular)
+    turma = models.ForeignKey('pedagogico.Turma', on_delete=models.SET_NULL, null=True, blank=True)
+    school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Multitenancy
+    tenant_type = models.CharField(max_length=20, null=True, blank=True)
+    tenant_id = models.CharField(max_length=100, blank=True, null=True)
+    
+    # --- Status & Mídia ---
+    is_premium = models.BooleanField(null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    capa = models.ImageField(upload_to='covers/', blank=True, null=True)
+    bio = models.TextField(blank=True)
+    
+    # --- Preferências & Contexto ---
+    hobby = models.CharField(max_length=100, blank=True)
+    visao_mundo = models.CharField(max_length=20, blank=True)
+    
+    # Menu & UX
+    nivel_ensino = models.CharField(max_length=20, null=True, blank=True) # superior, bebe, medio
+    fase_vida = models.CharField(max_length=20, null=True, blank=True) # ADULTO, BEBE
+
+class School(models.Model):
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=20)
+    def __str__(self): return self.nome

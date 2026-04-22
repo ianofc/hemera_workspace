@@ -1,4 +1,4 @@
-import AppLayout from "@/components/layout/AppLayout";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const bibliotecaMock = [
   { id: 1, titulo: "Álgebra Linear e Aplicações", autor: "Gilbert Strang", tipo: "PDF", categoria: "Matemática", imagem: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=300&q=80" },

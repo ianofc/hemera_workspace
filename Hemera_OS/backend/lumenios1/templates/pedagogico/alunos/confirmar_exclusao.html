@@ -1,0 +1,17 @@
+{% extends 'layouts/base_app.html' %}
+{% block title %}Confirmar Exclusão{% endblock %}
+{% block content %}
+<div class="max-w-md p-6 mx-auto mt-10 bg-white border border-red-100 shadow-sm rounded-xl">
+    <div class="text-center">
+        <i class="mb-4 text-4xl text-red-500 fas fa-exclamation-triangle"></i>
+        <h2 class="mb-2 text-xl font-bold text-gray-800">Excluir {{ tipo }}?</h2>
+        <p class="mb-6 text-gray-600">Tem certeza que deseja remover <strong>"{{ obj.nome }}"</strong>? Esta ação não pode ser desfeita.</p>
+        
+        <form method="POST" class="flex justify-center gap-3">
+            {% csrf_token %}
+            <a href="javascript:history.back()" class="px-5 py-2 font-bold text-gray-700 bg-gray-100 rounded-lg">Cancelar</a>
+            <button type="submit" class="px-5 py-2 font-bold text-white bg-red-600 rounded-lg hover:bg-red-700">Confirmar Exclusão</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

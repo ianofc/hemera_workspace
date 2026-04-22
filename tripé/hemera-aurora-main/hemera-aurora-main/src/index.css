@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hemera OS — Aurora Glass design system
+   Paleta: Aurora azul/roxo sobre off-white creme. Tudo HSL. */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 220 25% 98%;          /* off-white creme azulado */
+    --foreground: 222 47% 11%;          /* azul quase preto */
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Brand: Aurora Azul */
+    --primary: 230 75% 55%;             /* azul royal */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 245 80% 65%;        /* azul violeta luminoso */
+
+    /* Aurora Roxo */
+    --sun: 260 75% 60%;                 /* roxo aurora */
+    --sun-foreground: 0 0% 100%;
+    --sun-glow: 265 90% 75%;            /* violeta brilhante */
+
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 222 47% 16%;
+
+    --muted: 220 18% 94%;
+    --muted-foreground: 220 10% 40%;
+
+    --accent: 260 60% 96%;               /* lavanda suave */
+    --accent-foreground: 260 60% 25%;
+
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 230 75% 55%;
+
+    --radius: 0.85rem;
+
+    /* Gradientes Aurora */
+    --gradient-aurora: radial-gradient(ellipse at 15% 20%, hsl(230 75% 55% / 0.12), transparent 55%),
+                       radial-gradient(ellipse at 85% 10%, hsl(260 75% 60% / 0.14), transparent 50%),
+                       radial-gradient(ellipse at 70% 85%, hsl(245 80% 65% / 0.10), transparent 60%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-sun: linear-gradient(135deg, hsl(var(--sun)), hsl(var(--primary)));
+
+    /* Shadows */
+    --shadow-glass: 0 8px 32px -4px hsl(230 60% 20% / 0.12), 0 2px 8px hsl(230 40% 20% / 0.06);
+    --shadow-glow: 0 0 40px hsl(var(--sun) / 0.35);
+    --shadow-elegant: 0 20px 60px -20px hsl(230 60% 30% / 0.20);
+
+    --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --sidebar-background: 220 25% 98%;
+    --sidebar-foreground: 222 47% 16%;
+    --sidebar-primary: 230 75% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 260 60% 96%;
+    --sidebar-accent-foreground: 260 60% 25%;
+    --sidebar-border: 220 20% 90%;
+    --sidebar-ring: 230 75% 55%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 220 25% 98%;
+    --card: 222 40% 10%;
+    --card-foreground: 220 25% 98%;
+    --popover: 222 40% 10%;
+    --popover-foreground: 220 25% 98%;
+    --primary: 230 80% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 245 85% 70%;
+    --sun: 265 80% 65%;
+    --sun-foreground: 0 0% 100%;
+    --sun-glow: 270 90% 75%;
+    --secondary: 222 30% 15%;
+    --secondary-foreground: 220 25% 98%;
+    --muted: 222 25% 15%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 260 30% 18%;
+    --accent-foreground: 265 80% 75%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 230 80% 60%;
+    --gradient-aurora: radial-gradient(ellipse at 15% 20%, hsl(230 80% 55% / 0.25), transparent 55%),
+                       radial-gradient(ellipse at 85% 10%, hsl(260 80% 55% / 0.20), transparent 50%),
+                       radial-gradient(ellipse at 70% 85%, hsl(245 85% 60% / 0.15), transparent 60%);
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 220 25% 98%;
+    --sidebar-primary: 230 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 260 30% 18%;
+    --sidebar-accent-foreground: 265 80% 75%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 230 80% 60%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+    background-image: var(--gradient-aurora);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 { font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.02em; font-weight: 600; }
+}
+
+@layer components {
+  .glass {
+    @apply bg-card/70 backdrop-blur-xl border border-white/50;
+    box-shadow: var(--shadow-glass);
+  }
+  .glass-strong {
+    @apply bg-card/85 backdrop-blur-2xl border border-white/60;
+    box-shadow: var(--shadow-elegant);
+  }
+  .text-gradient-sun {
+    background: var(--gradient-sun);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .aurora-bg::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--gradient-aurora);
+  }
+}
+
+@layer utilities {
+  .animate-sun-pulse .ray { animation: sun-ray-pulse 3.2s ease-in-out infinite; }
+  .animate-sun-pulse .ray:nth-child(odd) { animation-delay: -1.6s; }
+  .animate-sun-rise { animation: sun-rise 1.2s var(--transition-smooth) both; }
+}
+
+@keyframes sun-ray-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+@keyframes sun-rise {
+  from { opacity: 0; transform: translateY(20px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%      { transform: translate(2%, -1%) scale(1.05); }
+}
+.aurora-blob { animation: aurora-drift 18s ease-in-out infinite; }

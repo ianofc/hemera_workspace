@@ -1,0 +1,148 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Gerador de Atividades{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-8 animate-fade-in-down">
+    
+    <div class="flex flex-col items-center justify-between p-8 text-white shadow-lg md:flex-row bg-gradient-to-r from-teal-500 to-emerald-600 rounded-2xl">
+        <div>
+            <h1 class="flex items-center gap-3 mb-2 text-3xl font-bold">
+                <i class="fas fa-shapes"></i> Fábrica de Atividades
+            </h1>
+            <p class="text-lg text-teal-100">Crie exercícios ou dinâmicas lúdicas num clique.</p>
+        </div>
+        <div class="p-4 mt-4 md:mt-0 bg-white/20 rounded-xl backdrop-blur-sm">
+            <span class="block text-xs tracking-wider uppercase opacity-75">Créditos de IA</span>
+            <span class="text-2xl font-bold">Ilimitado</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-12">
+        
+        <div class="space-y-4 md:col-span-4">
+            <div class="p-6 bg-white border border-gray-100 shadow-sm dark:bg-gray-800 rounded-xl dark:border-gray-700">
+                <form id="form-atividade" class="space-y-4">
+                    {% csrf_token %}
+                    
+                    <div>
+                        <label class="form-label">Público Alvo</label>
+                        <select name="turma_id" class="form-select">
+                            {% for turma in turmas %}
+                                <option value="{{ turma.id }}">{{ turma.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Tópico / Conteúdo</label>
+                        <input type="text" name="tema" class="form-input" placeholder="Ex: Verbos irregulares" required>
+                    </div>
+
+                    <div>
+                        <label class="block mb-3 form-label">Estilo da Atividade</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="estilo" value="Padrao" checked class="sr-only peer">
+                                <div class="p-3 text-center transition border border-gray-200 rounded-lg dark:border-gray-600 hover:bg-gray-50 peer-checked:bg-teal-50 peer-checked:border-teal-500 peer-checked:text-teal-700">
+                                    <i class="block mb-1 text-xl fas fa-list-ol"></i>
+                                    <span class="text-xs font-bold">Exercícios</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="estilo" value="Ludico" class="sr-only peer">
+                                <div class="p-3 text-center transition border border-gray-200 rounded-lg dark:border-gray-600 hover:bg-gray-50 peer-checked:bg-purple-50 peer-checked:border-purple-500 peer-checked:text-purple-700">
+                                    <i class="block mb-1 text-xl fas fa-gamepad"></i>
+                                    <span class="text-xs font-bold">Lúdico / Jogo</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-criar" class="w-full py-3 bg-teal-600 border-teal-600 btn-primary hover:bg-teal-700">
+                        Gerar Agora
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="md:col-span-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 h-full min-h-[500px] flex flex-col relative">
+                
+                <div class="flex justify-end gap-2 p-4 border-b border-gray-100 dark:border-gray-700">
+                    <button onclick="copiarTexto()" class="text-xs btn-ghost" title="Copiar Texto">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="text-xs btn-ghost" title="Salvar no Banco de Questões (Futuro)">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+
+                <div id="resultado-container" class="flex-grow p-8 prose dark:prose-invert max-w-none">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 opacity-60">
+                        <i class="mb-4 text-5xl fas fa-pencil-ruler"></i>
+                        <p>Aguardando instruções...</p>
+                    </div>
+                </div>
+
+                <div id="loader" class="absolute inset-0 z-10 flex-col items-center justify-center hidden bg-white/90 dark:bg-gray-800/90 rounded-xl">
+                    <div class="w-10 h-10 mb-3 border-4 border-teal-200 rounded-full border-t-teal-600 animate-spin"></div>
+                    <p class="font-medium text-teal-800 animate-pulse">Criando atividade...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('form-atividade').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const loader = document.getElementById('loader');
+    const btn = document.getElementById('btn-criar');
+
+    // UI Loading
+    loader.classList.remove('hidden');
+    loader.classList.add('flex'); // <--- CORREÇÃO AQUI
+    btn.disabled = true;
+
+    const payload = {
+        turma_id: this.turma_id.value,
+        tema: this.tema.value,
+        estilo: document.querySelector('input[name="estilo"]:checked').value
+    };
+
+    try {
+        const response = await fetch("{% url 'pedagogico:api_gerar_atividade' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            document.getElementById('resultado-container').innerHTML = data.conteudo;
+        } else {
+            alert("Erro: " + data.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Erro na geração.");
+    } finally {
+        loader.classList.add('hidden');
+        loader.classList.remove('flex'); // <--- CORREÇÃO AQUI
+        btn.disabled = false;
+    }
+});
+
+function copiarTexto() {
+    const texto = document.getElementById('resultado-container').innerText;
+    navigator.clipboard.writeText(texto).then(() => alert("Copiado!"));
+}
+</script>
+{% endblock %}

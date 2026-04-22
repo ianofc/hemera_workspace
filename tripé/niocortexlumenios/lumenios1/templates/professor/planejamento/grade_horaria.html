@@ -1,0 +1,209 @@
+{% extends 'core/professor_dashboard_base.html' %}
+{% load static %}
+
+{% block title %}NioCortex | Minha Grade{% endblock %}
+
+{% block content %}
+<div x-data="teacherScheduleData()" class="space-y-6">
+
+    <div class="flex flex-col items-end justify-between gap-4 md:flex-row no-print">
+        <div>
+            <h1 class="text-3xl font-extrabold font-display text-slate-800">Minha Grade</h1>
+            <p class="mt-1 text-sm text-slate-500">Visualize seus horários, turmas e salas de aula.</p>
+        </div>
+        
+        <button onclick="window.print()" class="px-6 py-3 bg-white text-slate-700 border border-slate-200 font-bold rounded-xl shadow-sm hover:shadow-md hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition flex items-center gap-2">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+    </div>
+
+    <div class="mb-10 lg:hidden no-print">
+        <div class="flex gap-2 pb-4 mb-2 overflow-x-auto scrollbar-hide">
+            <template x-for="day in days">
+                <button @click="activeDay = day.id" 
+                        :class="activeDay === day.id ? 'bg-[var(--color-primary)] text-white shadow-lg' : 'bg-white/60 text-slate-600 hover:bg-white'"
+                        class="flex-1 px-5 py-3 text-sm font-bold text-center transition border border-transparent rounded-xl whitespace-nowrap"
+                        x-text="day.label"></button>
+            </template>
+        </div>
+
+        <div class="p-4 space-y-3 glass-panel rounded-2xl">
+            <template x-for="slot in getScheduleForDay(activeDay)">
+                <div class="relative flex items-center gap-4 p-4 overflow-hidden transition border rounded-xl bg-white/50 border-slate-100 hover:shadow-md">
+                    <div class="absolute top-0 bottom-0 left-0 w-1" :class="getLevelColor(slot.level)"></div>
+                    
+                    <div class="flex flex-col items-center justify-center w-16 h-16 bg-slate-100 rounded-xl text-slate-600 shrink-0">
+                        <span class="text-xs font-bold" x-text="slot.start"></span>
+                        <div class="w-4 h-px bg-slate-300 my-0.5"></div>
+                        <span class="text-xs font-bold" x-text="slot.end"></span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="text-base font-black text-slate-800" x-text="slot.className"></h3>
+                                <p class="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wide" x-text="slot.subject"></p>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-1 rounded bg-slate-100 text-slate-500 border border-slate-200">
+                                <i class="mr-1 fas fa-map-marker-alt"></i> <span x-text="slot.room"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <div x-show="getScheduleForDay(activeDay).length === 0" class="py-12 text-center text-slate-400">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-3 rounded-full bg-slate-100">
+                    <i class="text-2xl fas fa-mug-hot"></i>
+                </div>
+                <p class="text-sm font-medium">Dia livre! Aproveite para planejar ou descansar.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden overflow-hidden border lg:block glass-panel rounded-3xl border-white/60 print-layout">
+        <table class="w-full text-left border-collapse">
+            <thead class="text-xs font-bold uppercase border-b bg-slate-50/80 text-slate-500 border-slate-200">
+                <tr>
+                    <th class="px-6 py-4 text-center border-r w-28 border-slate-100 bg-slate-50">Horário</th>
+                    <th class="px-4 py-4 text-center w-[18%]">Segunda</th>
+                    <th class="px-4 py-4 text-center w-[18%]">Terça</th>
+                    <th class="px-4 py-4 text-center w-[18%]">Quarta</th>
+                    <th class="px-4 py-4 text-center w-[18%]">Quinta</th>
+                    <th class="px-4 py-4 text-center w-[18%]">Sexta</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                <template x-for="time in timeSlots">
+                    <tr class="transition hover:bg-white/30 group">
+                        <td class="px-4 py-6 text-center transition border-r border-slate-100 bg-slate-50/30 group-hover:bg-slate-100/50">
+                            <span class="block text-sm font-black text-slate-700" x-text="time.start"></span>
+                            <span class="block mt-1 text-xs text-slate-400" x-text="time.end"></span>
+                        </td>
+                        
+                        <template x-for="day in ['seg', 'ter', 'qua', 'qui', 'sex']">
+                            <td class="h-full px-2 py-2 align-top">
+                                <div class="h-full w-full rounded-xl p-3 flex flex-col justify-between min-h-[110px] transition-all duration-200"
+                                     :class="getSlotClass(day, time.id)">
+                                    
+                                    <div x-show="getSlot(day, time.id)" class="relative flex flex-col h-full">
+                                        <div class="flex items-start justify-between mb-2">
+                                            <span class="text-sm font-black leading-tight text-slate-800" x-text="getSlot(day, time.id)?.className"></span>
+                                            <div class="w-2 h-2 rounded-full" :class="getLevelDot(getSlot(day, time.id)?.level)"></div>
+                                        </div>
+                                        
+                                        <div class="text-xs font-bold text-[var(--color-primary)] mb-auto" x-text="getSlot(day, time.id)?.subject"></div>
+                                        
+                                        <div class="mt-2 pt-2 border-t border-black/5 flex items-center justify-between text-[10px] font-medium text-slate-600">
+                                            <span class="flex items-center gap-1"><i class="fas fa-door-open text-slate-400"></i> <span x-text="getSlot(day, time.id)?.room"></span></span>
+                                            <span class="bg-white/60 px-1.5 py-0.5 rounded text-slate-500">32 Alunos</span>
+                                        </div>
+                                    </div>
+
+                                    <div x-show="!getSlot(day, time.id)" class="flex items-center justify-center h-full transition opacity-0 group-hover:opacity-100">
+                                        <span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">Livre</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="flex items-center justify-center gap-4 mt-4 text-xs font-bold text-slate-500 no-print">
+        <span class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-500 rounded-full"></div> Fundamental II</span>
+        <span class="flex items-center gap-2"><div class="w-3 h-3 bg-purple-500 rounded-full"></div> Ensino Médio</span>
+        <span class="flex items-center gap-2"><div class="w-3 h-3 bg-orange-500 rounded-full"></div> Atividades Extras</span>
+    </div>
+
+</div>
+
+<script>
+    function teacherScheduleData() {
+        return {
+            activeDay: 'seg',
+            
+            days: [
+                {id: 'seg', label: 'Segunda'}, {id: 'ter', label: 'Terça'}, {id: 'qua', label: 'Quarta'},
+                {id: 'qui', label: 'Quinta'}, {id: 'sex', label: 'Sexta'}
+            ],
+
+            timeSlots: [
+                {id: 1, start: '07:30', end: '08:20'},
+                {id: 2, start: '08:20', end: '09:10'},
+                {id: 3, start: '09:30', end: '10:20'},
+                {id: 4, start: '10:20', end: '11:10'},
+                {id: 5, start: '11:10', end: '12:00'},
+                {id: 6, start: '13:00', end: '13:50'}
+            ],
+
+            // Matriz de Aulas do Professor
+            scheduleMatrix: {
+                'seg_1': { className: '9º Ano A', subject: 'Matemática', room: 'Sala 12', level: 'fund2' },
+                'seg_2': { className: '9º Ano A', subject: 'Matemática', room: 'Sala 12', level: 'fund2' },
+                'seg_3': { className: '3º Médio B', subject: 'Física', room: 'Lab 1', level: 'medio' },
+                
+                'ter_1': { className: '8º Ano C', subject: 'Matemática', room: 'Sala 08', level: 'fund2' },
+                'ter_4': { className: '1º Médio A', subject: 'Física', room: 'Sala 15', level: 'medio' },
+                
+                'qua_1': { className: '9º Ano B', subject: 'Matemática', room: 'Sala 11', level: 'fund2' },
+                'qua_2': { className: '9º Ano B', subject: 'Matemática', room: 'Sala 11', level: 'fund2' },
+                'qua_3': { className: 'Clube de Xadrez', subject: 'Eletiva', room: 'Pátio', level: 'extra' },
+                
+                'qui_1': { className: '3º Médio A', subject: 'Física', room: 'Sala 16', level: 'medio' },
+                'qui_2': { className: '3º Médio B', subject: 'Física', room: 'Sala 14', level: 'medio' },
+                
+                'sex_1': { className: 'Reunião Pedagógica', subject: 'Coordenação', room: 'Sala Prof.', level: 'extra' },
+                'sex_2': { className: '9º Ano A', subject: 'Geometria', room: 'Sala 12', level: 'fund2' },
+            },
+
+            // Lógica de Renderização
+            getSlot(day, slotId) {
+                return this.scheduleMatrix[`${day}_${slotId}`];
+            },
+
+            getScheduleForDay(day) {
+                const slots = [];
+                this.timeSlots.forEach(time => {
+                    const data = this.getSlot(day, time.id);
+                    if (data) {
+                        slots.push({ ...data, start: time.start, end: time.end });
+                    }
+                });
+                return slots;
+            },
+
+            // Estilos Dinâmicos
+            getSlotClass(day, slotId) {
+                const data = this.getSlot(day, slotId);
+                if (!data) return 'hover:bg-slate-50 border border-transparent hover:border-slate-200';
+                
+                const styles = {
+                    'fund2': 'bg-blue-50/50 border border-blue-200 hover:shadow-md hover:-translate-y-1 hover:bg-blue-50',
+                    'medio': 'bg-purple-50/50 border border-purple-200 hover:shadow-md hover:-translate-y-1 hover:bg-purple-50',
+                    'extra': 'bg-orange-50/50 border border-orange-200 hover:shadow-md hover:-translate-y-1 hover:bg-orange-50',
+                };
+                return styles[data.level] || 'bg-slate-100';
+            },
+
+            getLevelColor(level) {
+                const colors = { 'fund2': 'bg-blue-500', 'medio': 'bg-purple-500', 'extra': 'bg-orange-500' };
+                return colors[level] || 'bg-slate-500';
+            },
+
+            getLevelDot(level) {
+                return this.getLevelColor(level);
+            }
+        }
+    }
+</script>
+
+<style>
+    @media print {
+        .no-print { display: none !important; }
+        .print-layout { display: block !important; border: 1px solid #ddd; width: 100%; box-shadow: none; }
+        body { background: white; color: black; }
+        .glass-panel { backdrop-filter: none; background: white; }
+    }
+</style>
+{% endblock %}

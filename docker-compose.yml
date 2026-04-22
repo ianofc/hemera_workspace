@@ -17,6 +17,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./Hemera_OS/backend:/app
+      - hemera_data:/app/data # Salva o SQLite para não perder as notas!
     ports:
       - "8000:8000"
     depends_on:
@@ -47,3 +48,5 @@ services:
 
 volumes:
   postgres_data:
+  pg_data:
+  hemera_data:

@@ -1,0 +1,189 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Planejador de Aulas com IA{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-8 animate-fade-in-down">
+    
+    <div class="text-center py-6">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 text-blue-600 mb-4">
+            <i class="fas fa-calendar-alt text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">
+            Planejador de Aulas <span class="text-blue-600">Inteligente</span>
+        </h1>
+        <p class="text-gray-500 max-w-2xl mx-auto mt-2">
+            Crie roteiros detalhados alinhados à BNCC em segundos.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-1">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sticky top-6">
+                <form id="form-planejamento" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    <div>
+                        <label class="form-label">Turma / Ano</label>
+                        <select name="turma_id" class="form-select" required>
+                            <option value="">Selecione a turma...</option>
+                            {% for turma in turmas %}
+                                <option value="{{ turma.id }}">{{ turma.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Disciplina</label>
+                        <input type="text" name="disciplina" class="form-input" placeholder="Ex: História, Matemática" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Tema da Aula</label>
+                        <textarea name="tema" rows="3" class="form-textarea" placeholder="Ex: O Ciclo da Água e sua importância." required></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="form-label">Duração</label>
+                            <select name="duracao" class="form-select">
+                                <option value="50 minutos">1 Aula (50min)</option>
+                                <option value="100 minutos">2 Aulas (1h40)</option>
+                                <option value="Semanal">Semanal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Metodologia</label>
+                            <select name="metodologia" class="form-select">
+                                <option value="Ativa">Metodologias Ativas</option>
+                                <option value="Expositiva">Expositiva Dialogada</option>
+                                <option value="PBL">Baseada em Projetos</option>
+                                <option value="Gamificação">Gamificação</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-gerar" class="w-full btn-primary py-3 text-lg shadow-blue-500/20">
+                        <i class="fas fa-magic mr-2"></i> Criar Plano
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2">
+            <div id="loading-state" class="hidden h-96 flex-col items-center justify-center text-center">
+                <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Consultando a BNCC...</h3>
+                <p class="text-sm text-gray-500">A IA está estruturando os objetivos e atividades.</p>
+            </div>
+
+            <div id="placeholder-inicial" class="h-96 flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-800/50">
+                <i class="fas fa-book-reader text-4xl text-gray-300 mb-3"></i>
+                <p class="text-gray-400">Preencha os dados ao lado para começar.</p>
+            </div>
+
+            <div id="area-resultado" class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
+                    <span class="font-bold text-gray-700 dark:text-gray-200">Plano Gerado</span>
+                    <button onclick="imprimirPlano()" class="text-sm text-blue-600 hover:underline">
+                        <i class="fas fa-print"></i> Imprimir / PDF
+                    </button>
+                </div>
+                
+                <div id="conteudo-plano" class="p-8 prose dark:prose-invert max-w-none">
+                    </div>
+
+                <div id="area-bncc" class="px-8 py-4 bg-yellow-50 dark:bg-yellow-900/10 border-t border-yellow-100 dark:border-yellow-900/20 flex flex-wrap gap-2">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('form-planejamento').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Elementos
+    const placeholder = document.getElementById('placeholder-inicial');
+    const areaResultado = document.getElementById('area-resultado');
+    const loadingState = document.getElementById('loading-state');
+    const btnGerar = document.getElementById('btn-gerar');
+
+    // UI Loading (Adiciona Flex dinamicamente)
+    placeholder.classList.add('hidden');
+    areaResultado.classList.add('hidden');
+    
+    loadingState.classList.remove('hidden');
+    loadingState.classList.add('flex'); // <--- CORREÇÃO AQUI
+    
+    btnGerar.disabled = true;
+
+    const payload = {
+        turma_id: this.turma_id.value,
+        disciplina: this.disciplina.value,
+        tema: this.tema.value,
+        duracao: this.duracao.value,
+        metodologia: this.metodologia.value
+    };
+
+    try {
+        const response = await fetch("{% url 'pedagogico:api_gerar_planejamento' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            // Renderiza conteúdo
+            document.getElementById('conteudo-plano').innerHTML = data.plano;
+            
+            // Renderiza Tags BNCC
+            const areaBncc = document.getElementById('area-bncc');
+            areaBncc.innerHTML = '<span class="text-xs font-bold text-yellow-800 dark:text-yellow-500 uppercase tracking-wide mr-2 py-1">BNCC:</span>';
+            if(data.bncc && data.bncc.length > 0) {
+                data.bncc.forEach(code => {
+                    areaBncc.innerHTML += `<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-md font-mono border border-yellow-200">${code}</span>`;
+                });
+            } else {
+                areaBncc.innerHTML += '<span class="text-xs text-gray-400 italic">Nenhum código específico identificado.</span>';
+            }
+
+            // Esconde Loading (Remove Flex)
+            loadingState.classList.add('hidden');
+            loadingState.classList.remove('flex'); // <--- CORREÇÃO AQUI
+            
+            areaResultado.classList.remove('hidden');
+        } else {
+            alert("Erro: " + data.message);
+            loadingState.classList.add('hidden');
+            loadingState.classList.remove('flex');
+            placeholder.classList.remove('hidden');
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Erro de comunicação.");
+        loadingState.classList.add('hidden');
+        loadingState.classList.remove('flex');
+        placeholder.classList.remove('hidden');
+    } finally {
+        btnGerar.disabled = false;
+    }
+});
+
+function imprimirPlano() {
+    const conteudo = document.getElementById('conteudo-plano').innerHTML;
+    const janela = window.open('', '', 'width=800,height=600');
+    janela.document.write(`<html><head><title>Plano de Aula</title></head><body style="font-family: sans-serif; padding: 40px;">${conteudo}</body></html>`);
+    janela.document.close();
+    janela.print();
+}
+</script>
+{% endblock %}

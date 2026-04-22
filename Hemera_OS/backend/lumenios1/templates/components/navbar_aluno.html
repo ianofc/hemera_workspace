@@ -1,0 +1,65 @@
+
+<nav class="sticky top-0 z-50 w-full transition-all duration-300 border-b shadow-sm border-white/40 glass-nav">
+    <div class="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
+        
+        <a href="{% url 'lumenios:dashboard_aluno' %}" class="flex items-center gap-3 group">
+            <div class="relative flex items-center justify-center w-10 h-10 text-white transition-transform rounded-xl bg-gradient-to-br from-aurora-primary to-aurora-secondary shadow-neon group-hover:scale-105">
+                <i class="text-lg fas fa-atom"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-lg font-bold tracking-tight transition-colors text-slate-700 font-display group-hover:text-aurora-primary">Lumenios</span>
+                <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-slate-400">Ambiente do Aluno</span>
+            </div>
+        </a>
+
+        <div class="hidden md:flex items-center bg-white/50 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/50 shadow-inner gap-1">
+            <a href="{% url 'lumenios:dashboard_aluno' %}" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-primary hover:bg-white">
+                <i class="fas fa-home"></i> Início
+            </a>
+            <a href="#" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-primary hover:bg-white">
+                <i class="fas fa-book-open"></i> Disciplinas
+            </a>
+            <a href="#" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-primary hover:bg-white">
+                <i class="fas fa-chart-line"></i> Desempenho
+            </a>
+            {% if 'core:student_library' %}
+            <a href="{% url 'core:student_library' %}" class="flex items-center gap-2 px-5 py-2 text-sm font-bold transition-all rounded-full text-slate-600 hover:text-aurora-primary hover:bg-white">
+                <i class="fas fa-bookmark"></i> Biblioteca
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button class="flex items-center justify-center w-10 h-10 transition border border-white rounded-full shadow-sm bg-white/60 hover:bg-white text-slate-500 hover:text-aurora-accent">
+                <i class="far fa-bell"></i>
+            </button>
+            
+            <div class="relative pl-4 border-l border-slate-200" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center gap-3 group">
+                    <div class="hidden text-right lg:block">
+                        <p class="text-xs font-bold text-slate-700">{{ user.first_name }}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">{{ user.matricula|default:'Estudante' }}</p>
+                    </div>
+                    <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ user.first_name }}&background=6366f1&color=fff{% endif %}" 
+                         class="object-cover w-10 h-10 transition-colors border-2 border-white shadow-sm rounded-xl group-hover:border-aurora-primary">
+                </button>
+
+                <div x-show="open" @click.away="open = false" 
+                     class="absolute right-0 w-56 p-2 space-y-1 transition-all origin-top-right transform border shadow-xl top-12 bg-white/90 backdrop-blur-xl rounded-2xl border-white/50"
+                     x-transition:enter="duration-200 ease-out" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                     style="display: none;">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-slate-600 hover:bg-slate-100 hover:text-aurora-primary">
+                        <i class="w-4 fas fa-id-card"></i> Carteirinha
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-slate-600 hover:bg-slate-100 hover:text-aurora-primary">
+                        <i class="w-4 fas fa-cog"></i> Configurações
+                    </a>
+                    <div class="h-px my-1 bg-slate-100"></div>
+                    <a href="{% url 'yourlife_social:logout' %}" class="flex items-center gap-3 px-3 py-2 text-xs font-bold transition rounded-xl text-aurora-danger hover:bg-red-50">
+                        <i class="w-4 fas fa-sign-out-alt"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

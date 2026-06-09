@@ -2,11 +2,11 @@
 
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 import random
 import logging
+from ..services.ai import generate_text, gerar_recomendacao_cursos_tas, buscar_noticias_externas_iris
 
-# Configuração de logs para o monitoramento PentaIA
 logger = logging.getLogger("ZIOS_PROACTIVE")
 router = APIRouter(prefix="/v1/proactive", tags=["Proactive Guardian"])
 
@@ -29,6 +29,18 @@ class PerformanceEvent(BaseModel):
     turma_id: int
     evento: Dict[str, Any]
 
+class RecommendationItem(BaseModel):
+    titulo: str
+    categoria: str
+    match_score: int
+    descricao: str
+
+class NewsItem(BaseModel):
+    titulo: str
+    fonte: str
+    snippet: str
+    url: str
+
 
 # --- HEIMDALL SECURITY CORE (Integrado) ---
 
@@ -38,27 +50,26 @@ async def check_request_safety(ip: str):
     HEIMDALL: Responsável pela integridade e segurança.
     Analisa reputação de IP e comportamento suspeito.
     """
-    is_suspicious = False
-    
     # Filtros de rede local e nós de confiança PentaIA
     if ip.startswith(("127.0.0.1", "192.168", "172.18")):
         return {
             "status": "INTERNAL",
             "shield_level": "MAXIMUM",
             "client_ip": ip,
-            "threat_detected": False
+            "threat_detected": False,
+            "reason": "Rede local confiável."
         }
 
-    # Simulação de detecção de Bot/Threat (GreyNoise logic)
-    if random.random() > 0.99: # Simulação de IP malicioso
-        is_suspicious = True
-
+    # Bloqueio simulado para IPs conhecidos da lista negra ou padrão de ameaça alto
+    is_suspicious = ip in ["185.220.101.5", "45.132.22.189"] or random.random() > 0.95
     return {
         "status": "PROTECTED" if not is_suspicious else "WARNING",
         "shield_level": "OPTIMAL",
         "client_ip": ip,
-        "threat_detected": is_suspicious
+        "threat_detected": is_suspicious,
+        "reason": "Tentativa de injeção de prompt no PENTAIA" if is_suspicious else "IP Residencial Confiável"
     }
+
 
 # --- ZIOS OBSERVATION ENGINE ---
 
@@ -66,105 +77,151 @@ async def check_request_safety(ip: str):
 async def observe_user(ctx: ContextInput):
     """
     ZIOS AI: O cérebro que decide quando intervir proativamente.
-    Utiliza o TAS para cálculos de métricas e IRIS para pulso de rede.
     """
-    
-    # 1. CONTEXTO DE SEGURANÇA (Intervenção do HEIMDALL via ZIOS)
+    # 1. CONTEXTO DE SEGURANÇA IMEDIATO
     if ctx.meta_data.get("risk_detected", False):
-        return {
-            "should_speak": True,
-            "emotion": "protective",
-            "source": "HEIMDALL",
-            "message": f"Segurança em primeiro lugar, {ctx.user_name}. Detectamos um comportamento anômalo. O Heimdall elevou o nível do escudo preventivamente."
-        }
+        return ObservationResponse(
+            should_speak=True,
+            emotion="protective",
+            source="HEIMDALL",
+            message=f"Segurança em primeiro lugar, {ctx.user_name}. Detectamos um comportamento anômalo. O Heimdall elevou o nível do escudo preventivamente."
+        )
 
-    # 2. CONTEXTO EDUCACIONAL: Professor no Diário
-    if "diario" in ctx.current_page and ctx.user_role == "PROFESSOR":
-        if ctx.meta_data.get("turma_nova", False):
-            return {
-                "should_speak": True,
-                "emotion": "excited",
-                "source": "ZIOS",
-                "message": f"Ei {ctx.user_name}! Essa turma é nova por aqui. O TAS sugere um Plano de Aula focado em integração para hoje. Quer ver?"
-            }
+    # 2. DECISÃO DA IA DE ACORDO COM O CONTEXTO
+    prompt = f"""
+    Você é o ZIOS AI, o cérebro proativo e tutor pedagógico do Hemera OS.
+    Analise o contexto de navegação atual do usuário para decidir se deve enviar uma mensagem de suporte proativo útil ou permanecer em silêncio (de acordo com as necessidades e regras de negócio do Hemera).
+    
+    Contexto do Usuário:
+    - Nome: {ctx.user_name}
+    - Cargo: {ctx.user_role}
+    - Página Atual: {ctx.current_page}
+    - Metadados: {ctx.meta_data}
+    
+    Diretrizes:
+    - Se a página atual for "diario" e o cargo for "PROFESSOR", sugira de forma empolgante gerar planos de aula ou atividades práticas alinhadas à BNCC.
+    - Se a página atual for "boletim" e o cargo for "ALUNO" e as notas/médias nos metadados estiverem baixas (< 6.0), envie uma mensagem de apoio amigável e ofereça ajuda com trilhas de reforço no Moodle (Accubens/dopamina).
+    - Se for "financeiro" e o cargo for "ADMIN", analise metadados de inadimplência e recomende ações de cobrança automatizadas.
+    - Se for um contexto geral sem necessidade de interrupção, permaneça em silêncio.
+    
+    Responda em formato JSON estrito com os campos: should_speak (bool), message (str), emotion (str), source (str).
+    Formatos possíveis de emotion: 'happy', 'concerned', 'excited', 'neutral', 'protective', 'idle'.
+    Formatos possíveis de source: 'ZIOS', 'IRIS', 'HEIMDALL', 'TAS', 'SYSTEM'.
+    """
+    import json
+    try:
+        from google import genai
+        from google.genai import types
+        api_key = random.choice([x for x in [generate_text.__globals__.get("api_key")] if x])
+        
+        if not api_key:
+            raise ValueError("Chave de API não configurada.")
+            
+        client = genai.Client(api_key=api_key)
+        response = await client.aio.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=ObservationResponse
+            )
+        )
+        data = json.loads(response.text)
+        return ObservationResponse(**data)
+    except Exception as e:
+        logger.error(f"Erro na observação por IA, usando fallback: {e}")
+        
+        # Fallback estático
+        if "diario" in ctx.current_page and ctx.user_role == "PROFESSOR":
+            return ObservationResponse(
+                should_speak=True,
+                emotion="excited",
+                source="ZIOS",
+                message=f"Ei {ctx.user_name}! O TAS sugere um Plano de Aula focado em integração pedagógica para hoje. Quer ver?"
+            )
+        return ObservationResponse(
+            should_speak=False,
+            message="",
+            emotion="idle",
+            source="SYSTEM"
+        )
 
-    # 3. CONTEXTO EDUCACIONAL: Aluno no Boletim (Acolhimento)
-    if "boletim" in ctx.current_page and ctx.user_role == "ALUNO":
-        media = ctx.meta_data.get("media_geral", 7.0)
-        if media < 6.0:
-            return {
-                "should_speak": True,
-                "emotion": "concerned",
-                "source": "ZIOS",
-                "message": "Notei que o desempenho em exatas oscilou. Não se cobre tanto! O TAS preparou uma trilha de reforço gamificada para você."
-            }
 
-    # 4. CONTEXTO FINANCEIRO/ADMIN: Alerta Estratégico (Poder do TAS)
-    if "financeiro" in ctx.current_page and ctx.user_role == "ADMIN":
-        inadimplencia = ctx.meta_data.get("taxa_inadimplencia", 0)
-        if inadimplencia > 10:
-            return {
-                "should_speak": True,
-                "emotion": "neutral",
-                "source": "TAS",
-                "message": f"Análise concluída: A inadimplência subiu {inadimplencia}%. O TAS recomenda automatizar as cobranças via Thalamus agora."
-            }
+# --- TAS PREDITIVO (RECOMENDAÇÃO DE CURSOS / MOODLE) ---
 
-    # 5. CONTEXTO DE REDE/NOTÍCIAS (Poder da IRIS)
-    if ctx.current_page in ["explore", "feed", "mercurio"]:
-        top_hashtag = ctx.meta_data.get("trending_hashtag", None)
-        if top_hashtag and random.random() > 0.8:
-            return {
-                "should_speak": True,
-                "emotion": "happy",
-                "source": "IRIS",
-                "message": f"O mundo está falando de {top_hashtag}! A IRIS detectou um pico de engajamento. Vale a pena conferir o contexto."
-            }
+@router.post("/tas/recommendations", response_model=List[RecommendationItem])
+async def get_tas_recommendations(perfil: dict):
+    """
+    TAS: Retorna sugestões do Moodle e cursos de acordo com o que o usuário mais gosta e precisa.
+    """
+    try:
+        recs = await gerar_recomendacao_cursos_tas(perfil)
+        return recs
+    except Exception as e:
+        logger.error(f"Erro ao buscar recomendações do TAS: {e}")
+        return []
 
-    # 6. CONTEXTO HUMANO: Bem-estar (ZIOS Amigo)
-    if random.random() > 0.96:
-        frases = [
-            f"Tudo em ordem por aqui, {ctx.user_name}. Lembre-se de descansar um pouco.",
-            "O ecossistema PentaIA está operando em harmonia.",
-            "Sempre de olho para que você possa focar no que importa."
-        ]
-        return {
-            "should_speak": True,
-                "emotion": "happy",
-                "source": "ZIOS",
-                "message": random.choice(frases)
-        }
 
-    # Silêncio operacional (ZIOS apenas observa)
-    return {
-        "should_speak": False, 
-        "message": "", 
-        "emotion": "idle",
-        "source": "SYSTEM"
-    }
+# --- IRIS NEWS CRAWLER (NOTÍCIAS EXTERNAS) ---
 
-# --- TAS PREDITIVO (INTEGRAÇÃO DJANGO) ---
+@router.get("/iris/news", response_model=List[NewsItem])
+async def get_iris_news():
+    """
+    IRIS: Busca notícias externas sobre EdTech e educação geral na web.
+    """
+    try:
+        news = await buscar_noticias_externas_iris()
+        return news
+    except Exception as e:
+        logger.error(f"Erro ao buscar notícias da IRIS: {e}")
+        return []
+
+
+# --- ANALISE PERFORMANCE WEBHOOK (INTEGRAÇÃO DJANGO) ---
 
 @router.post("/analyze-performance")
 async def analyze_performance_trigger(payload: PerformanceEvent):
     """
-    Acionado via webhook invisível do Django sempre que uma Nota ou Frequência é postada.
-    Aqui é onde o TAS analisa os dados frios e emite um alerta se necessário.
+    Acionado via webhook do Django quando notas/frequências são inseridas.
+    O TAS avalia e reporta o risco pedagógico.
     """
     logger.info(f"TAS Analysis Triggered for Aluno {payload.aluno_id} in Turma {payload.turma_id}")
     evento = payload.evento
     tipo = evento.get("tipo")
     
-    # Simulação básica da regra de negócio do TAS
-    if tipo == "nota":
-        valor = evento.get("valor", 10.0)
-        if valor < 5.0:
-            logger.warning(f"🚨 [TAS Alert] Nota vermelha detectada ({valor}). Gerando trilha de reforço para Aluno {payload.aluno_id}.")
-            return {"status": "analyzed", "risk": "HIGH", "action": "trigger_intervention"}
+    prompt = f"""
+    Você é o TAS (Total Analysis System), o motor de recomendação do Hemera OS.
+    Analise o seguinte evento acadêmico do aluno {payload.aluno_id} na turma {payload.turma_id}:
+    - Tipo: {tipo}
+    - Dados: {evento}
+    
+    Avalie o risco acadêmico (evasão/reprovação) e recomende a melhor ação.
+    Retorne um JSON estrito contendo:
+    {{
+        "status": "analyzed",
+        "risk": "HIGH" | "MEDIUM" | "LOW",
+        "action": "Ação recomendada pelo sistema"
+    }}
+    """
+    import json
+    try:
+        from google import genai
+        api_key = generate_text.__globals__.get("api_key")
+        if not api_key:
+            raise ValueError("Chave de API não configurada.")
             
-    elif tipo == "falta":
-        logger.warning(f"🚨 [TAS Alert] Falta registrada para Aluno {payload.aluno_id}. Analisando taxa de evasão.")
-        return {"status": "analyzed", "risk": "MEDIUM", "action": "notify_guardian"}
-
-    logger.info(f"TAS Analysis Complete. Normal behavior for Aluno {payload.aluno_id}.")
-    return {"status": "analyzed", "risk": "LOW"}
+        client = genai.Client(api_key=api_key)
+        response = await client.aio.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={"response_mime_type": "application/json"}
+        )
+        return json.loads(response.text)
+    except Exception as e:
+        logger.error(f"Erro no TAS webhook performance: {e}")
+        # Fallback
+        if tipo == "nota":
+            valor = evento.get("valor", 10.0)
+            if valor < 5.0:
+                return {"status": "analyzed", "risk": "HIGH", "action": "Acionar ZIOS para recuperação paralela."}
+        return {"status": "analyzed", "risk": "LOW", "action": "Nenhuma ação necessária."}

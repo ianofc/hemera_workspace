@@ -13,6 +13,9 @@ from app.engines.sara.vector_search import SaraEngine
 from app.engines.accumbens.ranker import AccumbensRanker
 from app.db.repositories.content_repository import ContentRepository
 from app.db.session import async_session
+from sqlalchemy.future import select
+from app.db.base_user import UserProfileModel
+from app.engines.sara.vigilance import sara_vigilance
 
 
 class RecommendationService:
@@ -119,6 +122,30 @@ class RecommendationService:
         return result, {"elapsed_ms": elapsed_ms, "degraded": degraded}
 
     async def get_feed_with_meta(self, request):
+        start_request_time = time.perf_counter()
+        
+        # Sincroniza orçamentos dinâmicos da SARA apenas se o daemon de vigília estiver ativo
+        if sara_vigilance.running:
+            self.budget_ms.update(sara_vigilance.current_budgets)
+
+        # 1. Carrega Perfil de Usuário para aplicar personalização de RL e Soberania (Vetos)
+        user_profile = None
+        try:
+            async with async_session() as session:
+                result = await session.execute(
+                    select(UserProfileModel).filter_by(user_id=request.user_id)
+                )
+                profile_obj = result.scalars().first()
+                if profile_obj:
+                    user_profile = {
+                        "user_id": profile_obj.user_id,
+                        "blacklisted_tags": profile_obj.blacklisted_tags or [],
+                        "blacklisted_authors": profile_obj.blacklisted_authors or [],
+                        "priority_interests": profile_obj.priority_interests or {}
+                    }
+        except Exception:
+            pass
+
         raw_data = []
         degraded_global = False
         try:
@@ -126,17 +153,15 @@ class RecommendationService:
                 repo = ContentRepository(session)
                 raw_objects = await repo.get_candidates()
                 raw_data = [
-
-
                 {
                     "id": o.id,
                     "title": o.title,
                     "tags": o.tags,
                     "safety": o.safety_label,
                     "embedding": o.embedding,
+                    "author_id": o.author_id,
                 }
                 for o in raw_objects
-
                 ]
         except Exception:
             raw_data = []
@@ -146,21 +171,24 @@ class RecommendationService:
             raw_data = [{"id": "test_1", "title": "Tendência Global", "tags": ["politics"], "safety": "safe"}]
             degraded_global = True
 
+        # 2. Thalamus: Filtro/Veto Soberano
         clean, thalamus_meta = await self._run_stage_with_budget(
             "thalamus",
-            self.thalamus.apply(request, raw_data),
+            self.thalamus.apply(request, raw_data, user_profile=user_profile),
             raw_data,
         )
 
+        # 3. SARA: Busca/Alinhamento Semântico
         aligned, sara_meta = await self._run_stage_with_budget(
             "sara",
             self.sara.align(request.user_id, clean),
             clean,
         )
 
+        # 4. Accumbens: Ranqueamento e RL
         ranked_ids, accumbens_meta = await self._run_stage_with_budget(
             "accumbens",
-            self.accumbens.rank(aligned),
+            self.accumbens.rank(aligned, user_id=request.user_id, user_profile=user_profile),
             [str(c["id"]) for c in aligned],
         )
 
@@ -174,7 +202,12 @@ class RecommendationService:
             "budgets_ms": self.budget_ms,
         }
 
+        # Registra latência e atividade na SARA
+        elapsed_request_ms = (time.perf_counter() - start_request_time) * 1000
+        sara_vigilance.record_request(elapsed_request_ms)
+
         return ranked_ids, meta
+
 
     async def get_trends(self, limit: int = 10):
         raw_objects = []

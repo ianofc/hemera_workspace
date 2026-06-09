@@ -90,26 +90,32 @@ ASGI_APPLICATION = 'niocortex.asgi.application'
 WSGI_APPLICATION = 'niocortex.wsgi.application'
 
 # --- BANCO DE DADOS ---
-database_url = os.getenv('DATABASE_URL')
-if not database_url:
-    # Fallback seguro
-    database_url = "postgresql://postgres:2511CorteXEduc@db.qnknyonohlorjfhzkkpz.supabase.co:5432/postgres"
-
-if database_url and "postgres" in database_url:
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.parse(database_url)
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
 else:
-    raise Exception("ERRO CRÍTICO: DATABASE_URL do Supabase não encontrada.")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # --- CONFIGURAÇÃO REDIS (CACHE & CHANNELS) ---
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 
 # 1. CACHE
 # Melhora performance geral e armazena sessões de usuário
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": f"redis://{REDIS_HOST}:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -126,7 +132,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(REDIS_HOST, 6379)],
         },
     },
 }

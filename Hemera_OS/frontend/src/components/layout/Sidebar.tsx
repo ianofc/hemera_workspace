@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Users, BookOpen, GraduationCap, Settings, LogOut } from 'lucide-react';
+import { Home, Users, BookOpen, GraduationCap, Settings, LogOut, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Sidebar = () => {
@@ -9,17 +9,24 @@ export const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('hemera_user_role');
-    navigate('/auth/login');
+    navigate('/login');
   };
 
-  // Itens dinâmicos baseados no papel do usuário (Professor vs Aluno)
-  const menuItems = role === 'professor' ? [
+  // Itens dinâmicos baseados no papel do usuário (Admin vs Professor vs Aluno)
+  const menuItems = role === 'admin' ? [
+    { icon: Home, label: 'Painel Olimpo', path: '/olimpo?tab=overview' },
+    { icon: Users, label: 'Matrículas & Turmas', path: '/olimpo?tab=matriculas' },
+    { icon: BookOpen, label: 'Diários de Classe', path: '/olimpo?tab=diarios' },
+    { icon: Settings, label: 'Calibração Rede/IA', path: '/olimpo?tab=config' },
+  ] : role === 'professor' ? [
     { icon: Home, label: 'Dashboard', path: '/professor' },
+    { icon: MessageSquare, label: 'Comunidade Polis', path: '/polis' },
     { icon: Users, label: 'Turmas & Chamada', path: '/professor/turmas' },
     { icon: BookOpen, label: 'Diário de Classe', path: '/professor/diario' },
     { icon: Settings, label: 'Configurações', path: '/professor/settings' },
   ] : [
     { icon: Home, label: 'Meu Painel', path: '/aluno' },
+    { icon: MessageSquare, label: 'Comunidade Polis', path: '/polis' },
     { icon: GraduationCap, label: 'Trilha de Cursos', path: '/aluno/cursos' },
     { icon: BookOpen, label: 'Minhas Notas', path: '/aluno/notas' },
   ];

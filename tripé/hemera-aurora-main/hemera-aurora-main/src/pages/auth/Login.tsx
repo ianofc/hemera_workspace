@@ -77,6 +77,7 @@ const Login = () => {
         await handleLogin(email, password);
         toast.success("Bem-vindo ao Hemera");
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const msg = err?.message ?? "Falha ao autenticar";
       if (msg.toLowerCase().includes("invalid login")) {
@@ -124,6 +125,7 @@ const Login = () => {
         if (retryErr) throw retryErr;
       }
       toast.success(`Entrando como ${kind} demo…`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err?.message ?? "Falha no demo");
     } finally {

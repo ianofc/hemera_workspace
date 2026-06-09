@@ -37,7 +37,7 @@ export default function Login() {
   // Redireciona se já estiver logado
   useEffect(() => {
     if (user && role) {
-      const target = role === "professor" ? "/professor" : "/aluno";
+      const target = role === "admin" ? "/olimpo" : role === "professor" ? "/professor" : "/aluno";
       navigate(target, { replace: true });
     }
   }, [user, role, navigate]);
@@ -51,7 +51,12 @@ export default function Login() {
       // Pequeno delay para a animação de loading ser vista
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      const roleToSet = email.toLowerCase().includes('aluno') ? 'aluno' : 'professor';
+      let roleToSet: 'aluno' | 'professor' | 'admin' = 'professor';
+      if (email.toLowerCase().includes('aluno')) {
+        roleToSet = 'aluno';
+      } else if (email.toLowerCase().includes('admin') || email.toLowerCase().includes('olimpo')) {
+        roleToSet = 'admin';
+      }
       
       // 1. Grava no estado global do useAuth
       await login(roleToSet); 
@@ -61,11 +66,10 @@ export default function Login() {
       });
 
       // 2. FORÇA O REDIRECIONAMENTO (O empurrão que faltava)
-      const target = roleToSet === "professor" ? "/professor" : "/aluno";
+      const target = roleToSet === "admin" ? "/olimpo" : roleToSet === "professor" ? "/professor" : "/aluno";
       navigate(target, { replace: true });
 
-    } catch (err: any) {
-      console.error("Erro no login:", err);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setError("Falha na autenticação local.");
     } finally {
       // 3. Desliga o motor de loading sempre no final

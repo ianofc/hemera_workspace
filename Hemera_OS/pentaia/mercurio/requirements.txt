@@ -4,3 +4,6 @@ requests
 schedule
 python-dotenv
 redis
+httpx
+pytest
+websockets

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface HemeraContextData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any;
   token: string | null;
   isAuthenticated: boolean;
@@ -11,6 +12,7 @@ interface HemeraContextData {
 const HemeraContext = createContext<HemeraContextData>({} as HemeraContextData);
 
 export const HemeraProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,6 +62,7 @@ export const HemeraProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useHemera = () => {
   const context = useContext(HemeraContext);
   if (!context) {

@@ -9,7 +9,7 @@ logger = logging.getLogger("ioconscius")
 
 # --- IMPORTAÇÃO DOS LÓBULOS CEREBRAIS (ROUTERS) ---
 # Certifique-se de que estes arquivos existem na pasta 'routers/'
-from .routers import education, chat, proactive
+from .routers import education, chat, proactive, hermes
 
 app = FastAPI(
     title="IO CONSCIOS API",
@@ -66,6 +66,12 @@ app.include_router(
     proactive.router, 
     dependencies=[Depends(verify_token)]
 )
+
+# 4. Módulo Hermes (Mensageria Segura E2EE & Bridge ZIOS)
+app.include_router(
+    hermes.router
+)
+
 
 if __name__ == "__main__":
     import uvicorn

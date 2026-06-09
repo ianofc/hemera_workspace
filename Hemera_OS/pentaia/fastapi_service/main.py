@@ -14,8 +14,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ioconscius")
 
 app = FastAPI(
-    title="IO CONSCIOS API",
-    description="The Soul OS & Pedagogical Brain for NioCortex",
+    title="PentaIA API",
+    description="The Cognitive & Pedagogical Brain for Hemera OS",
     version="2.1.0 (Full Brain Enabled)"
 )
 
@@ -36,16 +36,16 @@ async def verify_token(x_service_token: str = Header(...)):
 
     expected_token = os.getenv("SERVICE_TOKEN_SECRET", "dev-secret")
     if x_service_token != expected_token:
-        logger.warning("Tentativa de acesso não autorizado ao IO CONSCIOS.")
-        raise HTTPException(status_code=403, detail="Acesso negado ao Cérebro.")
+        logger.warning("Tentativa de acesso não autorizado à API do PentaIA.")
+        raise HTTPException(status_code=403, detail="Acesso negado à API do PentaIA.")
 
 # --- HEALTH CHECK (MONITORAMENTO) ---
 @app.get("/")
 def health_check():
     return {
         "status": "active", 
-        "system": "IO CONSCIOS", 
-        "modules": ["Education", "Chat", "Proactive", "Gorjeio"],
+        "system": "PentaIA", 
+        "modules": ["Education", "Chat", "Proactive", "Thorth"],
         "security": {"heimdall": "active" if heimdall_active else "inactive"},
         "mode": os.getenv("APP_ENV", "guerrilla")
     }

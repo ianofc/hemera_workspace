@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import auth, aluno, professor, pedagogical, social, ia
+from .views import auth, aluno, professor, pedagogical, social, ia, chat_api
 
 app_name = 'core'
 
@@ -23,6 +23,13 @@ urlpatterns = [
     # --- IA & Talkio ---
     path('talkio/', ia.talkio_view, name='talkio_app'),
 
+    # --- Chat API (Thorth / Gorjeio) ---
+    path('api/chat/rooms/', chat_api.chat_rooms_api, name='chat_rooms_api'),
+    path('api/chat/rooms/<int:room_id>/messages/', chat_api.chat_messages_api, name='chat_messages_api'),
+    path('api/chat/rooms/<int:room_id>/messages/send/', chat_api.create_message_api, name='create_message_api'),
+    path('api/chat/start-dm/', chat_api.start_dm_api, name='chat_start_dm_api'),
+    path('api/chat/users/', chat_api.search_users_api, name='chat_users_api'),
+
     # --- Extras do Aluno ---
     path('biblioteca/', aluno.biblioteca_view, name='student_library'),
     path('carreira/', aluno.carreira_view, name='student_career'),
@@ -30,3 +37,4 @@ urlpatterns = [
     path('tcc/', aluno.tcc_view, name='student_tcc'),
     path('diario/', aluno.diario_view, name='student_diary'),
 ]
+

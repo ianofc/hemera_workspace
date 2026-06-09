@@ -3,10 +3,13 @@ import hashlib
 import logging
 import time
 from typing import Any, Dict, List
+import uuid
+from contextlib import asynccontextmanager
 
 import requests
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, Query
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from core.config import (
     CORS_ALLOW_ORIGINS,
@@ -23,12 +26,51 @@ from core.config import (
     SERVICE_NAME,
     SERVICE_PORT,
     TAS_TRENDS_URL,
+    REDIS_URL,
+    MERCURIO_EVENT_BUS_TYPE,
 )
+from core.topic_manager import TopicManager, TopicMetadata
+from core.event_bus import create_event_bus, EventBus
+from core.connection_manager import ConnectionManager
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | MERCURIO: %(message)s")
 logger = logging.getLogger("MERCURIO_HUB")
 
-app = FastAPI(title="MERCÚRIO - Broadcaster Hub PentaIA", version="1.5.0")
+# Global instances initialized during startup lifespan
+topic_manager = TopicManager()
+event_bus: Any = None
+connection_manager: ConnectionManager = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global event_bus, connection_manager
+    logger.info("Initializing MERCURIO core infrastructure...")
+    
+    # Instantiate Event Bus (Redis or In-Memory fallback)
+    redis_addr = REDIS_URL if MERCURIO_EVENT_BUS_TYPE == "redis" else None
+    event_bus = await create_event_bus(topic_manager, redis_url=redis_addr)
+    
+    # Instantiate Connection Manager
+    connection_manager = ConnectionManager(event_bus, topic_manager)
+    await connection_manager.start()
+    
+    logger.info("MERCURIO core infrastructure initialized successfully.")
+    yield
+    
+    logger.info("Stopping MERCURIO core infrastructure...")
+    if connection_manager:
+        await connection_manager.stop()
+    if event_bus:
+        await event_bus.stop()
+    logger.info("MERCURIO core infrastructure stopped.")
+
+
+app = FastAPI(
+    title="MERCÚRIO - Broadcaster Hub PentaIA",
+    version="1.5.0",
+    lifespan=lifespan
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,6 +79,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 BUNDLE_CACHE: Dict[str, Any] = {"expires_at": 0.0, "payload": None}
@@ -450,6 +493,113 @@ async def get_integrated_bundle(request: Request):
 
     _store_cached_bundle(payload)
     return payload
+
+
+# Pydantic schemas for requests
+class PublishRequest(BaseModel):
+    topic: str
+    message: Dict[str, Any]
+
+
+class TopicCreateRequest(BaseModel):
+    name: str
+    description: str = ""
+    priority: str = "medium"
+    rate_limit: int = 0
+    require_auth: bool = False
+
+
+# WebSocket endpoint
+@app.websocket("/api/v1/mercurio/ws")
+async def websocket_endpoint(
+    websocket: WebSocket,
+    client_id: str = Query(None),
+    topics: str = Query(None)
+):
+    if not client_id:
+        client_id = f"client_{uuid.uuid4().hex[:8]}"
+        
+    topic_list = []
+    if topics:
+        topic_list = [t.strip() for t in topics.split(",") if t.strip()]
+
+    # Connect to the pool
+    success = await connection_manager.connect(websocket, client_id, topic_list)
+    if not success:
+        return
+
+    try:
+        while True:
+            # We wait for client messages
+            data = await websocket.receive_json()
+            msg_type = data.get("type")
+            
+            if msg_type == "pong":
+                await connection_manager.handle_ping(websocket)
+            elif msg_type == "subscribe":
+                new_topics = data.get("topics", [])
+                if isinstance(new_topics, list):
+                    await connection_manager.update_subscriptions(client_id, new_topics)
+            elif msg_type == "publish":
+                topic = data.get("topic")
+                payload = data.get("message", {})
+                if topic and payload:
+                    await event_bus.publish(topic, payload)
+            else:
+                # Treat any other payload as activity indicator to keep connection alive
+                await connection_manager.handle_ping(websocket)
+                
+    except WebSocketDisconnect:
+        logger.info(f"WebSocket client {client_id} disconnected.")
+    except Exception as e:
+        logger.error(f"Error in WebSocket loop for client {client_id}: {e}")
+    finally:
+        await connection_manager.disconnect(websocket)
+
+
+# HTTP Publish Route
+@app.post("/api/v1/mercurio/publish")
+async def publish_event(payload: PublishRequest):
+    if not topic_manager.is_valid_format(payload.topic):
+        return {"status": "error", "message": f"Invalid topic format: {payload.topic}"}, 400
+        
+    metadata = topic_manager.get_topic_metadata(payload.topic)
+    if metadata and metadata.require_auth:
+        logger.info(f"Publishing to critical topic {payload.topic} requires authorization.")
+
+    receivers = await event_bus.publish(payload.topic, payload.message)
+    return {
+        "status": "success",
+        "topic": payload.topic,
+        "receivers_notified": receivers
+    }
+
+
+# HTTP Topic Management Routes
+@app.get("/api/v1/mercurio/topics")
+async def get_registered_topics():
+    return {
+        "topics": topic_manager.list_topics()
+    }
+
+
+@app.post("/api/v1/mercurio/topics")
+async def register_new_topic(payload: TopicCreateRequest):
+    meta = TopicMetadata(
+        name=payload.name,
+        description=payload.description,
+        priority=payload.priority,
+        rate_limit=payload.rate_limit,
+        require_auth=payload.require_auth
+    )
+    success = topic_manager.register_topic(meta)
+    if not success:
+        return {"status": "error", "message": "Invalid topic format or validation error."}, 400
+        
+    return {
+        "status": "success",
+        "message": f"Topic '{payload.name}' registered successfully."
+    }
 
 
 if __name__ == "__main__":

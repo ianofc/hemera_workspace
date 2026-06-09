@@ -3,6 +3,7 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const authService = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   login: async (credentials: any) => {
     try {
       const response = await axios.post(`${API_URL}/api/status/login/`, {
@@ -10,6 +11,7 @@ export const authService = {
         password: credentials.password
       });
       return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response?.status === 401) {
         throw new Error('Credenciais inválidas. Verifique seu email e senha.');
@@ -18,6 +20,7 @@ export const authService = {
     }
   },
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: async (userData: any) => {
     // Para simplificar, mantemos mock ou você pode apontar para API de registro real no futuro
     await new Promise(resolve => setTimeout(resolve, 800));

@@ -35,6 +35,7 @@ export default function Signup() {
       
       toast.success("Conta Criada!", { description: "Bem-vindo ao Hemera OS." });
       navigate("/");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.detail || "Erro ao registrar. Tente novamente.");
       setIsLoading(false);

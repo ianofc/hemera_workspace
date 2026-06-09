@@ -31,3 +31,8 @@ CORS_ALLOW_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
+
+# Redis / Event Bus
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+MERCURIO_EVENT_BUS_TYPE = os.getenv("MERCURIO_EVENT_BUS_TYPE", "redis")
+

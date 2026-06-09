@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AppLayout } from "../components/layout/AppLayout"; // Caminho relativo para não quebrar o Vite
-import { Layers, Users, Clock, Plus, Brain, Zap, Printer, MonitorUp, Lightbulb, ArrowRight, BarChart3, CalendarCheck, CheckCircle2, UserCheck, CalendarDays } from "lucide-react"; // Importação dos ícones reais da nossa obra
+import { TrailBuilder } from "../components/lyceum/TrailBuilder";
+import { Layers, Users, Clock, Plus, Brain, Zap, Printer, MonitorUp, Lightbulb, ArrowRight, BarChart3, CalendarCheck, CheckCircle2, UserCheck, CalendarDays, Map } from "lucide-react"; // Importação dos ícones reais da nossa obra
 
 const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
 const horarios = ["07:30", "08:20", "09:10", "10:10", "11:00", "13:30", "14:20", "15:10"];
@@ -20,6 +21,7 @@ const gradeMock: Record<string, Record<string, { nome: string; alunos: number } 
 
 const ProfessorDashboard = () => {
   const [periodo, setPeriodo] = useState<"manha" | "tarde">("manha");
+  const [dashboardTab, setDashboardTab] = useState<"agenda" | "lyceum">("agenda");
 
   const filteredHorarios = horarios.filter((h) => {
     if (periodo === "manha") return h < "12:00";
@@ -90,7 +92,7 @@ const ProfessorDashboard = () => {
               </h3>
               <p className="mt-2 leading-relaxed text-gray-600">
                 Bom dia, Professor. Identifiquei que você tem <strong className="text-gray-800">3 aulas hoje</strong>. 
-                O material de revisão de <span className="text-primary font-bold">Matemática (9º Ano)</span> e <span className="text-secondary font-bold">Física (8º Ano)</span> já foi gerado na sua Oficina com base nas dificuldades do último teste.
+                O material de revisão de <span className="text-primary font-bold">Matemática (9º Ano)</span> e <span className="text-secondary font-bold">Física (8º Ano)</span> já foi gerado na sua Oficina com base das dificuldades do último teste.
               </p>
               
               <div className="flex flex-wrap gap-3 mt-5">
@@ -105,66 +107,95 @@ const ProfessorDashboard = () => {
           </div>
         </div>
 
-        {/* Grade Horária */}
-        <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl overflow-hidden border border-glass-border">
-          <div className="flex flex-col items-center justify-between gap-4 p-6 border-b border-gray-100 sm:flex-row">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-gray-800">
-              <span className="w-2 h-6 bg-primary rounded-full" /> Grade Horária
-            </h2>
-            <div className="flex p-1 bg-gray-100 rounded-xl">
-              {(["manha", "tarde"] as const).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPeriodo(p)}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    periodo === p ? "bg-white text-primary shadow-sm" : "text-gray-500"
-                  }`}
-                >
-                  {p === "manha" ? "Manhã" : "Tarde"}
-                </button>
-              ))}
+        {/* Abas do Dashboard */}
+        <div className="flex p-1 bg-white/40 border border-glass-border backdrop-blur-xl rounded-2xl max-w-md">
+          <button
+            onClick={() => setDashboardTab("agenda")}
+            className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-bold transition-all rounded-xl ${
+              dashboardTab === "agenda"
+                ? "bg-primary text-white shadow-md"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Clock className="w-4 h-4" /> Grade Horária
+          </button>
+          <button
+            onClick={() => setDashboardTab("lyceum")}
+            className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-bold transition-all rounded-xl ${
+              dashboardTab === "lyceum"
+                ? "bg-primary text-white shadow-md"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Map className="w-4 h-4" /> Construtor Lyceum
+          </button>
+        </div>
+
+        {dashboardTab === "agenda" ? (
+          /* Grade Horária */
+          <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl overflow-hidden border border-glass-border">
+            <div className="flex flex-col items-center justify-between gap-4 p-6 border-b border-gray-100 sm:flex-row">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-gray-800">
+                <span className="w-2 h-6 bg-primary rounded-full" /> Grade Horária
+              </h2>
+              <div className="flex p-1 bg-gray-100 rounded-xl">
+                {(["manha", "tarde"] as const).map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPeriodo(p)}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      periodo === p ? "bg-white text-primary shadow-sm" : "text-gray-500"
+                    }`}
+                  >
+                    {p === "manha" ? "Manhã" : "Tarde"}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px]">
+                <thead>
+                  <tr className="bg-gray-50/50">
+                    <th className="w-32 px-6 py-4 text-xs font-bold text-left uppercase text-gray-500">Horário</th>
+                    {diasSemana.map((dia) => (
+                      <th key={dia} className="w-1/5 px-6 py-4 text-xs font-bold text-center uppercase text-gray-500">{dia}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filteredHorarios.map((tempo) => (
+                    <tr key={tempo} className="transition-colors hover:bg-gray-50/50">
+                      <td className="px-6 py-4 text-xs font-bold border-r text-gray-500 border-gray-100 bg-gray-50/50">{tempo}</td>
+                      {diasSemana.map((dia) => {
+                        const item = gradeMock[tempo]?.[dia];
+                        return (
+                          <td key={dia} className="relative h-24 p-2 align-top border-r border-dashed border-gray-200 last:border-0 group">
+                            {item ? (
+                              <div className="relative block w-full h-full p-3 transition-all border shadow-sm rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 cursor-pointer">
+                                <h4 className="text-sm font-bold truncate text-primary">{item.nome}</h4>
+                                <div className="flex items-center gap-2 mt-2 opacity-70">
+                                  <Users className="w-3 h-3 text-gray-500" />
+                                  <span className="text-[10px] font-bold text-gray-600">{item.alunos}</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-center w-full h-full transition-all border-2 border-transparent opacity-0 cursor-pointer rounded-xl group-hover:opacity-100 hover:bg-gray-50 hover:border-dashed hover:border-gray-200">
+                                <Plus className="w-4 h-4 text-gray-300" />
+                              </div>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
-              <thead>
-                <tr className="bg-gray-50/50">
-                  <th className="w-32 px-6 py-4 text-xs font-bold text-left uppercase text-gray-500">Horário</th>
-                  {diasSemana.map((dia) => (
-                    <th key={dia} className="w-1/5 px-6 py-4 text-xs font-bold text-center uppercase text-gray-500">{dia}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredHorarios.map((tempo) => (
-                  <tr key={tempo} className="transition-colors hover:bg-gray-50/50">
-                    <td className="px-6 py-4 text-xs font-bold border-r text-gray-500 border-gray-100 bg-gray-50/50">{tempo}</td>
-                    {diasSemana.map((dia) => {
-                      const item = gradeMock[tempo]?.[dia];
-                      return (
-                        <td key={dia} className="relative h-24 p-2 align-top border-r border-dashed border-gray-200 last:border-0 group">
-                          {item ? (
-                            <div className="relative block w-full h-full p-3 transition-all border shadow-sm rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 cursor-pointer">
-                              <h4 className="text-sm font-bold truncate text-primary">{item.nome}</h4>
-                              <div className="flex items-center gap-2 mt-2 opacity-70">
-                                <Users className="w-3 h-3 text-gray-500" />
-                                <span className="text-[10px] font-bold text-gray-600">{item.alunos}</span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex items-center justify-center w-full h-full transition-all border-2 border-transparent opacity-0 cursor-pointer rounded-xl group-hover:opacity-100 hover:bg-gray-50 hover:border-dashed hover:border-gray-200">
-                              <Plus className="w-4 h-4 text-gray-300" />
-                            </div>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        ) : (
+          /* Construtor Lyceum */
+          <TrailBuilder />
+        )}
 
         {/* Bottom row */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">

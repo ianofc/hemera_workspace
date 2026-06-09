@@ -7,3 +7,5 @@ python-dotenv
 openai
 google-genai
 sqlalchemy
+asyncpg
+psycopg2-binary
